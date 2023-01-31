@@ -1,0 +1,87 @@
+23-01-31 16:14:06 Execution trace by 'Common VBA Execution Trace Service' (https://github.com/warbe-maker/Common-VBA-Execution-Trace-Service)
+23-01-31 16:14:06                 >> Begin execution trace 
+23-01-31 16:14:06 00,0000         >> mTest.Regression_test
+23-01-31 16:14:06 00,0007         >> mTest.Test_StandardModule_mQue_Default_Queue
+23-01-31 16:14:06 00,0008         |  > mQueue.QisEmpty
+23-01-31 16:14:06 00,0009 00,0001 |  < mQueue.QisEmpty
+23-01-31 16:14:06 00,0011         |  > mQueue.Qenq
+23-01-31 16:14:06 00,0012 00,0001 |  < mQueue.Qenq
+23-01-31 16:14:06 00,0014         |  > mQueue.Qdeq
+23-01-31 16:14:06 00,0015 00,0001 |  < mQueue.Qdeq
+23-01-31 16:14:06 00,0016         |  > mQueue.Qsize
+23-01-31 16:14:06 00,0018 00,0001 |  < mQueue.Qsize
+23-01-31 16:14:06 00,0230         |  > mQueue.Qed
+23-01-31 16:14:06 00,0234 00,0003 |  < mQueue.Qed
+23-01-31 16:14:06 00,0237 00,0230 << mTest.Test_StandardModule_mQue_Default_Queue
+23-01-31 16:14:06 00,0240         >> mTest.Test_StandardModule_mQue_Provided_Queue
+23-01-31 16:14:06 00,0242         |  > mQueue.QisEmpty
+23-01-31 16:14:06 00,0243 00,0002 |  < mQueue.QisEmpty
+23-01-31 16:14:06 00,0245         |  > mQueue.Qenq
+23-01-31 16:14:06 00,0247 00,0002 |  < mQueue.Qenq
+23-01-31 16:14:06 00,0248         |  > mQueue.Qdeq
+23-01-31 16:14:06 00,0250 00,0002 |  < mQueue.Qdeq
+23-01-31 16:14:06 00,0252         |  > mQueue.Qsize
+23-01-31 16:14:06 00,0254 00,0002 |  < mQueue.Qsize
+23-01-31 16:14:06 00,0255         |  > mQueue.Qed
+23-01-31 16:14:06 00,0257 00,0002 |  < mQueue.Qed
+23-01-31 16:14:06 00,0259 00,0019 << mTest.Test_StandardModule_mQue_Provided_Queue
+23-01-31 16:14:06 00,0261         >> mTest.Test_StandardModule_mStck_Default_Stack
+23-01-31 16:14:06 00,0262         |  > mStack.IsEmpty
+23-01-31 16:14:06 00,0264 00,0002 |  < mStack.IsEmpty
+23-01-31 16:14:06 00,0267         |  > mStack.Push
+23-01-31 16:14:06 00,0269 00,0002 |  < mStack.Push
+23-01-31 16:14:06 00,0272         |  > mStack.Pop
+23-01-31 16:14:06 00,0274 00,0002 |  < mStack.Pop
+23-01-31 16:14:06 00,0278         |  > mStack.Size
+23-01-31 16:14:06 00,0280 00,0002 |  < mStack.Size
+23-01-31 16:14:06 00,0282         |  > mStack.Stacked
+23-01-31 16:14:06 00,0284 00,0002 |  < mStack.Stacked
+23-01-31 16:14:06 00,0286 00,0025 << mTest.Test_StandardModule_mStck_Default_Stack
+23-01-31 16:14:06 00,0289         >> mTest.Test_StandardModule_mStck_Provided_Stack
+23-01-31 16:14:06 00,0290         |  > mStack.IsEmpty
+23-01-31 16:14:06 00,0292 00,0001 |  < mStack.IsEmpty
+23-01-31 16:14:06 00,0293         |  > mStack.Push
+23-01-31 16:14:06 00,0294 00,0001 |  < mStack.Push
+23-01-31 16:14:06 00,0296         |  > mStack.Pop
+23-01-31 16:14:06 00,0297 00,0001 |  < mStack.Pop
+23-01-31 16:14:06 00,0298         |  > mStack.Size
+23-01-31 16:14:06 00,0299 00,0001 |  < mStack.Size
+23-01-31 16:14:06 00,0301         |  > mStack.Stacked
+23-01-31 16:14:06 00,0302 00,0001 |  < mStack.Stacked
+23-01-31 16:14:06 00,0303 00,0014 << mTest.Test_StandardModule_mStck_Provided_Stack
+23-01-31 16:14:06 00,0305         >> mTest.Test_ClassModule_clsStack
+23-01-31 16:14:06 00,0306         |  > clsStack.IsEmpty
+23-01-31 16:14:06 00,0307 00,0001 |  < clsStack.IsEmpty
+23-01-31 16:14:06 00,0309         |  > cllStack.Push
+23-01-31 16:14:06 00,0310 00,0001 |  < cllStack.Push
+23-01-31 16:14:06 00,0311         |  > cllStack.Pop
+23-01-31 16:14:06 00,0312 00,0001 |  < cllStack.Pop
+23-01-31 16:14:06 00,0314         |  > cllStack.Size
+23-01-31 16:14:06 00,0315 00,0001 |  < cllStack.Size
+23-01-31 16:14:06 00,0316         |  > cllStack.Top
+23-01-31 16:14:06 00,0317 00,0001 |  < cllStack.Top
+23-01-31 16:14:06 00,0319         |  > cllStack.Bottom
+23-01-31 16:14:06 00,0320 00,0001 |  < cllStack.Bottom
+23-01-31 16:14:06 00,0321         |  > cllStack.IsStacked
+23-01-31 16:14:06 00,0322 00,0001 |  < cllStack.IsStacked
+23-01-31 16:14:06 00,0324 00,0019 << mTest.Test_ClassModule_clsStack
+23-01-31 16:14:06 00,0327         >> mTest.Test_ClassModule_clsQueue
+23-01-31 16:14:06 00,0329         |  > clsQueue.IsEmpty
+23-01-31 16:14:06 00,0330 00,0001 |  < clsQueue.IsEmpty
+23-01-31 16:14:06 00,0332         |  > cllQueue.Enqueue
+23-01-31 16:14:06 00,0333 00,0001 |  < cllQueue.Enqueue
+23-01-31 16:14:06 00,0334         |  > cllQueue.Dequeue
+23-01-31 16:14:06 00,0336 00,0001 |  < cllQueue.Dequeue
+23-01-31 16:14:06 00,0337         |  > cllQueue.Size
+23-01-31 16:14:06 00,0338 00,0001 |  < cllQueue.Size
+23-01-31 16:14:06 00,0340         |  > cllQueue.First
+23-01-31 16:14:06 00,0341 00,0001 |  < cllQueue.First
+23-01-31 16:14:06 00,0342         |  > cllQueue.Last
+23-01-31 16:14:06 00,0343 00,0001 |  < cllQueue.Last
+23-01-31 16:14:06 00,0345         |  > cllQueue.IsQueued
+23-01-31 16:14:06 00,0346 00,0001 |  < cllQueue.IsQueued
+23-01-31 16:14:06 00,0347 00,0020 << mTest.Test_ClassModule_clsQueue
+23-01-31 16:14:06 00,0349 00,0349 << mTest.Regression_test
+23-01-31 16:14:06 00,0349 00,0349 << End execution trace 
+23-01-31 16:14:06                 Impact on the overall performance (caused by the trace itself): 00,0001 seconds!
+23-01-31 16:14:06 Execution trace by 'Common VBA Execution Trace Service' (https://github.com/warbe-maker/Common-VBA-Execution-Trace-Service)

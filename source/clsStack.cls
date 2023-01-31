@@ -1,0 +1,168 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "clsStack"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+' ----------------------------------------------------------------------------
+' Class Module cllStack: LiFo (stack) services.
+'
+' Note: A stack can be percieved as a tube which is closed at one end which
+'       means that only the last item added (pushed into it, pushed on the
+'       stack respecitvely) can be returned (poped).
+'
+' Public services:
+' - Bottom      Retunrs the botton item on the stack
+' - IsStacked   Returns TRUE and its position when a given item is on the
+'               stack
+' - Item        Returns an item on a provided position
+' - Pop         Returns the top (last added) item from the stack
+' - Push        Pushes an item on the stack
+' - Size        Returns the current stack's size
+' - Top         Returns the top item on the stack without taking it off the
+'               stack, i.e. poping it.
+'
+' W. Rauschenberger, Berlin Feb 2023
+' ----------------------------------------------------------------------------
+Private cllStack As Collection
+
+Private Sub Class_Initialize():                     Set cllStack = New Collection:          End Sub
+
+Private Sub Class_Terminate():                      Set cllStack = Nothing:                 End Sub
+
+Public Sub Bottom(ByRef b_item As Variant):         StackBottom cllStack, b_item:           End Sub
+
+Public Function IsEmpty() As Boolean:               IsEmpty = StackIsEmpty(cllStack):       End Function
+
+Public Function IsStacked(ByVal i_item As Variant, _
+                 Optional ByRef i_pos As Long)
+    IsStacked = IsOnStack(cllStack, i_item, i_pos)
+End Function
+
+Public Sub Item(ByVal i_pos As Long, _
+                ByRef i_item As Variant)
+    StackItem cllStack, i_pos, i_item
+End Sub
+                
+Public Sub Pop(ByRef p_item As Variant):            StackPop cllStack, p_item:              End Sub
+
+Public Sub Push(ByVal p_item As Variant):           StackPush cllStack, p_item:             End Sub
+
+Public Function Size() As Long:                     Size = StackSize(cllStack):             End Function
+
+Private Sub StackBottom(ByVal s_stack As Collection, _
+                        ByRef s_item As Variant)
+' ----------------------------------------------------------------------------
+' Returns the bottom item (s_item) on the stack (s_stack), provided the stack
+' is not empty.
+' ----------------------------------------------------------------------------
+    If Not StackIsEmpty(s_stack) Then
+        If VarType(s_stack(1)) = vbObject Then
+            Set s_item = s_stack(1)
+        Else
+            s_item = s_stack(1)
+        End If
+    End If
+End Sub
+
+Private Function IsOnStack(ByVal s_stack As Collection, _
+                         ByVal s_item As Variant, _
+                Optional ByRef s_pos As Long) As Boolean
+' ----------------------------------------------------------------------------
+' Returns TRUE and the index (s_pos) when the item (s_item) is found in the
+' stack (s_stack).
+' ----------------------------------------------------------------------------
+    Dim v   As Variant
+    Dim i   As Long
+    
+    If VarType(s_item) = vbObject Then
+        For i = 1 To s_stack.Count
+            If s_stack(i) Is s_item Then
+                IsOnStack = True
+                s_pos = i
+                Exit Function
+            End If
+        Next i
+    Else
+        For i = 1 To s_stack.Count
+            If s_stack(i) = s_item Then
+                IsOnStack = True
+                s_pos = i
+                Exit Function
+            End If
+        Next i
+    End If
+
+End Function
+
+Private Sub StackItem(ByVal s_stack As Collection, _
+                      ByVal s_pos As Long, _
+             Optional ByRef s_item As Variant)
+' ----------------------------------------------------------------------------
+' Returns the item (s_item) at the position (s_pos) on the stack (s_stack),
+' provided the stack is not empty and the position is within the stack's size.
+' ----------------------------------------------------------------------------
+    
+    If Not StackIsEmpty(s_stack) Then
+        If StackSize(s_stack) <= s_pos Then
+            If VarType(s_stack(s_pos)) = vbObject Then
+                Set s_item = s_stack(s_pos)
+            Else
+                s_item = s_stack(s_pos)
+            End If
+        End If
+    End If
+    
+End Sub
+
+Private Function StackIsEmpty(ByVal s_stack As Collection) As Boolean
+    StackIsEmpty = s_stack Is Nothing
+    If Not StackIsEmpty Then StackIsEmpty = s_stack.Count = 0
+End Function
+
+Private Sub StackPop(ByRef s_stack As Collection, _
+                     ByRef s_item As Variant)
+' ----------------------------------------------------------------------------
+' Returns the top item on the stack (s_item), i.e. the last one pushed on it,
+' and removes it from the stack.
+' ----------------------------------------------------------------------------
+    Dim pos As Long
+    If Not StackIsEmpty(s_stack) Then
+        StackTop s_stack, s_item, pos
+        s_stack.Remove pos
+    End If
+End Sub
+
+Private Sub StackPush(ByRef s_stack As Collection, _
+                      ByVal s_item As Variant)
+    If s_stack Is Nothing Then Set s_stack = New Collection
+    s_stack.Add s_item
+End Sub
+
+Private Function StackSize(ByVal s_stack As Collection) As Long
+    If Not StackIsEmpty(s_stack) Then StackSize = s_stack.Count
+End Function
+
+Private Sub StackTop(ByVal s_stack As Collection, _
+                     ByRef s_item As Variant, _
+            Optional ByRef s_pos As Long)
+' ----------------------------------------------------------------------------
+' Returns the top item on the stack (s_item), i.e. the last one pushed on it
+' and the top item's position.
+' ----------------------------------------------------------------------------
+    If Not StackIsEmpty(s_stack) Then
+        s_pos = s_stack.Count
+        If VarType(s_stack(s_pos)) = vbObject Then
+            Set s_item = s_stack(s_pos)
+        Else
+            s_item = s_stack(s_pos)
+        End If
+    End If
+End Sub
+
+Public Sub Top(ByRef t_item):                       StackTop cllStack, t_item:              End Sub
+
