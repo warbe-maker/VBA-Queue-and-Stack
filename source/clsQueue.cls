@@ -14,13 +14,14 @@ Attribute VB_Exposed = False
 '       item put into it (is enqued) is the first on taken from it (dequeued).
 '
 ' Public services:
-' - DeQueue  Returns the first (first added) item from the queue
-' - EnQueue  Queues an item
-' - First    Returns the first item in the queue without dequeuing it.
-' - IsQueued Returns TRUE and its position when a given item is in the queue
-' - Item     Returns an item on a provided position in the queue
-' - Last     Returns the botton item in the queue
-' - Size     Returns the current queue's size
+' - DeQueue   Returns the first (first added) item from the queue
+' - EnQueue   Queues an item
+' - First     Returns the first item in the queue without dequeuing it.
+' - IsEmpty   Returns TRUE when the queue is empty
+' - IsInQueue Returns TRUE and its position when a given item is in the queue
+' - Item      Returns an item on a provided position in the queue
+' - Last      Returns the last item enqueued
+' - Size      Returns the current queue's size
 '
 ' W. Rauschenberger, Berlin Feb 2023
 ' ----------------------------------------------------------------------------
@@ -35,7 +36,7 @@ Public Sub Last(ByRef b_item As Variant):               QueueLast cllQueue, b_it
 Public Function IsEmpty() As Boolean:                   IsEmpty = QueueIsEmpty(cllQueue):       End Function
 
 Public Function IsQueued(ByVal i_item As Variant, _
-                Optional ByRef i_pos As Long)
+                Optional ByRef i_pos As Long) As Boolean
     IsQueued = IsInQueue(cllQueue, i_item, i_pos)
 End Function
 
@@ -106,7 +107,7 @@ Private Sub QueueItem(ByVal q_queue As Collection, _
 ' ----------------------------------------------------------------------------
     
     If Not QueueIsEmpty(q_queue) Then
-        If QueueSize(q_queue) <= q_pos Then
+        If q_pos <= QueueSize(q_queue) Then
             If VarType(q_queue(q_pos)) = vbObject Then
                 Set q_item = q_queue(q_pos)
             Else
@@ -128,10 +129,10 @@ Private Sub QueueDequeue(ByRef q_queue As Collection, _
 ' Returns the top item in the queue (q_item), i.e. the last one pushed on it,
 ' and removes it from the queue.
 ' ----------------------------------------------------------------------------
-    Dim pos As Long
+    Dim Pos As Long
     If Not QueueIsEmpty(q_queue) Then
-        QueueFirst q_queue, q_item, pos
-        q_queue.Remove pos
+        QueueFirst q_queue, q_item, Pos
+        q_queue.Remove Pos
     End If
 End Sub
 

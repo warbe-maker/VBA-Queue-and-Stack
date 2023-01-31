@@ -1,197 +1,41 @@
 Attribute VB_Name = "mQueue"
 Option Explicit
 ' ----------------------------------------------------------------------------
-' Standard Module mQue: Generic (typeless) queue services.
+' Standard Module mQueue: FiFo (queue) services based on a Collection as queue.
 '
-' Public services:
-' - Qdeq        Returns the first item from the queue, in case none is
-'               provided from the module's internal default queue.
-' - Qed         Returns TRUE when the provided item (en) is queued, in case
-'               none is provided in the  module's internal default queue.
-
-' - Qenq        Adds a provided item to the queue, in case none is provided to
-'               the module's internal default queue.
-' - Qget        Returns the queue, in case none is provided the module's
-'               internal default queue.
-' - QisEmpty    Returns TRUE when the queue is empty, in case none
-'               is provided the module's internal default queue.
-' - Qsize       Returns the size (number of items) in the queue, in case none
-'               is provided those of the module's internal default queue.
+' Note: A queue can be seen as a tube which is open at both ends. The first
+'       item put into it (is enqued) is the first on taken from it (dequeued).
 '
-' W. Rauschenberger Berlin Jan 2013
+' Public services (in case no queue is provided by the calle the module's
+'                  internal default queue is used):
+' - DeQueue   Returns the first (first added) item from the queue
+' - EnQueue   Queues an item
+' - First     Returns the first item in the queue without dequeuing it.
+' - IsEmpty   Returns TRUE when the queue is empty
+' - IsInQueue Returns TRUE and its position when a given item is in the queue
+' - Item      Returns an item on a provided position in the queue
+' - Last      Returns the last item enqueued
+' - Size      Returns the current queue's size
+'
+' W. Rauschenberger Berlin Jan 2023
 ' ----------------------------------------------------------------------------
 Private cllQueue As New Collection
 
-Public Function Qed(Optional ByRef q_queue As Collection = Nothing, _
-                    Optional ByVal q_var As Variant) As Boolean
+Public Sub First(ByRef f_item As Variant, _
+        Optional ByRef f_queue As Collection = Nothing)
 ' ------------------------------------------------------------------------------
-' Returns TRUE when the item (q_var) is queued in (q_queue), when none is
-' provided in the module's internal default queue.
+' Returns the first item in the queue without dequeuing it.
 ' ------------------------------------------------------------------------------
-    Const PROC = "Qed"
-    
-    On Error GoTo eh
-    Dim v As Variant
-    
-    If q_queue Is Nothing Then
-        Set q_queue = cllQueue
-    ElseIf TypeName(q_queue) <> "Collection" Then
-        Err.Raise AppErr(1), ErrSrc(PROC), "The provided queue is not a Collection!"
-    End If
-    
-    If VarType(q_var) = vbObject Then
-        For Each v In q_queue
-            If v Is q_var Then
-                Qed = True
-                GoTo xt
-            End If
-        Next v
-    Else
-        For Each v In q_queue
-            If v = q_var Then
-                Qed = True
-                GoTo xt
-            End If
-        Next v
-    End If
-    
-xt: Exit Function
+    QueueFirst UsedQueue(f_queue), f_item
+End Sub
 
-eh: Select Case ErrMsg(ErrSrc(PROC))
-        Case vbResume:  Stop: Resume
-        Case Else:      GoTo xt
-    End Select
-End Function
-
-Public Function Qsize(Optional ByRef q_queue As Collection = Nothing) As Long
-' ----------------------------------------------------------------------------
-' Returns the size (number of items) in the queue (q_queue), in case none is
-' provided those of the module's internal queue.
-' ----------------------------------------------------------------------------
-    Const PROC = "QisEmpty"
-    
-    On Error GoTo eh
-    If q_queue Is Nothing Then
-        Set q_queue = cllQueue
-    ElseIf TypeName(q_queue) <> "Collection" Then
-        Err.Raise AppErr(1), ErrSrc(PROC), "The provided queue is not a Collection!"
-    End If
-    Set q_queue = Qget(q_queue)
-    If q_queue Is Nothing Then Qsize = 0 Else Qsize = q_queue.Count
-
-xt: Exit Function
-
-eh: Select Case ErrMsg(ErrSrc(PROC))
-        Case vbResume:  Stop: Resume
-        Case Else:      GoTo xt
-    End Select
-End Function
-
-Public Property Let Qenq(Optional ByRef q_queue As Collection = Nothing, _
-                                  ByVal q_var As Variant)
-' ----------------------------------------------------------------------------
-' Adds the item (q-var) to the queue (q_queue), in case none is provided to
-' the module's internal queue.
-' ----------------------------------------------------------------------------
-    Const PROC = "Qenq-Let"
-    
-    On Error GoTo eh
-    
-    If q_queue Is Nothing Then
-        Set q_queue = cllQueue
-    ElseIf TypeName(q_queue) <> "Collection" Then
-        Err.Raise AppErr(1), ErrSrc(PROC), "The provided queue is not a Collection!"
-    End If
-    q_queue.Add q_var
-
-xt: Exit Property
-
-eh: Select Case ErrMsg(ErrSrc(PROC))
-        Case vbResume:  Stop: Resume
-        Case Else:      GoTo xt
-    End Select
-End Property
-
-Public Function Qdeq(Optional ByRef q_queue As Collection = Nothing) As Variant
-' ----------------------------------------------------------------------------
-' Returns the first item from the queue (q_queue), , in case none is provided
-' from the module's internal queue.
-' ----------------------------------------------------------------------------
-    Const PROC = "Qdeq-Get"
-    
-    On Error GoTo eh
-    
-    If q_queue Is Nothing Then
-        Set q_queue = cllQueue
-    ElseIf TypeName(q_queue) <> "Collection" Then
-        Err.Raise AppErr(1), ErrSrc(PROC), "The provided queue is not a Collection!"
-    End If
-    If QisEmpty(q_queue) Then GoTo xt
-    
-    If VarType(q_queue(q_queue.Count)) = vbObject Then
-        Set Qdeq = q_queue(q_queue.Count)
-    Else
-        Qdeq = q_queue(q_queue.Count)
-    End If
-    q_queue.Remove q_queue.Count
-
-xt: Exit Function
-
-eh: Select Case ErrMsg(ErrSrc(PROC))
-        Case vbResume:  Stop: Resume
-        Case Else:      GoTo xt
-    End Select
-End Function
-
-Public Function QisEmpty(Optional ByRef q_queue As Collection = Nothing) As Boolean
-' ----------------------------------------------------------------------------
-' Returns TRUE when the queue (q_queue) is empty, in case none is provided
-' the module's internal queue.
-' ----------------------------------------------------------------------------
-    Const PROC = "QisEmpty"
-    
-    On Error GoTo eh
-    If q_queue Is Nothing Then
-        Set q_queue = cllQueue
-    ElseIf TypeName(q_queue) <> "Collection" Then
-        Err.Raise AppErr(1), ErrSrc(PROC), "The provided queue is not a Collection!"
-    End If
-    
-    Set q_queue = Qget(q_queue)
-    QisEmpty = q_queue Is Nothing
-    If Not QisEmpty Then QisEmpty = q_queue.Count = 0
-    If QisEmpty Then Set q_queue = Nothing
-
-xt: Exit Function
-
-eh: Select Case ErrMsg(ErrSrc(PROC))
-        Case vbResume:  Stop: Resume
-        Case Else:      GoTo xt
-    End Select
-End Function
-
-Public Function Qget(Optional ByVal q_queue As Collection = Nothing) As Collection
-' ----------------------------------------------------------------------------
-' Returns the queue (q_queue), in case none is provided the module's internal
-' queue.
-' ----------------------------------------------------------------------------
-    Const PROC = "QisEmpty"
-    
-    On Error GoTo eh
-    If q_queue Is Nothing Then
-        Set q_queue = cllQueue
-    ElseIf TypeName(q_queue) <> "Collection" Then
-        Err.Raise AppErr(1), ErrSrc(PROC), "The provided queue is not a Collection!"
-    End If
-    Set Qget = q_queue
-    
-xt: Exit Function
-
-eh: Select Case ErrMsg(ErrSrc(PROC))
-        Case vbResume:  Stop: Resume
-        Case Else:      GoTo xt
-    End Select
-End Function
+Public Sub Last(ByRef l_item As Variant, _
+       Optional ByRef l_queue As Collection = Nothing)
+' ------------------------------------------------------------------------------
+' Returns the last item enqueued.
+' ------------------------------------------------------------------------------
+    QueueLast UsedQueue(l_queue), l_item
+End Sub
 
 Private Function AppErr(ByVal app_err_no As Long) As Long
 ' ------------------------------------------------------------------------------
@@ -204,9 +48,23 @@ Private Function AppErr(ByVal app_err_no As Long) As Long
     If app_err_no > 0 Then AppErr = app_err_no + vbObjectError Else AppErr = app_err_no - vbObjectError
 End Function
 
-Private Function ErrSrc(ByVal sProc As String) As String
-    ErrSrc = "mQueue." & sProc
-End Function
+Public Sub DeQueue(ByRef d_item As Variant, _
+          Optional ByRef d_queue As Collection = Nothing)
+' ----------------------------------------------------------------------------
+' Returns the first item from the queue (d_queue), in case none is provided
+' from the module's internal queue.
+' ----------------------------------------------------------------------------
+    QueueDequeue UsedQueue(d_queue), d_item
+End Sub
+
+Public Sub EnQueue(ByVal q_item As Variant, _
+          Optional ByRef q_queue As Collection = Nothing)
+' ----------------------------------------------------------------------------
+' Adds the item (q-var) to the queue (q_queue), in case none is provided to
+' the module's internal queue.
+' ----------------------------------------------------------------------------
+    QueueEnqueue UsedQueue(q_queue), q_item
+End Sub
 
 Private Function ErrMsg(ByVal err_source As String, _
                Optional ByVal err_no As Long = 0, _
@@ -311,5 +169,207 @@ Private Function ErrMsg(ByVal err_source As String, _
 xt:
 End Function
 
+Private Function ErrSrc(ByVal sProc As String) As String
+    ErrSrc = "mQueue." & sProc
+End Function
 
+Public Function IsEmpty(Optional ByRef q_queue As Collection = Nothing) As Boolean
+' ----------------------------------------------------------------------------
+' Returns TRUE when the queue (q_queue) is empty, in case none is provided
+' the module's internal queue.
+' ----------------------------------------------------------------------------
+    IsEmpty = QueueIsEmpty(UsedQueue(q_queue))
+End Function
+
+Private Function IsInQueue(ByVal i_queue As Collection, _
+                           ByVal i_item As Variant, _
+                  Optional ByRef i_pos As Long) As Boolean
+' ----------------------------------------------------------------------------
+' Returns TRUE and the index (i_pos) when the item (i_item) is found in the
+' queue (i_queue).
+' ----------------------------------------------------------------------------
+    Dim i As Long
+    
+    If VarType(i_item) = vbObject Then
+        For i = 1 To i_queue.Count
+            If i_queue(i) Is i_item Then
+                IsInQueue = True
+                i_pos = i
+                Exit Function
+            End If
+        Next i
+    Else
+        For i = 1 To i_queue.Count
+            If i_queue(i) = i_item Then
+                IsInQueue = True
+                i_pos = i
+                Exit Function
+            End If
+        Next i
+    End If
+
+End Function
+
+Public Function IsQueued(ByVal i_item As Variant, _
+                Optional ByRef i_pos As Long, _
+                Optional ByRef i_queue As Collection = Nothing) As Boolean
+' ----------------------------------------------------------------------------
+'
+' ----------------------------------------------------------------------------
+    IsQueued = IsInQueue(UsedQueue(i_queue), i_item, i_pos)
+End Function
+
+Public Sub Item(ByVal i_pos As Long, _
+                ByRef i_item As Variant, _
+       Optional ByRef i_queue As Collection = Nothing)
+' ----------------------------------------------------------------------------
+'
+' ----------------------------------------------------------------------------
+    QueueItem UsedQueue(i_queue), i_pos, i_item
+End Sub
+
+Private Sub QueueDequeue(ByRef q_queue As Collection, _
+                         ByRef q_item As Variant)
+' ----------------------------------------------------------------------------
+' Returns the top item in the queue (q_item), i.e. the last one pushed on it,
+' and removes it from the queue.
+' ----------------------------------------------------------------------------
+    Dim Pos As Long
+    If Not QueueIsEmpty(q_queue) Then
+        QueueFirst q_queue, q_item, Pos
+        q_queue.Remove Pos
+    End If
+End Sub
+
+Private Sub QueueEnqueue(ByRef q_queue As Collection, _
+                         ByVal q_item As Variant)
+    If q_queue Is Nothing Then Set q_queue = New Collection
+    q_queue.Add q_item
+End Sub
+
+Private Sub QueueFirst(ByVal q_queue As Collection, _
+                       ByRef q_item As Variant, _
+              Optional ByRef q_pos As Long)
+' ----------------------------------------------------------------------------
+' Returns the current first item in the queue, i.e. the one added (enqueued)
+' first.
+' ----------------------------------------------------------------------------
+    If Not QueueIsEmpty(q_queue) Then
+        q_pos = 1
+        If VarType(q_queue(q_pos)) = vbObject Then
+            Set q_item = q_queue(q_pos)
+        Else
+            q_item = q_queue(q_pos)
+        End If
+    End If
+End Sub
+
+Private Function QueueIsEmpty(ByVal q_queue As Collection) As Boolean
+    QueueIsEmpty = q_queue Is Nothing
+    If Not QueueIsEmpty Then QueueIsEmpty = q_queue.Count = 0
+End Function
+
+Private Sub QueueItem(ByVal q_queue As Collection, _
+                      ByVal q_pos As Long, _
+             Optional ByRef q_item As Variant)
+' ----------------------------------------------------------------------------
+' Returns the item (q_item) at the position (q_pos) in the queue (q_queue),
+' provided the queue is not empty and the position is within the queue's size.
+' ----------------------------------------------------------------------------
+    
+    If Not QueueIsEmpty(q_queue) Then
+        If q_pos <= QueueSize(q_queue) Then
+            If VarType(q_queue(q_pos)) = vbObject Then
+                Set q_item = q_queue(q_pos)
+            Else
+                q_item = q_queue(q_pos)
+            End If
+        End If
+    End If
+    
+End Sub
+
+Private Sub QueueLast(ByVal q_queue As Collection, _
+                      ByRef q_item As Variant)
+' ----------------------------------------------------------------------------
+' Returns the item (q_item) in the queue which had been enqueued last in the
+' queue (q_queue), provided the queue is not empty.
+' ----------------------------------------------------------------------------
+    Dim lSize As Long
+    
+    If Not QueueIsEmpty(q_queue) Then
+        lSize = q_queue.Count
+        If VarType(q_queue(lSize)) = vbObject Then
+            Set q_item = q_queue(lSize)
+        Else
+            q_item = q_queue(lSize)
+        End If
+    End If
+End Sub
+
+Private Function QueueSize(ByVal q_queue As Collection) As Long
+    If Not QueueIsEmpty(q_queue) Then QueueSize = q_queue.Count
+End Function
+
+Public Function Size(Optional ByRef q_queue As Collection = Nothing) As Long
+' ----------------------------------------------------------------------------
+' Returns the size (number of items) in the queue (q_queue), in case none is
+' provided those of the module's internal queue.
+' ----------------------------------------------------------------------------
+    Size = QueueSize(UsedQueue(q_queue))
+End Function
+
+Private Function UsedQueue(Optional ByRef u_queue As Collection = Nothing) As Collection
+' ------------------------------------------------------------------------------
+' Provides the stack the caller has provided (passed with the call) or when none
+' had been provided, a default stack.
+' ------------------------------------------------------------------------------
+    Const PROC = "UsedQueue"
+    
+    On Error GoTo eh
+    Select Case True
+        Case Not u_queue Is Nothing And TypeName(u_queue) <> "Collection"
+            Err.Raise AppErr(1), ErrSrc(PROC), "The provided queue (u_queue) is not a Collection!"
+        Case Not u_queue Is Nothing And TypeName(u_queue) = "Collection"
+            Set UsedQueue = u_queue
+        Case u_queue Is Nothing
+            Set UsedQueue = cllQueue
+    End Select
+
+xt: Exit Function
+
+eh: Select Case ErrMsg(ErrSrc(PROC))
+        Case vbResume:  Stop: Resume
+        Case Else:      GoTo xt
+    End Select
+End Function
+
+Private Sub Test_Private_Queue_Services()
+' ----------------------------------------------------------------------------
+' Self-test for the 'Private' Queue.... services
+' ----------------------------------------------------------------------------
+    Dim MyQueue As New Collection
+    Dim Item    As Variant
+    Dim Pos     As Long
+                                Debug.Assert QueueIsEmpty(MyQueue)
+    QueueEnqueue MyQueue, "A":  Debug.Assert Not QueueIsEmpty(MyQueue)
+    QueueDequeue MyQueue, Item: Debug.Assert Item = "A"
+                                Debug.Assert QueueIsEmpty(MyQueue)
+    QueueEnqueue MyQueue, "A"
+    QueueEnqueue MyQueue, "B"
+    QueueEnqueue MyQueue, "C"
+    QueueEnqueue MyQueue, "D"
+                                Debug.Assert Not QueueIsEmpty(MyQueue)
+                                Debug.Assert QueueSize(MyQueue) = 4
+                                Debug.Assert IsInQueue(MyQueue, "B", Pos) = True
+                                Debug.Assert Pos = 2
+    QueueItem MyQueue, 2, Item: Debug.Assert Item = "B"
+    QueueDequeue MyQueue, Item: Debug.Assert Item = "A"
+    QueueDequeue MyQueue, Item: Debug.Assert Item = "B"
+    QueueDequeue MyQueue, Item: Debug.Assert Item = "C"
+    QueueDequeue MyQueue, Item: Debug.Assert Item = "D"
+                                Debug.Assert QueueIsEmpty(MyQueue)
+    Set MyQueue = Nothing
+    
+End Sub
 

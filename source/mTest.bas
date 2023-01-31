@@ -4,341 +4,6 @@ Option Explicit
 Private MyStack  As New Collection
 Private MyQueue  As New Collection
 
-Private Function ErrSrc(ByVal sProc As String) As String
-    ErrSrc = "mTest." & sProc
-End Function
-
-Public Sub Regression_Test()
-    Const PROC = "Regression_test"
-    
-    mTrc.LogClear
-    BoP ErrSrc(PROC)
-    mErH.Regression = True
-    mTest.Test_StandardModule_mQue_Default_Queue
-    mTest.Test_StandardModule_mQue_Provided_Queue
-    mTest.Test_StandardModule_mStck_Default_Stack
-    mTest.Test_StandardModule_mStck_Provided_Stack
-    mTest.Test_ClassModule_clsStack
-    mTest.Test_ClassModule_clsQueue
-    EoP ErrSrc(PROC)
-    mTrc.Dsply
-    
-End Sub
-
-Public Sub Test_StandardModule_mQue_Default_Queue()
-    Const PROC = "Test_StandardModule_mQue_Default_Queue"
-    
-    BoP ErrSrc(PROC)
-    BoC "mQueue.QisEmpty"
-    Debug.Assert mQueue.QisEmpty()
-    EoC "mQueue.QisEmpty"
-    
-    BoC "mQueue.Qenq"
-    mQueue.Qenq() = "A"
-    EoC "mQueue.Qenq"
-    
-    BoC "mQueue.Qdeq"
-    Debug.Assert mQueue.Qdeq() = "A"
-    EoC "mQueue.Qdeq"
-    
-    mQueue.Qenq() = "A"
-    mQueue.Qenq() = "B"
-    mQueue.Qenq() = "C"
-    mQueue.Qenq() = "D"
-    
-    BoC "mQueue.Qsize"
-    Debug.Assert mQueue.Qsize() = 4
-    EoC "mQueue.Qsize"
-        
-    BoC "mQueue.Qed"
-    Debug.Assert mQueue.Qed(, "B") = True
-    EoC "mQueue.Qed"
-    
-    Debug.Assert mQueue.Qdeq() = "D"
-    Debug.Assert mQueue.Qdeq() = "C"
-    Debug.Assert mQueue.Qdeq() = "B"
-    Debug.Assert mQueue.Qdeq() = "A"
-    Debug.Assert mQueue.QisEmpty()
-    EoP ErrSrc(PROC)
-        
-End Sub
-
-Public Sub Test_StandardModule_mQue_Provided_Queue()
-    Const PROC = "Test_StandardModule_mQue_Provided_Queue"
-
-    BoP ErrSrc(PROC)
-    BoC "mQueue.QisEmpty"
-    Debug.Assert mQueue.QisEmpty(MyQueue)
-    EoC "mQueue.QisEmpty"
-    
-    BoC "mQueue.Qenq"
-    mQueue.Qenq(MyQueue) = "A"
-    EoC "mQueue.Qenq"
-    
-    BoC "mQueue.Qdeq"
-    Debug.Assert mQueue.Qdeq(MyQueue) = "A"
-    EoC "mQueue.Qdeq"
-    
-    mQueue.Qenq(MyQueue) = "A"
-    mQueue.Qenq(MyQueue) = "B"
-    mQueue.Qenq(MyQueue) = "C"
-    mQueue.Qenq(MyQueue) = "D"
-    
-    BoC "mQueue.Qsize"
-    Debug.Assert mQueue.Qsize(MyQueue) = 4
-    EoC "mQueue.Qsize"
-        
-    BoC "mQueue.Qed"
-    Debug.Assert mQueue.Qed(MyQueue, "B") = True
-    EoC "mQueue.Qed"
-    
-    Debug.Assert Not mQueue.QisEmpty(MyQueue)
-    Debug.Assert mQueue.Qdeq(MyQueue) = "D"
-    Debug.Assert mQueue.Qdeq(MyQueue) = "C"
-    Debug.Assert mQueue.Qdeq(MyQueue) = "B"
-    Debug.Assert mQueue.Qdeq(MyQueue) = "A"
-    Debug.Assert mQueue.QisEmpty(MyQueue)
-    EoP ErrSrc(PROC)
-    
-End Sub
-
-Public Sub Test_StandardModule_mStck_Default_Stack()
-    Const PROC = "Test_StandardModule_mStck_Default_Stack"
-
-    Dim StackItem As Variant
-    
-    BoP ErrSrc(PROC)
-    
-    BoC "mStack.IsEmpty"
-    Debug.Assert mStack.IsEmpty()
-    EoC "mStack.IsEmpty"
-    
-    BoC "mStack.Push"
-    mStack.Push "A"
-    EoC "mStack.Push"
-    
-    BoC "mStack.Pop"
-    mStack.Pop StackItem
-    Debug.Assert StackItem = "A"
-    EoC "mStack.Pop"
-    
-    mStack.Push "A"
-    mStack.Push "B"
-    mStack.Push "C"
-    mStack.Push "D"
-       
-    BoC "mStack.Size"
-    Debug.Assert mStack.Size() = 4
-    EoC "mStack.Size"
-        
-    BoC "mStack.Stacked"
-    Debug.Assert mStack.Stacked("B") = True
-    EoC "mStack.Stacked"
-    
-    Debug.Assert Not mStack.IsEmpty
-    mStack.Pop StackItem
-    Debug.Assert StackItem = "D"
-    mStack.Pop StackItem
-    Debug.Assert StackItem = "C"
-    mStack.Pop StackItem
-    Debug.Assert StackItem = "B"
-    mStack.Pop StackItem
-    Debug.Assert StackItem = "A"
-    Debug.Assert mStack.IsEmpty
-    EoP ErrSrc(PROC)
-    
-End Sub
-
-Public Sub Test_StandardModule_mStck_Provided_Stack()
-    Const PROC = "Test_StandardModule_mStck_Provided_Stack"
-    
-    Dim StackItem   As Variant
-    Dim StackPos    As Long
-    
-    BoP ErrSrc(PROC)
-    
-    BoC "mStack.IsEmpty"
-    Debug.Assert mStack.IsEmpty(MyStack)
-    EoC "mStack.IsEmpty"
-    
-    BoC "mStack.Push"
-    mStack.Push "A", MyStack
-    EoC "mStack.Push"
-    
-    BoC "mStack.Pop"
-    mStack.Pop StackItem, MyStack
-    EoC "mStack.Pop"
-    Debug.Assert StackItem = "A"
-    
-    mStack.Push "A", MyStack
-    mStack.Push "B", MyStack
-    mStack.Push "C", MyStack
-    mStack.Push "D", MyStack
-    
-    BoC "mStack.Size"
-    Debug.Assert mStack.Size(MyStack) = 4
-    EoC "mStack.Size"
-        
-    BoC "mStack.Stacked"
-    Debug.Assert mStack.Stacked("B", StackPos, MyStack) = True
-    EoC "mStack.Stacked"
-    Debug.Assert StackPos = 2
-    
-    Debug.Assert Not mStack.IsEmpty(MyStack)
-    mStack.Pop StackItem, MyStack
-    Debug.Assert StackItem = "D"
-    mStack.Pop StackItem, MyStack
-    Debug.Assert StackItem = "C"
-    mStack.Pop StackItem, MyStack
-    Debug.Assert StackItem = "B"
-    mStack.Pop StackItem, MyStack
-    Debug.Assert StackItem = "A"
-    Debug.Assert mStack.IsEmpty(MyStack)
-    EoP ErrSrc(PROC)
-    
-End Sub
-
-Public Sub Test_ClassModule_clsStack()
-    Const PROC = "Test_ClassModule_clsStack"
-    
-    Dim MyStack     As New clsStack
-    Dim StackItem   As Variant
-    Dim StackPos    As Long
-    
-    BoP ErrSrc(PROC)
-    
-    BoC "clsStack.IsEmpty"
-    Debug.Assert MyStack.IsEmpty
-    EoC "clsStack.IsEmpty"
-    
-    BoC "cllStack.Push"
-    MyStack.Push "A"
-    EoC "cllStack.Push"
-    
-    BoC "cllStack.Pop"
-    MyStack.Pop StackItem
-    EoC "cllStack.Pop"
-    Debug.Assert StackItem = "A"
-    
-    MyStack.Push "A"
-    MyStack.Push "B"
-    MyStack.Push "C"
-    MyStack.Push "D"
-    
-    BoC "cllStack.Size"
-    Debug.Assert MyStack.Size = 4
-    EoC "cllStack.Size"
-    
-    BoC "cllStack.Top"
-    MyStack.Top StackItem
-    Debug.Assert StackItem = "D"
-    EoC "cllStack.Top"
-        
-    BoC "cllStack.Bottom"
-    MyStack.Bottom StackItem
-    Debug.Assert StackItem = "A"
-    EoC "cllStack.Bottom"
-    
-    BoC "cllStack.IsStacked"
-    Debug.Assert MyStack.IsStacked("C", StackPos) = True
-    EoC "cllStack.IsStacked"
-    Debug.Assert StackPos = 3
-    
-    Debug.Assert Not MyStack.IsEmpty
-    MyStack.Pop StackItem
-    Debug.Assert StackItem = "D"
-    MyStack.Pop StackItem
-    Debug.Assert StackItem = "C"
-    MyStack.Pop StackItem
-    Debug.Assert StackItem = "B"
-    MyStack.Pop StackItem
-    Debug.Assert StackItem = "A"
-    Debug.Assert MyStack.IsEmpty
-    
-    Set MyStack = Nothing
-    
-    EoP ErrSrc(PROC)
-End Sub
-
-Public Sub Test_ClassModule_clsQueue()
-    Const PROC = "Test_ClassModule_clsQueue"
-    
-    Dim MyQueue     As New clsQueue
-    Dim QueueItem   As Variant
-    Dim QueuePos    As Long
-    
-    BoP ErrSrc(PROC)
-    
-    BoC "clsQueue.IsEmpty"
-    Debug.Assert MyQueue.IsEmpty
-    EoC "clsQueue.IsEmpty"
-    
-    BoC "cllQueue.Enqueue"
-    MyQueue.EnQueue "A"
-    EoC "cllQueue.Enqueue"
-    
-    BoC "cllQueue.Dequeue"
-    MyQueue.DeQueue QueueItem
-    EoC "cllQueue.Dequeue"
-    Debug.Assert QueueItem = "A"
-    
-    MyQueue.EnQueue "A"
-    MyQueue.EnQueue "B"
-    MyQueue.EnQueue "C"
-    MyQueue.EnQueue "D"
-    
-    BoC "cllQueue.Size"
-    Debug.Assert MyQueue.Size = 4
-    EoC "cllQueue.Size"
-    
-    BoC "cllQueue.First"
-    MyQueue.First QueueItem
-    Debug.Assert QueueItem = "A"
-    EoC "cllQueue.First"
-        
-    BoC "cllQueue.Last"
-    MyQueue.Last QueueItem
-    EoC "cllQueue.Last"
-    Debug.Assert QueueItem = "D"
-    
-    BoC "cllQueue.IsQueued"
-    Debug.Assert MyQueue.IsQueued("C", QueuePos) = True
-    EoC "cllQueue.IsQueued"
-    Debug.Assert QueuePos = 3
-    
-    Debug.Assert Not MyQueue.IsEmpty
-    MyQueue.DeQueue QueueItem
-    Debug.Assert QueueItem = "A"
-    MyQueue.DeQueue QueueItem
-    Debug.Assert QueueItem = "B"
-    MyQueue.DeQueue QueueItem
-    Debug.Assert QueueItem = "C"
-    MyQueue.DeQueue QueueItem
-    Debug.Assert QueueItem = "D"
-    Debug.Assert MyQueue.IsEmpty
-    
-    Set MyQueue = Nothing
-    
-    EoP ErrSrc(PROC)
-End Sub
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Private Sub BoC(ByVal boc_id As String, ParamArray b_arguments() As Variant)
 ' ------------------------------------------------------------------------------
 ' (B)egin-(o)f-(C)ode with id (boc_id) trace. Procedure to be copied as Private
@@ -395,4 +60,336 @@ Private Sub EoP(ByVal e_proc As String, _
 #End If
 End Sub
 
+Private Function ErrSrc(ByVal sProc As String) As String
+    ErrSrc = "mTest." & sProc
+End Function
+
+Public Sub Regression_Test()
+    Const PROC = "Regression_test"
+    
+    mTrc.LogClear
+    BoP ErrSrc(PROC)
+    mErH.Regression = True
+    mTest.Test_StandardModule_mQue_Default_Queue
+    mTest.Test_StandardModule_mQue_Provided_Queue
+    mTest.Test_StandardModule_mStck_Default_Stack
+    mTest.Test_StandardModule_mStck_Provided_Stack
+    mTest.Test_ClassModule_clsStack
+    mTest.Test_ClassModule_clsQueue
+    EoP ErrSrc(PROC)
+    mTrc.Dsply
+    
+End Sub
+
+Public Sub Test_ClassModule_clsQueue()
+    Const PROC = "Test_ClassModule_clsQueue"
+    
+    Dim MyQueue     As New clsQueue
+    Dim QueueItem   As Variant
+    Dim QueuePos    As Long
+    
+    BoP ErrSrc(PROC)
+    
+    BoC "clsQueue.IsEmpty"
+    Debug.Assert MyQueue.IsEmpty
+    EoC "clsQueue.IsEmpty"
+    
+    BoC "cllQueue.Enqueue"
+    MyQueue.EnQueue "A"
+    EoC "cllQueue.Enqueue"
+    
+    BoC "cllQueue.DeQueue"
+    MyQueue.DeQueue QueueItem
+    EoC "cllQueue.DeQueue"
+    Debug.Assert QueueItem = "A"
+    
+    MyQueue.EnQueue "A"
+    MyQueue.EnQueue "B"
+    MyQueue.EnQueue "C"
+    MyQueue.EnQueue "D"
+    
+    BoC "cllQueue.Size"
+    Debug.Assert MyQueue.Size = 4
+    EoC "cllQueue.Size"
+    
+    BoC "cllQueue.First"
+    MyQueue.First QueueItem
+    Debug.Assert QueueItem = "A"
+    EoC "cllQueue.First"
+        
+    BoC "cllQueue.Last"
+    MyQueue.Last QueueItem
+    EoC "cllQueue.Last"
+    Debug.Assert QueueItem = "D"
+    
+    BoC "cllQueue.IsQueued"
+    Debug.Assert MyQueue.IsQueued("C", QueuePos) = True
+    EoC "cllQueue.IsQueued"
+    Debug.Assert QueuePos = 3
+    
+    Debug.Assert Not MyQueue.IsEmpty
+    MyQueue.DeQueue QueueItem
+    Debug.Assert QueueItem = "A"
+    MyQueue.DeQueue QueueItem
+    Debug.Assert QueueItem = "B"
+    MyQueue.DeQueue QueueItem
+    Debug.Assert QueueItem = "C"
+    MyQueue.DeQueue QueueItem
+    Debug.Assert QueueItem = "D"
+    Debug.Assert MyQueue.IsEmpty
+    
+    Set MyQueue = Nothing
+    
+    EoP ErrSrc(PROC)
+End Sub
+
+Public Sub Test_ClassModule_clsStack()
+    Const PROC = "Test_ClassModule_clsStack"
+    
+    Dim MyStack As New clsStack
+    Dim Item    As Variant
+    Dim Pos     As Long
+    
+    BoP ErrSrc(PROC)
+    
+    BoC "clsStack.IsEmpty"
+    Debug.Assert MyStack.IsEmpty
+    EoC "clsStack.IsEmpty"
+    
+    BoC "cllStack.Push"
+    MyStack.Push "A"
+    EoC "cllStack.Push"
+    
+    BoC "cllStack.Pop"
+    MyStack.Pop Item
+    EoC "cllStack.Pop"
+    Debug.Assert Item = "A"
+    
+    MyStack.Push "A"
+    MyStack.Push "B"
+    MyStack.Push "C"
+    MyStack.Push "D"
+    
+    BoC "cllStack.Size"
+    Debug.Assert MyStack.Size = 4
+    EoC "cllStack.Size"
+    
+    BoC "cllStack.Top"
+    MyStack.Top Item
+    Debug.Assert Item = "D"
+    EoC "cllStack.Top"
+        
+    BoC "cllStack.Bottom"
+    MyStack.Bottom Item
+    Debug.Assert Item = "A"
+    EoC "cllStack.Bottom"
+    
+    BoC "cllStack.IsStacked"
+    Debug.Assert MyStack.IsStacked("C", Pos) = True
+    EoC "cllStack.IsStacked"
+    Debug.Assert Pos = 3
+    
+    Debug.Assert Not MyStack.IsEmpty
+    MyStack.Pop Item
+    Debug.Assert Item = "D"
+    MyStack.Pop Item
+    Debug.Assert Item = "C"
+    MyStack.Pop Item
+    Debug.Assert Item = "B"
+    MyStack.Pop Item
+    Debug.Assert Item = "A"
+    Debug.Assert MyStack.IsEmpty
+    
+    Set MyStack = Nothing
+    
+    EoP ErrSrc(PROC)
+End Sub
+
+Public Sub Test_StandardModule_mQue_Default_Queue()
+    Const PROC = "Test_StandardModule_mQue_Default_Queue"
+    
+    Dim Item As Variant
+    Dim Pos  As Long
+    
+    BoP ErrSrc(PROC)
+    BoC "mQueue.IsEmpty"
+    Debug.Assert mQueue.IsEmpty()
+    EoC "mQueue.IsEmpty"
+    
+    BoC "mQueue.EnQueue"
+    mQueue.EnQueue "A"
+    EoC "mQueue.EnQueue"
+    
+    BoC "mQueue.DeQueue"
+    mQueue.DeQueue Item
+    EoC "mQueue.DeQueue"
+    Debug.Assert Item = "A"
+    
+    mQueue.EnQueue "A"
+    mQueue.EnQueue "B"
+    mQueue.EnQueue "C"
+    mQueue.EnQueue "D"
+    
+    BoC "mQueue.Size"
+    Debug.Assert mQueue.Size() = 4
+    EoC "mQueue.Size"
+        
+    BoC "mQueue.Queued"
+    Debug.Assert mQueue.IsQueued("B", Pos) = True
+    EoC "mQueue.Queued"
+    Debug.Assert Pos = 2
+    
+    mQueue.DeQueue Item:    Debug.Assert Item = "A"
+    mQueue.DeQueue Item:    Debug.Assert Item = "B"
+    mQueue.DeQueue Item:    Debug.Assert Item = "C"
+    mQueue.DeQueue Item:    Debug.Assert Item = "D"
+                            Debug.Assert mQueue.IsEmpty()
+    EoP ErrSrc(PROC)
+        
+End Sub
+
+Public Sub Test_StandardModule_mQue_Provided_Queue()
+    Const PROC = "Test_StandardModule_mQue_Provided_Queue"
+
+    Dim Item    As Variant
+    Dim Pos     As Long
+
+    BoP ErrSrc(PROC)
+    BoC "mQueue.IsEmpty"
+    Debug.Assert mQueue.IsEmpty(MyQueue)
+    EoC "mQueue.IsEmpty"
+    
+    BoC "mQueue.EnQueue"
+    mQueue.EnQueue "A", MyQueue
+    EoC "mQueue.EnQueue"
+    
+    BoC "mQueue.DeQueue"
+    mQueue.DeQueue Item, MyQueue:        Debug.Assert Item = "A"
+    EoC "mQueue.DeQueue"
+    
+    mQueue.EnQueue "A", MyQueue
+    mQueue.EnQueue "B", MyQueue
+    mQueue.EnQueue "C", MyQueue
+    mQueue.EnQueue "D", MyQueue
+    
+    BoC "mQueue.Size"
+    Debug.Assert mQueue.Size(MyQueue) = 4
+    EoC "mQueue.Size"
+        
+    BoC "mQueue.IsQueued"
+    Debug.Assert mQueue.IsQueued("B", Pos, MyQueue) = True
+    EoC "mQueue.IsQueued"
+    Debug.Assert Pos = 2
+    
+    Debug.Assert Not mQueue.IsEmpty(MyQueue)
+    mQueue.DeQueue Item, MyQueue
+    Debug.Assert Item = "A"
+    mQueue.DeQueue Item, MyQueue
+    Debug.Assert Item = "B"
+    mQueue.DeQueue Item, MyQueue
+    Debug.Assert Item = "C"
+    mQueue.DeQueue Item, MyQueue
+    Debug.Assert Item = "D"
+    
+    Debug.Assert mQueue.IsEmpty(MyQueue)
+    
+    EoP ErrSrc(PROC)
+    
+End Sub
+
+Public Sub Test_StandardModule_mStck_Default_Stack()
+    Const PROC = "Test_StandardModule_mStck_Default_Stack"
+
+    Dim Item As Variant
+    
+    BoP ErrSrc(PROC)
+    
+    BoC "mStack.IsEmpty"
+    Debug.Assert mStack.IsEmpty()
+    EoC "mStack.IsEmpty"
+    
+    BoC "mStack.Push"
+    mStack.Push "A"
+    EoC "mStack.Push"
+    
+    BoC "mStack.Pop"
+    mStack.Pop Item
+    Debug.Assert Item = "A"
+    EoC "mStack.Pop"
+    
+    mStack.Push "A"
+    mStack.Push "B"
+    mStack.Push "C"
+    mStack.Push "D"
+       
+    BoC "mStack.Size"
+    Debug.Assert mStack.Size() = 4
+    EoC "mStack.Size"
+        
+    BoC "mStack.Stacked"
+    Debug.Assert mStack.Stacked("B") = True
+    EoC "mStack.Stacked"
+    
+    Debug.Assert Not mStack.IsEmpty
+    mStack.Pop Item
+    Debug.Assert Item = "D"
+    mStack.Pop Item
+    Debug.Assert Item = "C"
+    mStack.Pop Item
+    Debug.Assert Item = "B"
+    mStack.Pop Item
+    Debug.Assert Item = "A"
+    Debug.Assert mStack.IsEmpty
+    EoP ErrSrc(PROC)
+    
+End Sub
+
+Public Sub Test_StandardModule_mStck_Provided_Stack()
+    Const PROC = "Test_StandardModule_mStck_Provided_Stack"
+    
+    Dim Item   As Variant
+    Dim Pos    As Long
+    
+    BoP ErrSrc(PROC)
+    
+    BoC "mStack.IsEmpty"
+    Debug.Assert mStack.IsEmpty(MyStack)
+    EoC "mStack.IsEmpty"
+    
+    BoC "mStack.Push"
+    mStack.Push "A", MyStack
+    EoC "mStack.Push"
+    
+    BoC "mStack.Pop"
+    mStack.Pop Item, MyStack
+    EoC "mStack.Pop"
+    Debug.Assert Item = "A"
+    
+    mStack.Push "A", MyStack
+    mStack.Push "B", MyStack
+    mStack.Push "C", MyStack
+    mStack.Push "D", MyStack
+    
+    BoC "mStack.Size"
+    Debug.Assert mStack.Size(MyStack) = 4
+    EoC "mStack.Size"
+        
+    BoC "mStack.Stacked"
+    Debug.Assert mStack.Stacked("B", Pos, MyStack) = True
+    EoC "mStack.Stacked"
+    Debug.Assert Pos = 2
+    
+    Debug.Assert Not mStack.IsEmpty(MyStack)
+    mStack.Pop Item, MyStack
+    Debug.Assert Item = "D"
+    mStack.Pop Item, MyStack
+    Debug.Assert Item = "C"
+    mStack.Pop Item, MyStack
+    Debug.Assert Item = "B"
+    mStack.Pop Item, MyStack
+    Debug.Assert Item = "A"
+    Debug.Assert mStack.IsEmpty(MyStack)
+    EoP ErrSrc(PROC)
+    
+End Sub
 
