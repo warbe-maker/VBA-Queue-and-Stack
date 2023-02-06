@@ -1,21 +1,22 @@
-## Common-VBA-Queue-and-Stack-services
-Common VBA Components providing Queue (mQueue, clsQueue) and Stack (mStack, clsStack) services.
+## Common VBA Queue and Stack services
+Common VBA Components providing comprehensive queue and stack services each in three different flavors, as StandardModule (mQueue, mStack) as ClassModules (clsQueue, clsStack) and as private procedures for being copied into any StandardModule (Queue....., Stack......).
+
 ## Services
 All services below are provided either by a Standard-Module (mQueue, mStack) by a Class-Module (clsQueue, clsStack). In addition the services may be integrated as Private procedures (Queue...., Stack....) which are identical in the clsQueue/mQueue and the clsStack/mStack modules.
 
-| Service   | Queue | Stack | Description                                                                         |
-| --------- |:-----:|:-----:|---------------------------------------------------------------------- |
-| Bottom    |       |   x   | Returns the bottom item on the stack                                                |
-| DeQueue   |       |       | De-queues (returns and removes):<br>- the first item in the queue (the default)<br>- a specific item plus its position provided it is unique in the queue<br>- an item identified by its position    |
+| Service   | Queue | Stack | Description                                                                        |
+| --------- |:-----:|:-----:|------------------------------------------------------------------------------------|
+| Bottom    |       |   x   | Returns the bottom item on the stack                                               |
+| DeQueue   |   x   |       | De-queues (returns and removes):<br>- the first item in the queue (the default)<br>- a specific item plus its position provided an identical and unique item is in the queue<br>- an item identified by its position       |
 | EnQueue   |   x   |       | Adds/en-queues an item
-| First     |   x   |       | Returns the first item added/en-queued)  |
-| IsEmpty   |   x   |   x   | Returns TRUE when the stack is empty                                                |
-| IsStacked |       |   x   | Returns TRUE and its position when a provided item is on the stack                  |
-| Item      |   x   |   x   | Returns an item on a provided position                                              |
+| First     |   x   |       | Returns the first item added/en-queued)                                            |
+| IsEmpty   |   x   |   x   | Returns TRUE when the stack is empty                                               |
+| IsStacked |       |   x   | Returns TRUE and its position when a provided item is on the stack                 |
+| Item      |   x   |   x   | Returns an item on a provided position - from a queue without de-queueing it, or from a stack without taking it off the stack. These services allow to investigate the queue's/stack's items in a loop. |
 | Last      |   x   |       | Returns the last item in the queue (i.e. the last item added/en-queued)
 | Pop       |       |   x   | Returns the top (last added) item from the stack and removes it                    |
 | Push      |       |   x   | Pushes an item on the stack                                                        |
-| Size      |   x   |   x   | Returns the current stack's size                                                   |
+| Size      |   x   |   x   | Returns the current size of the queue or stack                                     |
 | Top       |       |   x   | Returns the top item on the stack by leaving it on the stack, i.e. not popping it. |
 
 
