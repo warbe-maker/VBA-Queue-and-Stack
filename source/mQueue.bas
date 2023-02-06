@@ -229,16 +229,59 @@ Public Sub Item(ByVal i_pos As Long, _
 End Sub
 
 Private Sub QueueDequeue(ByRef q_queue As Collection, _
-                         ByRef q_item As Variant)
+                Optional ByRef q_item_returned As Variant, _
+                Optional ByVal q_item_to_be_dequeued As Variant = Nothing, _
+                Optional ByVal q_item_pos_to_be_dequeued As Long = 0)
 ' ----------------------------------------------------------------------------
-' Returns the top item in the queue (q_item), i.e. the last one pushed on it,
-' and removes it from the queue.
+' - When neither a specific item to be dequeued (q_item_to_be_dequeued) nor a
+'   specific to be dequed item by its position (q_item_pos) is provided, the
+'   service returns the top item in the queue (q_item_returned) - i.e. the
+'   first one added, i.e. enqueued - and removes it from the queue.
+' - When a specific item to be dequeued (q_item_to_be_dequeued) is provided
+'   and it exists in the queue, this one is dequeued, returned
+'   (q_item_returned) and removed from the queue.
+' - When a specific to be dequeued item by its position (q_item_pos) is
+'   provided - and the position is within the queue's size - this position's
+'   item is returned and removed.
+'
+' Notes
+' 1. When the argument (q_item_to_be_dequeued) is provided the argument
+'    (q_item_pos_to_be_dequeued) is ignored.
+' 2. All private procedures Queue... may be copied into any StandardModule
 ' ----------------------------------------------------------------------------
-    Dim Pos As Long
+    Const PROC = "QueueDequeue"
+    
+    On Error GoTo eh
+    Dim lPos    As Long
+    Dim lNo     As Long
+    
     If Not QueueIsEmpty(q_queue) Then
-        QueueFirst q_queue, q_item, Pos
-        q_queue.Remove Pos
+        If Not QueueIsNothing(q_item_to_be_dequeued) Then
+            If QueueIsQueued(q_queue, q_item_to_be_dequeued, lPos, lNo) Then
+                If lNo > 1 _
+                Then Err.Raise AppErr(1), ErrSrc(PROC), "The specific item provided cannot be dequeued since it is not unambigous but in the queue " & lNo & " times!"
+                QueueVarType q_item_to_be_dequeued, q_item_returned
+                q_queue.Remove lPos
+            End If
+        ElseIf q_item_pos_to_be_dequeued <> 0 Then
+            If q_item_pos_to_be_dequeued <= QueueSize(q_queue) Then
+                QueueItem q_queue, q_item_pos_to_be_dequeued, q_item_returned
+                q_queue.Remove q_item_pos_to_be_dequeued
+            End If
+        Else
+            QueueFirst q_queue, q_item_returned
+            q_queue.Remove 1
+        End If
+    Else
+        Set q_item_returned = Nothing
     End If
+
+xt: Exit Sub
+
+eh: Select Case ErrMsg(ErrSrc(PROC))
+        Case vbResume:  Stop: Resume
+        Case Else:      GoTo xt
+    End Select
 End Sub
 
 Private Sub QueueEnqueue(ByRef q_queue As Collection, _
@@ -248,25 +291,64 @@ Private Sub QueueEnqueue(ByRef q_queue As Collection, _
 End Sub
 
 Private Sub QueueFirst(ByVal q_queue As Collection, _
-                       ByRef q_item As Variant, _
-              Optional ByRef q_pos As Long)
+                       ByRef q_item_returned As Variant)
 ' ----------------------------------------------------------------------------
 ' Returns the current first item in the queue, i.e. the one added (enqueued)
-' first.
+' first. When the queue is empty Nothing is returned
 ' ----------------------------------------------------------------------------
     If Not QueueIsEmpty(q_queue) Then
-        q_pos = 1
-        If VarType(q_queue(q_pos)) = vbObject Then
-            Set q_item = q_queue(q_pos)
-        Else
-            q_item = q_queue(q_pos)
-        End If
+        QueueVarType q_queue(1), q_item_returned
+    Else
+        Set q_item_returned = Nothing
     End If
+
 End Sub
+
+Private Function QueueIdenticalItems(ByVal q_1 As Variant, _
+                                     ByVal q_2 As Variant) As Boolean
+' ----------------------------------------------------------------------------
+' Retunrs TRUE when item 1 is identical with item 2.
+' ----------------------------------------------------------------------------
+    Select Case True
+        Case VarType(q_1) = vbObject And VarType(q_2) = vbObject:   QueueIdenticalItems = q_1 Is q_2
+        Case VarType(q_1) <> vbObject And VarType(q_2) <> vbObject: QueueIdenticalItems = q_1 = q_2
+    End Select
+End Function
 
 Private Function QueueIsEmpty(ByVal q_queue As Collection) As Boolean
     QueueIsEmpty = q_queue Is Nothing
     If Not QueueIsEmpty Then QueueIsEmpty = q_queue.Count = 0
+End Function
+
+Private Function QueueIsNothing(ByVal i_item As Variant) As Boolean
+    Select Case True
+        Case VarType(i_item) = vbNull:      QueueIsNothing = True
+        Case VarType(i_item) = vbEmpty:     QueueIsNothing = True
+        Case VarType(i_item) = vbObject:    QueueIsNothing = i_item Is Nothing
+        Case IsNumeric(i_item):             QueueIsNothing = CInt(i_item) = 0
+        Case VarType(i_item) = vbString:    QueueIsNothing = i_item = vbNullString
+    End Select
+End Function
+
+Private Function QueueIsQueued(ByVal i_queue As Collection, _
+                               ByVal i_item As Variant, _
+                      Optional ByRef i_pos As Long, _
+                      Optional ByRef i_no_found As Long) As Boolean
+' ----------------------------------------------------------------------------
+' Returns TRUE and the index (i_pos) when the item (i_item) is found in the
+' queue (i_queue).
+' ----------------------------------------------------------------------------
+    Dim i As Long
+    
+    i_no_found = 0
+    For i = 1 To i_queue.Count
+        If QueueIdenticalItems(i_queue(i), i_item) Then
+            i_no_found = i_no_found + 1
+            QueueIsQueued = True
+            i_pos = i
+        End If
+    Next i
+
 End Function
 
 Private Sub QueueItem(ByVal q_queue As Collection, _
@@ -311,6 +393,20 @@ Private Function QueueSize(ByVal q_queue As Collection) As Long
     If Not QueueIsEmpty(q_queue) Then QueueSize = q_queue.Count
 End Function
 
+Private Sub QueueVarType(ByVal q_item As Variant, _
+                         ByRef q_item_result As Variant)
+' ----------------------------------------------------------------------------
+' Returns the pr0vided item (q_item) with respect to its VarType (q_item_var).
+' ----------------------------------------------------------------------------
+    Set q_item_result = Nothing
+    If VarType(q_item) = vbObject Then
+        Set q_item_result = q_item
+    Else
+        q_item_result = q_item
+    End If
+End Sub
+
+
 Public Function Size(Optional ByRef q_queue As Collection = Nothing) As Long
 ' ----------------------------------------------------------------------------
 ' Returns the size (number of items) in the queue (q_queue), in case none is
@@ -321,8 +417,8 @@ End Function
 
 Private Function UsedQueue(Optional ByRef u_queue As Collection = Nothing) As Collection
 ' ------------------------------------------------------------------------------
-' Provides the stack the caller has provided (passed with the call) or when none
-' had been provided, a default stack.
+' Provides the queue the caller has provided (passed with the call) or when none
+' had been provided, a default queue.
 ' ------------------------------------------------------------------------------
     Const PROC = "UsedQueue"
     
