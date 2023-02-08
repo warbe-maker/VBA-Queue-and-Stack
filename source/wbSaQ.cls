@@ -9,16 +9,16 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Option Explicit
 ' ----------------------------------------------------------------------------
-' Workbook SaQ.xlsb(wbSaQ): Stack (mStck) and Queue (mQue) services.
+' Workbook SaQ.xlsb(wbSaQ): Stk (mStck) and Queue (mQue) services.
 '
 ' Standard Modules
 ' - mQue    Queue services
-' - mStck   Stack services
+' - mStck   Stk services
 ' - mTest   Regression-Test
 '
 ' W. Rauschenberger Berlin Jan 2013
 ' ----------------------------------------------------------------------------
-Private Const HOSTED_RAWS = "mStack,mQueue,clsStack, clsQueue"
+Private Const HOSTED_RAWS = "mStk,mQ,clsStk, clsQ"
 
 Private Sub Workbook_Open()
     '~~ The following statement invokes the named service, provided the Workbook

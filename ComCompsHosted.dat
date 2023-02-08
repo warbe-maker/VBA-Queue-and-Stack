@@ -10,3 +10,15 @@ RawRevisionNumber=2023-01-31.002
 [clsQueue]
 RawExpFileFullName=D:\Ablage\Excel VBA\DevAndTest\Common-VBA-Queue-and-Stack-services\source\clsQueue.cls
 RawRevisionNumber=2023-02-06.004
+[mQ]
+RawExpFileFullName=D:\Ablage\Excel VBA\DevAndTest\Common-VBA-Queue-and-Stack-services\source\mQ.bas
+RawRevisionNumber=2023-02-08.001
+[clsQ]
+RawExpFileFullName=D:\Ablage\Excel VBA\DevAndTest\Common-VBA-Queue-and-Stack-services\source\clsQ.cls
+RawRevisionNumber=2023-02-08.001
+[mStk]
+RawExpFileFullName=D:\Ablage\Excel VBA\DevAndTest\Common-VBA-Queue-and-Stack-services\source\mStk.bas
+RawRevisionNumber=2023-02-08.002
+[clsStk]
+RawExpFileFullName=D:\Ablage\Excel VBA\DevAndTest\Common-VBA-Queue-and-Stack-services\source\clsStk.cls
+RawRevisionNumber=2023-02-08.002

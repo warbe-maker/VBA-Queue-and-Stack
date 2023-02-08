@@ -1,4 +1,4 @@
-Attribute VB_Name = "mQueuePrivate"
+Attribute VB_Name = "mQprivate"
 Option Explicit
 
 Private Function IsInQueue(ByVal i_queue As Collection, _
@@ -30,33 +30,33 @@ Private Function IsInQueue(ByVal i_queue As Collection, _
 
 End Function
 
-Private Sub QueueDequeue(ByRef q_queue As Collection, _
+Private Sub Qdequeue(ByRef q_queue As Collection, _
                      ByRef q_item As Variant)
 ' ----------------------------------------------------------------------------
 ' Returns the top item in the queue (q_item), i.e. the last one pushed on it,
 ' and removes it from the queue.
 ' ----------------------------------------------------------------------------
     Dim Pos As Long
-    If Not QueueIsEmpty(q_queue) Then
-        QueueFirst q_queue, q_item, Pos
+    If Not QisEmpty(q_queue) Then
+        Qfirst q_queue, q_item, Pos
         q_queue.Remove Pos
     End If
 End Sub
 
-Private Sub QueueEnqueue(ByRef q_queue As Collection, _
+Private Sub Qenqueue(ByRef q_queue As Collection, _
                          ByVal q_item As Variant)
     If q_queue Is Nothing Then Set q_queue = New Collection
     q_queue.Add q_item
 End Sub
 
-Private Sub QueueFirst(ByVal q_queue As Collection, _
+Private Sub Qfirst(ByVal q_queue As Collection, _
                        ByRef q_item As Variant, _
               Optional ByRef q_pos As Long)
 ' ----------------------------------------------------------------------------
 ' Returns the current first item in the queue, i.e. the one added (enqueued)
 ' first.
 ' ----------------------------------------------------------------------------
-    If Not QueueIsEmpty(q_queue) Then
+    If Not QisEmpty(q_queue) Then
         q_pos = 1
         If VarType(q_queue(q_pos)) = vbObject Then
             Set q_item = q_queue(q_pos)
@@ -66,12 +66,12 @@ Private Sub QueueFirst(ByVal q_queue As Collection, _
     End If
 End Sub
 
-Private Function QueueIsEmpty(ByVal q_queue As Collection) As Boolean
-    QueueIsEmpty = q_queue Is Nothing
-    If Not QueueIsEmpty Then QueueIsEmpty = q_queue.Count = 0
+Private Function QisEmpty(ByVal q_queue As Collection) As Boolean
+    QisEmpty = q_queue Is Nothing
+    If Not QisEmpty Then QisEmpty = q_queue.Count = 0
 End Function
 
-Private Sub QueueItem(ByVal q_queue As Collection, _
+Private Sub Qitem(ByVal q_queue As Collection, _
                       ByVal q_pos As Long, _
              Optional ByRef q_item As Variant)
 ' ----------------------------------------------------------------------------
@@ -79,8 +79,8 @@ Private Sub QueueItem(ByVal q_queue As Collection, _
 ' provided the queue is not empty and the position is within the queue's size.
 ' ----------------------------------------------------------------------------
     
-    If Not QueueIsEmpty(q_queue) Then
-        If q_pos <= QueueSize(q_queue) Then
+    If Not QisEmpty(q_queue) Then
+        If q_pos <= Qsize(q_queue) Then
             If VarType(q_queue(q_pos)) = vbObject Then
                 Set q_item = q_queue(q_pos)
             Else
@@ -91,7 +91,7 @@ Private Sub QueueItem(ByVal q_queue As Collection, _
     
 End Sub
 
-Private Sub QueueLast(ByVal q_queue As Collection, _
+Private Sub Qlast(ByVal q_queue As Collection, _
                       ByRef q_item As Variant)
 ' ----------------------------------------------------------------------------
 ' Returns the item (q_item) in the queue which had been enqueued last in the
@@ -99,7 +99,7 @@ Private Sub QueueLast(ByVal q_queue As Collection, _
 ' ----------------------------------------------------------------------------
     Dim lSize As Long
     
-    If Not QueueIsEmpty(q_queue) Then
+    If Not QisEmpty(q_queue) Then
         lSize = q_queue.Count
         If VarType(q_queue(lSize)) = vbObject Then
             Set q_item = q_queue(lSize)
@@ -109,8 +109,8 @@ Private Sub QueueLast(ByVal q_queue As Collection, _
     End If
 End Sub
 
-Private Function QueueSize(ByVal q_queue As Collection) As Long
-    If Not QueueIsEmpty(q_queue) Then QueueSize = q_queue.Count
+Private Function Qsize(ByVal q_queue As Collection) As Long
+    If Not QisEmpty(q_queue) Then Qsize = q_queue.Count
 End Function
 
 Public Sub Test_Private_Queue_Services()
@@ -120,24 +120,24 @@ Public Sub Test_Private_Queue_Services()
     Dim MyQueue As New Collection
     Dim Item    As Variant
     Dim Pos     As Long
-                                Debug.Assert QueueIsEmpty(MyQueue)
-    QueueEnqueue MyQueue, "A":  Debug.Assert Not QueueIsEmpty(MyQueue)
-    QueueDequeue MyQueue, Item: Debug.Assert Item = "A"
-                                Debug.Assert QueueIsEmpty(MyQueue)
-    QueueEnqueue MyQueue, "A"
-    QueueEnqueue MyQueue, "B"
-    QueueEnqueue MyQueue, "C"
-    QueueEnqueue MyQueue, "D"
-                                Debug.Assert Not QueueIsEmpty(MyQueue)
-                                Debug.Assert QueueSize(MyQueue) = 4
+                                Debug.Assert QisEmpty(MyQueue)
+    Qenqueue MyQueue, "A":  Debug.Assert Not QisEmpty(MyQueue)
+    Qdequeue MyQueue, Item: Debug.Assert Item = "A"
+                                Debug.Assert QisEmpty(MyQueue)
+    Qenqueue MyQueue, "A"
+    Qenqueue MyQueue, "B"
+    Qenqueue MyQueue, "C"
+    Qenqueue MyQueue, "D"
+                                Debug.Assert Not QisEmpty(MyQueue)
+                                Debug.Assert Qsize(MyQueue) = 4
                                 Debug.Assert IsInQueue(MyQueue, "B", Pos) = True
                                 Debug.Assert Pos = 2
-    QueueItem MyQueue, 2, Item: Debug.Assert Item = "B"
-    QueueDequeue MyQueue, Item: Debug.Assert Item = "A"
-    QueueDequeue MyQueue, Item: Debug.Assert Item = "B"
-    QueueDequeue MyQueue, Item: Debug.Assert Item = "C"
-    QueueDequeue MyQueue, Item: Debug.Assert Item = "D"
-                                Debug.Assert QueueIsEmpty(MyQueue)
+    Qitem MyQueue, 2, Item: Debug.Assert Item = "B"
+    Qdequeue MyQueue, Item: Debug.Assert Item = "A"
+    Qdequeue MyQueue, Item: Debug.Assert Item = "B"
+    Qdequeue MyQueue, Item: Debug.Assert Item = "C"
+    Qdequeue MyQueue, Item: Debug.Assert Item = "D"
+                                Debug.Assert QisEmpty(MyQueue)
     Set MyQueue = Nothing
     
 End Sub

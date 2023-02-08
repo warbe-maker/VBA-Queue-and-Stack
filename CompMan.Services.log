@@ -1,14 +1,22 @@
-23-02-06 16:28:24 Export Changed Components (by CompMan.xlsb) for SaQ.xlsb: 
-23-02-06 16:28:24 ----------------------------------------------------------
-23-02-06 16:28:24 Class-Module    clsQaS .......: Unchanged component
-23-02-06 16:28:24 UserForm        fMsg .........: Unchanged Used Common Component
-23-02-06 16:28:24 Standard-Module mBasic .......: Unchanged Used Common Component
-23-02-06 16:28:24 Standard-Module mCompManClient: Unchanged Used Common Component
-23-02-06 16:28:24 Standard-Module mErH .........: Unchanged Used Common Component
-23-02-06 16:28:24 Standard-Module mMsg .........: Unchanged Used Common Component
-23-02-06 16:28:24 Standard-Module mQueuePrivate : Unchanged component
-23-02-06 16:28:24 Standard-Module mStackPrivate : Unchanged component
-23-02-06 16:28:24 Standard-Module mTest ........: Unchanged component
-23-02-06 16:28:24 Standard-Module mTrc .........: Unchanged Used Common Component
-23-02-06 16:28:24 Workbook        wbSaQ ........: Unchanged component
-23-02-06 16:28:24 Worksheet       wsUnused .....: Unchanged component
+23-02-08 13:01:00 Export Changed Components (by CompMan.xlsb) for SaQ.xlsb: 
+23-02-08 13:01:00 ----------------------------------------------------------
+23-02-08 13:01:01 Export-File obsolete (deleted because component no longer exists)
+23-02-08 13:01:01 Export-File obsolete (deleted because component no longer exists)
+23-02-08 13:01:01 Export-File obsolete (deleted because component no longer exists)
+23-02-08 13:01:01 Class-Module    clsStk .......: Hosted Raw Common Component code modified
+23-02-08 13:01:01                                 Code modified of Hosted Raw Common Component
+23-02-08 13:01:01                                 Exported, Revision Number increased, Export File copied to 'Common Components Folder'
+23-02-08 13:01:01 UserForm        fMsg .........: Unchanged Used Common Component
+23-02-08 13:01:01 Standard-Module mBasic .......: Modified Used Common Component exported (due revert allert registered!)
+23-02-08 13:01:01 Standard-Module mCompManClient: Unchanged Used Common Component
+23-02-08 13:01:01 Standard-Module mErH .........: Modified Used Common Component exported (due revert allert registered!)
+23-02-08 13:01:01 Standard-Module mMsg .........: Modified Used Common Component exported (due revert allert registered!)
+23-02-08 13:01:01 Standard-Module mQprivate ....: Modified code exported
+23-02-08 13:01:01 Standard-Module mStk .........: Hosted Raw Common Component code modified
+23-02-08 13:01:01                                 Code modified of Hosted Raw Common Component
+23-02-08 13:01:01                                 Exported, Revision Number increased, Export File copied to 'Common Components Folder'
+23-02-08 13:01:01 Standard-Module mStkPrivate ..: Modified code exported
+23-02-08 13:01:01 Standard-Module mTest ........: Modified code exported
+23-02-08 13:01:01 Standard-Module mTrc .........: Modified Used Common Component exported (due revert allert registered!)
+23-02-08 13:01:01 Workbook        wbSaQ ........: Modified code exported
+23-02-08 13:01:01 Worksheet       wsUnused .....: Unchanged component

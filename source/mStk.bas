@@ -1,7 +1,7 @@
-Attribute VB_Name = "mStack"
+Attribute VB_Name = "mStk"
 Option Explicit
 ' ----------------------------------------------------------------------------
-' Standard Module mStack: Provides Stack services for a default stack or one
+' Standard Module mStk: Provides Stk services for a default stack or one
 '                         declared and provided by the caller.
 '
 ' Note: A stack can be seen as a tube which is closed at one end which means
@@ -13,7 +13,7 @@ Option Explicit
 ' Public services:
 ' - Bottom      Returns the botton item on the stack
 ' - IsEmpty
-' - IsStacked   Returns TRUE and the items position when a given item is on
+' - IsStked   Returns TRUE and the items position when a given item is on
 '               the stack
 ' - Item        Returns an item on a provided position
 ' - Pop         Returns the top (last added) item from the stack
@@ -24,7 +24,7 @@ Option Explicit
 '
 ' W. Rauschenberger Berlin Jan 2013
 ' ----------------------------------------------------------------------------
-Private cllStack As New Collection
+Private cllStk As New Collection
 
 Private Function AppErr(ByVal app_err_no As Long) As Long
 ' ------------------------------------------------------------------------------
@@ -36,6 +36,11 @@ Private Function AppErr(ByVal app_err_no As Long) As Long
 ' ------------------------------------------------------------------------------
     If app_err_no > 0 Then AppErr = app_err_no + vbObjectError Else AppErr = app_err_no - vbObjectError
 End Function
+
+Public Sub Bottom(ByRef b_item As Variant, _
+         Optional ByRef b_stack As Collection = Nothing)
+    StkBottom StkUsed(b_stack), b_item
+End Sub
 
 Private Function ErrMsg(ByVal err_source As String, _
                Optional ByVal err_no As Long = 0, _
@@ -141,25 +146,20 @@ xt:
 End Function
 
 Private Function ErrSrc(ByVal sProc As String) As String
-    ErrSrc = "mStack." & sProc
+    ErrSrc = "mStk." & sProc
 End Function
-
-Public Sub Bottom(ByRef b_item As Variant, _
-         Optional ByRef b_stack As Collection = Nothing)
-    StackBottom UsedStack(b_stack), b_item
-End Sub
 
 Public Function IsEmpty(Optional ByRef s_stack As Collection = Nothing) As Boolean
 ' ----------------------------------------------------------------------------
 ' Returns TRUE when the stack (s_stack) is empty, in case no stack is provided
 ' the module's internal stack.
 ' ----------------------------------------------------------------------------
-    IsEmpty = StackIsEmpty(UsedStack(s_stack))
+    IsEmpty = StkIsEmpty(StkUsed(s_stack))
 End Function
 
-Private Function IsOnStack(ByVal s_stack As Collection, _
-                           ByVal s_item As Variant, _
-                  Optional ByRef s_pos As Long) As Boolean
+Private Function StkOn(ByVal s_stack As Collection, _
+                       ByVal s_item As Variant, _
+              Optional ByRef s_pos As Long) As Boolean
 ' ----------------------------------------------------------------------------
 ' Returns TRUE and the index (s_pos) when the item (s_item) is found in the
 ' stack (s_stack).
@@ -169,7 +169,7 @@ Private Function IsOnStack(ByVal s_stack As Collection, _
     If VarType(s_item) = vbObject Then
         For i = 1 To s_stack.Count
             If s_stack(i) Is s_item Then
-                IsOnStack = True
+                StkOn = True
                 s_pos = i
                 Exit Function
             End If
@@ -177,7 +177,7 @@ Private Function IsOnStack(ByVal s_stack As Collection, _
     Else
         For i = 1 To s_stack.Count
             If s_stack(i) = s_item Then
-                IsOnStack = True
+                StkOn = True
                 s_pos = i
                 Exit Function
             End If
@@ -192,7 +192,7 @@ Public Sub Pop(ByRef p_item As Variant, _
 ' Returns the top item from the stack (s_stack) and removes it, in case no stack
 ' is provided from the module's internal stack.
 ' ----------------------------------------------------------------------------
-    StackPop UsedStack(p_stack), p_item
+    StkPop StkUsed(p_stack), p_item
 End Sub
 
 Public Sub Push(ByVal p_item As Variant, _
@@ -201,7 +201,7 @@ Public Sub Push(ByVal p_item As Variant, _
 ' Pushes the item (p_item) on the stack (p_stack), in case none is provided on
 ' the module's internal stack.
 ' ----------------------------------------------------------------------------
-    UsedStack(p_stack).Add p_item
+    StkUsed(p_stack).Add p_item
 End Sub
 
 Public Function Size(Optional ByRef s_stack As Collection = Nothing) As Long
@@ -209,10 +209,10 @@ Public Function Size(Optional ByRef s_stack As Collection = Nothing) As Long
 ' Returns the size (i.e. the number of items) on the stack (s_stack), in case
 ' no stack is provided of the module's internal stack.
 ' ----------------------------------------------------------------------------
-    Size = StackSize(UsedStack(s_stack))
+    Size = StkSize(StkUsed(s_stack))
 End Function
 
-Private Sub StackBottom(ByVal s_stack As Collection, _
+Private Sub StkBottom(ByVal s_stack As Collection, _
                         ByRef s_item As Variant)
 ' ----------------------------------------------------------------------------
 ' Returns the bottom item (s_item) on the stack (s_stack), provided the stack
@@ -220,7 +220,7 @@ Private Sub StackBottom(ByVal s_stack As Collection, _
 ' ----------------------------------------------------------------------------
     Dim lBottom As Long
     
-    If Not StackIsEmpty(s_stack) Then
+    If Not StkIsEmpty(s_stack) Then
         lBottom = 1
         If VarType(s_stack(lBottom)) = vbObject Then
             Set s_item = s_stack(lBottom)
@@ -230,22 +230,22 @@ Private Sub StackBottom(ByVal s_stack As Collection, _
     End If
 End Sub
 
-Public Function Stacked(ByVal s_item As Variant, _
+Public Function StkEd(ByVal s_item As Variant, _
                Optional ByRef s_pos As Long, _
                Optional ByRef s_stack As Collection = Nothing) As Boolean
 ' ------------------------------------------------------------------------------
 ' Returns TRUE when the item (q_var) is stackd in (q_stack), when none is
 ' provided on the module's internal default stack.
 ' ------------------------------------------------------------------------------
-    Stacked = IsOnStack(UsedStack(s_stack), s_item, s_pos)
+    StkEd = StkOn(StkUsed(s_stack), s_item, s_pos)
 End Function
 
-Private Function StackIsEmpty(ByVal s_stack As Collection) As Boolean
-    StackIsEmpty = s_stack Is Nothing
-    If Not StackIsEmpty Then StackIsEmpty = s_stack.Count = 0
+Private Function StkIsEmpty(ByVal s_stack As Collection) As Boolean
+    StkIsEmpty = s_stack Is Nothing
+    If Not StkIsEmpty Then StkIsEmpty = s_stack.Count = 0
 End Function
 
-Private Sub StackItem(ByVal s_stack As Collection, _
+Private Sub StkItem(ByVal s_stack As Collection, _
                       ByVal s_pos As Long, _
              Optional ByRef s_item As Variant)
 ' ----------------------------------------------------------------------------
@@ -253,8 +253,8 @@ Private Sub StackItem(ByVal s_stack As Collection, _
 ' provided the stack is not empty and the position is within the stack's size.
 ' ----------------------------------------------------------------------------
     
-    If Not StackIsEmpty(s_stack) Then
-        If s_pos <= StackSize(s_stack) Then
+    If Not StkIsEmpty(s_stack) Then
+        If s_pos <= StkSize(s_stack) Then
             If VarType(s_stack(s_pos)) = vbObject Then
                 Set s_item = s_stack(s_pos)
             Else
@@ -265,30 +265,30 @@ Private Sub StackItem(ByVal s_stack As Collection, _
     
 End Sub
 
-Private Sub StackPop(ByRef s_stack As Collection, _
+Private Sub StkPop(ByRef s_stack As Collection, _
                      ByRef s_item As Variant)
 ' ----------------------------------------------------------------------------
 ' Returns the top item on the stack (s_item), i.e. the last one pushed on it,
 ' and removes it from the stack.
 ' ----------------------------------------------------------------------------
     Dim Pos As Long
-    If Not StackIsEmpty(s_stack) Then
-        StackTop s_stack, s_item, Pos
+    If Not StkIsEmpty(s_stack) Then
+        StkTop s_stack, s_item, Pos
         s_stack.Remove Pos
     End If
 End Sub
 
-Private Sub StackPush(ByRef s_stack As Collection, _
+Private Sub StkPush(ByRef s_stack As Collection, _
                       ByVal s_item As Variant)
     If s_stack Is Nothing Then Set s_stack = New Collection
     s_stack.Add s_item
 End Sub
 
-Private Function StackSize(ByVal s_stack As Collection) As Long
-    If Not StackIsEmpty(s_stack) Then StackSize = s_stack.Count
+Private Function StkSize(ByVal s_stack As Collection) As Long
+    If Not StkIsEmpty(s_stack) Then StkSize = s_stack.Count
 End Function
 
-Private Sub StackTop(ByVal s_stack As Collection, _
+Private Sub StkTop(ByVal s_stack As Collection, _
                      ByRef s_item As Variant, _
             Optional ByRef s_pos As Long)
 ' ----------------------------------------------------------------------------
@@ -297,7 +297,7 @@ Private Sub StackTop(ByVal s_stack As Collection, _
 ' ----------------------------------------------------------------------------
     Dim lTop As Long
     
-    If Not StackIsEmpty(s_stack) Then
+    If Not StkIsEmpty(s_stack) Then
         lTop = s_stack.Count
         If VarType(s_stack(lTop)) = vbObject Then
             Set s_item = s_stack(lTop)
@@ -315,24 +315,24 @@ Public Sub Top(ByRef t_item As Variant, _
 ' Returns the top item (t_item) on the stack (t-stack), when none is
 ' provided on the module's internal default stack.
 ' ----------------------------------------------------------------------------
-    StackTop UsedStack(t_stack), t_item, t_pos
+    StkTop StkUsed(t_stack), t_item, t_pos
 End Sub
 
-Private Function UsedStack(Optional ByRef u_stack As Collection = Nothing) As Collection
+Private Function StkUsed(Optional ByRef u_stack As Collection = Nothing) As Collection
 ' ------------------------------------------------------------------------------
 ' Provides the stack the caller has provided (passed with the call) or when none
 ' had been provided, a default stack.
 ' ------------------------------------------------------------------------------
-    Const PROC = "UsedStack"
+    Const PROC = "StkUsed"
     
     On Error GoTo eh
     Select Case True
         Case Not u_stack Is Nothing And TypeName(u_stack) <> "Collection"
             Err.Raise AppErr(1), ErrSrc(PROC), "The provided stack (u_stack) is not a Collection!"
         Case Not u_stack Is Nothing And TypeName(u_stack) = "Collection"
-            Set UsedStack = u_stack
+            Set StkUsed = u_stack
         Case u_stack Is Nothing
-            Set UsedStack = cllStack
+            Set StkUsed = cllStk
     End Select
 
 xt: Exit Function
@@ -342,33 +342,4 @@ eh: Select Case ErrMsg(ErrSrc(PROC))
         Case Else:      GoTo xt
     End Select
 End Function
-
-Private Sub Test_Private_Stack_Services()
-' ----------------------------------------------------------------------------
-' Self-test for the 'Private' Stack.... services
-' ----------------------------------------------------------------------------
-    Dim MyStack As New Collection
-    Dim Item    As Variant
-    Dim Pos     As Long
-                                Debug.Assert StackIsEmpty(MyStack)
-    StackPush MyStack, "A":     Debug.Assert Not StackIsEmpty(MyStack)
-    StackPop MyStack, Item:     Debug.Assert Item = "A"
-                                Debug.Assert StackIsEmpty(MyStack)
-    StackPush MyStack, "A"
-    StackPush MyStack, "B"
-    StackPush MyStack, "C"
-    StackPush MyStack, "D"
-                                Debug.Assert Not StackIsEmpty(MyStack)
-                                Debug.Assert StackSize(MyStack) = 4
-                                Debug.Assert IsOnStack(MyStack, "B", Pos) = True
-                                Debug.Assert Pos = 2
-    StackItem MyStack, 2, Item: Debug.Assert Item = "B"
-    StackPop MyStack, Item:     Debug.Assert Item = "D"
-    StackPop MyStack, Item:     Debug.Assert Item = "C"
-    StackPop MyStack, Item:     Debug.Assert Item = "B"
-    StackPop MyStack, Item:     Debug.Assert Item = "A"
-                                Debug.Assert StackIsEmpty(MyStack)
-    Set MyStack = Nothing
-    
-End Sub
 

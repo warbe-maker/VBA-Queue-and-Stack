@@ -1,7 +1,7 @@
-Attribute VB_Name = "mQueue"
+Attribute VB_Name = "mQ"
 Option Explicit
 ' ----------------------------------------------------------------------------
-' Standard Module mQueue: FiFo (queue) services based on a Collection as queue.
+' Standard Module mQ: FiFo (queue) services based on a Collection as queue.
 '
 ' Note: A queue can be seen as a tube which is open at both ends. The first
 '       item put into it (is enqued) is the first on taken from it (dequeued).
@@ -26,7 +26,7 @@ Public Sub First(ByRef f_item As Variant, _
 ' ------------------------------------------------------------------------------
 ' Returns the first item in the queue without dequeuing it.
 ' ------------------------------------------------------------------------------
-    QueueFirst UsedQueue(f_queue), f_item
+    Qfirst UsedQueue(f_queue), f_item
 End Sub
 
 Public Sub Last(ByRef l_item As Variant, _
@@ -34,7 +34,7 @@ Public Sub Last(ByRef l_item As Variant, _
 ' ------------------------------------------------------------------------------
 ' Returns the last item enqueued.
 ' ------------------------------------------------------------------------------
-    QueueLast UsedQueue(l_queue), l_item
+    Qlast UsedQueue(l_queue), l_item
 End Sub
 
 Private Function AppErr(ByVal app_err_no As Long) As Long
@@ -54,7 +54,7 @@ Public Sub DeQueue(ByRef d_item As Variant, _
 ' Returns the first item from the queue (d_queue), in case none is provided
 ' from the module's internal queue.
 ' ----------------------------------------------------------------------------
-    QueueDequeue UsedQueue(d_queue), d_item
+    Qdequeue UsedQueue(d_queue), d_item
 End Sub
 
 Public Sub EnQueue(ByVal q_item As Variant, _
@@ -63,7 +63,7 @@ Public Sub EnQueue(ByVal q_item As Variant, _
 ' Adds the item (q-var) to the queue (q_queue), in case none is provided to
 ' the module's internal queue.
 ' ----------------------------------------------------------------------------
-    QueueEnqueue UsedQueue(q_queue), q_item
+    Qenqueue UsedQueue(q_queue), q_item
 End Sub
 
 Private Function ErrMsg(ByVal err_source As String, _
@@ -170,7 +170,7 @@ xt:
 End Function
 
 Private Function ErrSrc(ByVal sProc As String) As String
-    ErrSrc = "mQueue." & sProc
+    ErrSrc = "mQ." & sProc
 End Function
 
 Public Function IsEmpty(Optional ByRef q_queue As Collection = Nothing) As Boolean
@@ -178,7 +178,7 @@ Public Function IsEmpty(Optional ByRef q_queue As Collection = Nothing) As Boole
 ' Returns TRUE when the queue (q_queue) is empty, in case none is provided
 ' the module's internal queue.
 ' ----------------------------------------------------------------------------
-    IsEmpty = QueueIsEmpty(UsedQueue(q_queue))
+    IsEmpty = QisEmpty(UsedQueue(q_queue))
 End Function
 
 Private Function IsInQueue(ByVal i_queue As Collection, _
@@ -225,10 +225,10 @@ Public Sub Item(ByVal i_pos As Long, _
 ' ----------------------------------------------------------------------------
 '
 ' ----------------------------------------------------------------------------
-    QueueItem UsedQueue(i_queue), i_pos, i_item
+    Qitem UsedQueue(i_queue), i_pos, i_item
 End Sub
 
-Private Sub QueueDequeue(ByRef q_queue As Collection, _
+Private Sub Qdequeue(ByRef q_queue As Collection, _
                 Optional ByRef q_item_returned As Variant, _
                 Optional ByVal q_item_to_be_dequeued As Variant = Nothing, _
                 Optional ByVal q_item_pos_to_be_dequeued As Long = 0)
@@ -249,27 +249,27 @@ Private Sub QueueDequeue(ByRef q_queue As Collection, _
 '    (q_item_pos_to_be_dequeued) is ignored.
 ' 2. All private procedures Queue... may be copied into any StandardModule
 ' ----------------------------------------------------------------------------
-    Const PROC = "QueueDequeue"
+    Const PROC = "Qdequeue"
     
     On Error GoTo eh
     Dim lPos    As Long
     Dim lNo     As Long
     
-    If Not QueueIsEmpty(q_queue) Then
-        If Not QueueIsNothing(q_item_to_be_dequeued) Then
-            If QueueIsQueued(q_queue, q_item_to_be_dequeued, lPos, lNo) Then
+    If Not QisEmpty(q_queue) Then
+        If Not QisNothing(q_item_to_be_dequeued) Then
+            If QisQueued(q_queue, q_item_to_be_dequeued, lPos, lNo) Then
                 If lNo > 1 _
                 Then Err.Raise AppErr(1), ErrSrc(PROC), "The specific item provided cannot be dequeued since it is not unambigous but in the queue " & lNo & " times!"
-                QueueVarType q_item_to_be_dequeued, q_item_returned
+                QvarType q_item_to_be_dequeued, q_item_returned
                 q_queue.Remove lPos
             End If
         ElseIf q_item_pos_to_be_dequeued <> 0 Then
-            If q_item_pos_to_be_dequeued <= QueueSize(q_queue) Then
-                QueueItem q_queue, q_item_pos_to_be_dequeued, q_item_returned
+            If q_item_pos_to_be_dequeued <= Qsize(q_queue) Then
+                Qitem q_queue, q_item_pos_to_be_dequeued, q_item_returned
                 q_queue.Remove q_item_pos_to_be_dequeued
             End If
         Else
-            QueueFirst q_queue, q_item_returned
+            Qfirst q_queue, q_item_returned
             q_queue.Remove 1
         End If
     Else
@@ -284,53 +284,53 @@ eh: Select Case ErrMsg(ErrSrc(PROC))
     End Select
 End Sub
 
-Private Sub QueueEnqueue(ByRef q_queue As Collection, _
+Private Sub Qenqueue(ByRef q_queue As Collection, _
                          ByVal q_item As Variant)
     If q_queue Is Nothing Then Set q_queue = New Collection
     q_queue.Add q_item
 End Sub
 
-Private Sub QueueFirst(ByVal q_queue As Collection, _
+Private Sub Qfirst(ByVal q_queue As Collection, _
                        ByRef q_item_returned As Variant)
 ' ----------------------------------------------------------------------------
 ' Returns the current first item in the queue, i.e. the one added (enqueued)
 ' first. When the queue is empty Nothing is returned
 ' ----------------------------------------------------------------------------
-    If Not QueueIsEmpty(q_queue) Then
-        QueueVarType q_queue(1), q_item_returned
+    If Not QisEmpty(q_queue) Then
+        QvarType q_queue(1), q_item_returned
     Else
         Set q_item_returned = Nothing
     End If
 
 End Sub
 
-Private Function QueueIdenticalItems(ByVal q_1 As Variant, _
+Private Function QidenticalItems(ByVal q_1 As Variant, _
                                      ByVal q_2 As Variant) As Boolean
 ' ----------------------------------------------------------------------------
 ' Retunrs TRUE when item 1 is identical with item 2.
 ' ----------------------------------------------------------------------------
     Select Case True
-        Case VarType(q_1) = vbObject And VarType(q_2) = vbObject:   QueueIdenticalItems = q_1 Is q_2
-        Case VarType(q_1) <> vbObject And VarType(q_2) <> vbObject: QueueIdenticalItems = q_1 = q_2
+        Case VarType(q_1) = vbObject And VarType(q_2) = vbObject:   QidenticalItems = q_1 Is q_2
+        Case VarType(q_1) <> vbObject And VarType(q_2) <> vbObject: QidenticalItems = q_1 = q_2
     End Select
 End Function
 
-Private Function QueueIsEmpty(ByVal q_queue As Collection) As Boolean
-    QueueIsEmpty = q_queue Is Nothing
-    If Not QueueIsEmpty Then QueueIsEmpty = q_queue.Count = 0
+Private Function QisEmpty(ByVal q_queue As Collection) As Boolean
+    QisEmpty = q_queue Is Nothing
+    If Not QisEmpty Then QisEmpty = q_queue.Count = 0
 End Function
 
-Private Function QueueIsNothing(ByVal i_item As Variant) As Boolean
+Private Function QisNothing(ByVal i_item As Variant) As Boolean
     Select Case True
-        Case VarType(i_item) = vbNull:      QueueIsNothing = True
-        Case VarType(i_item) = vbEmpty:     QueueIsNothing = True
-        Case VarType(i_item) = vbObject:    QueueIsNothing = i_item Is Nothing
-        Case IsNumeric(i_item):             QueueIsNothing = CInt(i_item) = 0
-        Case VarType(i_item) = vbString:    QueueIsNothing = i_item = vbNullString
+        Case VarType(i_item) = vbNull:      QisNothing = True
+        Case VarType(i_item) = vbEmpty:     QisNothing = True
+        Case VarType(i_item) = vbObject:    QisNothing = i_item Is Nothing
+        Case IsNumeric(i_item):             QisNothing = CInt(i_item) = 0
+        Case VarType(i_item) = vbString:    QisNothing = i_item = vbNullString
     End Select
 End Function
 
-Private Function QueueIsQueued(ByVal i_queue As Collection, _
+Private Function QisQueued(ByVal i_queue As Collection, _
                                ByVal i_item As Variant, _
                       Optional ByRef i_pos As Long, _
                       Optional ByRef i_no_found As Long) As Boolean
@@ -342,16 +342,16 @@ Private Function QueueIsQueued(ByVal i_queue As Collection, _
     
     i_no_found = 0
     For i = 1 To i_queue.Count
-        If QueueIdenticalItems(i_queue(i), i_item) Then
+        If QidenticalItems(i_queue(i), i_item) Then
             i_no_found = i_no_found + 1
-            QueueIsQueued = True
+            QisQueued = True
             i_pos = i
         End If
     Next i
 
 End Function
 
-Private Sub QueueItem(ByVal q_queue As Collection, _
+Private Sub Qitem(ByVal q_queue As Collection, _
                       ByVal q_pos As Long, _
              Optional ByRef q_item As Variant)
 ' ----------------------------------------------------------------------------
@@ -359,8 +359,8 @@ Private Sub QueueItem(ByVal q_queue As Collection, _
 ' provided the queue is not empty and the position is within the queue's size.
 ' ----------------------------------------------------------------------------
     
-    If Not QueueIsEmpty(q_queue) Then
-        If q_pos <= QueueSize(q_queue) Then
+    If Not QisEmpty(q_queue) Then
+        If q_pos <= Qsize(q_queue) Then
             If VarType(q_queue(q_pos)) = vbObject Then
                 Set q_item = q_queue(q_pos)
             Else
@@ -371,7 +371,7 @@ Private Sub QueueItem(ByVal q_queue As Collection, _
     
 End Sub
 
-Private Sub QueueLast(ByVal q_queue As Collection, _
+Private Sub Qlast(ByVal q_queue As Collection, _
                       ByRef q_item As Variant)
 ' ----------------------------------------------------------------------------
 ' Returns the item (q_item) in the queue which had been enqueued last in the
@@ -379,7 +379,7 @@ Private Sub QueueLast(ByVal q_queue As Collection, _
 ' ----------------------------------------------------------------------------
     Dim lSize As Long
     
-    If Not QueueIsEmpty(q_queue) Then
+    If Not QisEmpty(q_queue) Then
         lSize = q_queue.Count
         If VarType(q_queue(lSize)) = vbObject Then
             Set q_item = q_queue(lSize)
@@ -389,11 +389,11 @@ Private Sub QueueLast(ByVal q_queue As Collection, _
     End If
 End Sub
 
-Private Function QueueSize(ByVal q_queue As Collection) As Long
-    If Not QueueIsEmpty(q_queue) Then QueueSize = q_queue.Count
+Private Function Qsize(ByVal q_queue As Collection) As Long
+    If Not QisEmpty(q_queue) Then Qsize = q_queue.Count
 End Function
 
-Private Sub QueueVarType(ByVal q_item As Variant, _
+Private Sub QvarType(ByVal q_item As Variant, _
                          ByRef q_item_result As Variant)
 ' ----------------------------------------------------------------------------
 ' Returns the pr0vided item (q_item) with respect to its VarType (q_item_var).
@@ -412,7 +412,7 @@ Public Function Size(Optional ByRef q_queue As Collection = Nothing) As Long
 ' Returns the size (number of items) in the queue (q_queue), in case none is
 ' provided those of the module's internal queue.
 ' ----------------------------------------------------------------------------
-    Size = QueueSize(UsedQueue(q_queue))
+    Size = Qsize(UsedQueue(q_queue))
 End Function
 
 Private Function UsedQueue(Optional ByRef u_queue As Collection = Nothing) As Collection
@@ -447,24 +447,24 @@ Private Sub Test_Private_Queue_Services()
     Dim MyQueue As New Collection
     Dim Item    As Variant
     Dim Pos     As Long
-                                Debug.Assert QueueIsEmpty(MyQueue)
-    QueueEnqueue MyQueue, "A":  Debug.Assert Not QueueIsEmpty(MyQueue)
-    QueueDequeue MyQueue, Item: Debug.Assert Item = "A"
-                                Debug.Assert QueueIsEmpty(MyQueue)
-    QueueEnqueue MyQueue, "A"
-    QueueEnqueue MyQueue, "B"
-    QueueEnqueue MyQueue, "C"
-    QueueEnqueue MyQueue, "D"
-                                Debug.Assert Not QueueIsEmpty(MyQueue)
-                                Debug.Assert QueueSize(MyQueue) = 4
+                                Debug.Assert QisEmpty(MyQueue)
+    Qenqueue MyQueue, "A":  Debug.Assert Not QisEmpty(MyQueue)
+    Qdequeue MyQueue, Item: Debug.Assert Item = "A"
+                                Debug.Assert QisEmpty(MyQueue)
+    Qenqueue MyQueue, "A"
+    Qenqueue MyQueue, "B"
+    Qenqueue MyQueue, "C"
+    Qenqueue MyQueue, "D"
+                                Debug.Assert Not QisEmpty(MyQueue)
+                                Debug.Assert Qsize(MyQueue) = 4
                                 Debug.Assert IsInQueue(MyQueue, "B", Pos) = True
                                 Debug.Assert Pos = 2
-    QueueItem MyQueue, 2, Item: Debug.Assert Item = "B"
-    QueueDequeue MyQueue, Item: Debug.Assert Item = "A"
-    QueueDequeue MyQueue, Item: Debug.Assert Item = "B"
-    QueueDequeue MyQueue, Item: Debug.Assert Item = "C"
-    QueueDequeue MyQueue, Item: Debug.Assert Item = "D"
-                                Debug.Assert QueueIsEmpty(MyQueue)
+    Qitem MyQueue, 2, Item: Debug.Assert Item = "B"
+    Qdequeue MyQueue, Item: Debug.Assert Item = "A"
+    Qdequeue MyQueue, Item: Debug.Assert Item = "B"
+    Qdequeue MyQueue, Item: Debug.Assert Item = "C"
+    Qdequeue MyQueue, Item: Debug.Assert Item = "D"
+                                Debug.Assert QisEmpty(MyQueue)
     Set MyQueue = Nothing
     
 End Sub

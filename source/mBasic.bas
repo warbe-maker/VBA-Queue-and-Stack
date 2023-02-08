@@ -929,11 +929,11 @@ Public Function Spaced(ByVal s As String) As String
 
 End Function
 
-Public Function StackEd(ByVal stck As Collection, _
+Public Function StkEd(ByVal stck As Collection, _
                Optional ByRef stck_item As Variant = vbNullString, _
                Optional ByRef stck_lvl As Long = 0) As Variant
 ' ----------------------------------------------------------------------------
-' Common "Stacked" service.
+' Common "Stked" service.
 ' - When an item (stck_item) is provided: Returns TRUE when the item
 '   (stck_item) is on the stack (stck). In case a stack level is provided,
 '   TRUE is returned when the item is stacked on the provided level, else
@@ -959,8 +959,8 @@ Public Function StackEd(ByVal stck As Collection, _
         If stck_lvl = 0 Or stck_lvl > stck.Count Then GoTo xt
         '~~ The item of the stack level is returned
         If IsObject(stck(stck_lvl)) _
-        Then Set StackEd = stck(stck_lvl) _
-        Else StackEd = stck(stck_lvl)
+        Then Set StkEd = stck(stck_lvl) _
+        Else StkEd = stck(stck_lvl)
     Else
         '~~ The provided stack item is either an object, a string, or numeric
         For i = 1 To stck.Count
@@ -969,13 +969,13 @@ Public Function StackEd(ByVal stck As Collection, _
                 If v Is stck_item Then
                     If stck_lvl <> 0 Then
                         If i = stck_lvl Then
-                            StackEd = True
+                            StkEd = True
                             GoTo xt
                         End If
                     Else
                         stck_lvl = i
                     End If
-                    StackEd = True
+                    StkEd = True
                     GoTo xt
                 End If
             Else
@@ -983,13 +983,13 @@ Public Function StackEd(ByVal stck As Collection, _
                 If v = stck_item Then
                     If stck_lvl <> 0 Then
                         If i = stck_lvl Then
-                            StackEd = True
+                            StkEd = True
                             GoTo xt
                         End If
                     Else
                         stck_lvl = i
                     End If
-                    StackEd = True
+                    StkEd = True
                     GoTo xt
                 End If
             End If
@@ -1004,30 +1004,30 @@ eh: Select Case ErrMsg(ErrSrc(PROC))
     End Select
 End Function
 
-Public Function StackIsEmpty(ByVal stck As Collection) As Boolean
+Public Function StkIsEmpty(ByVal stck As Collection) As Boolean
 ' ----------------------------------------------------------------------------
-' Common Stack Empty check service. Returns True when either there is no stack
+' Common Stk Empty check service. Returns True when either there is no stack
 ' (stck Is Nothing) or when the stack is empty (items count is 0).
 ' ----------------------------------------------------------------------------
-    StackIsEmpty = stck Is Nothing
-    If Not StackIsEmpty Then StackIsEmpty = stck.Count = 0
+    StkIsEmpty = stck Is Nothing
+    If Not StkIsEmpty Then StkIsEmpty = stck.Count = 0
 End Function
 
-Public Function StackPop(ByVal stck As Collection) As Variant
+Public Function StkPop(ByVal stck As Collection) As Variant
 ' ----------------------------------------------------------------------------
-' Common Stack Pop service. Returns the last item pushed on the stack (stck)
+' Common Stk Pop service. Returns the last item pushed on the stack (stck)
 ' and removes the item from the stack. When the stack (stck) is empty a
 ' vbNullString is returned.
 ' ----------------------------------------------------------------------------
     Const PROC = "StckPop"
     
     On Error GoTo eh
-    If StackIsEmpty(stck) Then GoTo xt
+    If StkIsEmpty(stck) Then GoTo xt
     
     On Error Resume Next
-    Set StackPop = stck(stck.Count)
+    Set StkPop = stck(stck.Count)
     If Err.Number <> 0 _
-    Then StackPop = stck(stck.Count)
+    Then StkPop = stck(stck.Count)
     stck.Remove stck.Count
 
 xt: Exit Function
@@ -1038,10 +1038,10 @@ eh: Select Case ErrMsg(ErrSrc(PROC))
     End Select
 End Function
 
-Public Sub StackPush(ByRef stck As Collection, _
+Public Sub StkPush(ByRef stck As Collection, _
                      ByVal stck_item As Variant)
 ' ----------------------------------------------------------------------------
-' Common Stack Push service. Pushes (adds) an item (stck_item) to the stack
+' Common Stk Push service. Pushes (adds) an item (stck_item) to the stack
 ' (stck). When the provided stack (stck) is Nothing the stack is created.
 ' ----------------------------------------------------------------------------
     Const PROC = "StckPush"
@@ -1058,18 +1058,18 @@ eh: Select Case ErrMsg(ErrSrc(PROC))
     End Select
 End Sub
 
-Public Function StackTop(ByVal stck As Collection) As Variant
+Public Function StkTop(ByVal stck As Collection) As Variant
 ' ----------------------------------------------------------------------------
-' Common Stack Top service. Returns the top item from the stack (stck), i.e.
+' Common Stk Top service. Returns the top item from the stack (stck), i.e.
 ' the item last pushed. If the stack is empty a vbNullString is returned.
 ' ----------------------------------------------------------------------------
     Const PROC = "StckTop"
     
     On Error GoTo eh
-    If StackIsEmpty(stck) Then GoTo xt
+    If StkIsEmpty(stck) Then GoTo xt
     If IsObject(stck(stck.Count)) _
-    Then Set StackTop = stck(stck.Count) _
-    Else StackTop = stck(stck.Count)
+    Then Set StkTop = stck(stck.Count) _
+    Else StkTop = stck(stck.Count)
 
 xt: Exit Function
 

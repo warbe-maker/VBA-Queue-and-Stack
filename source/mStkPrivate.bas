@@ -1,7 +1,7 @@
-Attribute VB_Name = "mStackPrivate"
+Attribute VB_Name = "mStkPrivate"
 Option Explicit
 
-Private Function IsOnStack(ByVal s_stack As Collection, _
+Private Function StkOn(ByVal s_stack As Collection, _
                            ByVal s_item As Variant, _
                   Optional ByRef s_pos As Long) As Boolean
 ' ----------------------------------------------------------------------------
@@ -13,7 +13,7 @@ Private Function IsOnStack(ByVal s_stack As Collection, _
     If VarType(s_item) = vbObject Then
         For i = 1 To s_stack.Count
             If s_stack(i) Is s_item Then
-                IsOnStack = True
+                StkOn = True
                 s_pos = i
                 Exit Function
             End If
@@ -21,7 +21,7 @@ Private Function IsOnStack(ByVal s_stack As Collection, _
     Else
         For i = 1 To s_stack.Count
             If s_stack(i) = s_item Then
-                IsOnStack = True
+                StkOn = True
                 s_pos = i
                 Exit Function
             End If
@@ -30,7 +30,7 @@ Private Function IsOnStack(ByVal s_stack As Collection, _
 
 End Function
 
-Private Sub StackBottom(ByVal s_stack As Collection, _
+Private Sub StkBottom(ByVal s_stack As Collection, _
                         ByRef s_item As Variant)
 ' ----------------------------------------------------------------------------
 ' Returns the bottom item (s_item) on the stack (s_stack), provided the stack
@@ -38,7 +38,7 @@ Private Sub StackBottom(ByVal s_stack As Collection, _
 ' ----------------------------------------------------------------------------
     Dim lBottom As Long
     
-    If Not StackIsEmpty(s_stack) Then
+    If Not StkIsEmpty(s_stack) Then
         lBottom = s_stack.Count
         If VarType(s_stack(lBottom)) = vbObject Then
             Set s_item = s_stack(lBottom)
@@ -48,12 +48,12 @@ Private Sub StackBottom(ByVal s_stack As Collection, _
     End If
 End Sub
 
-Private Function StackIsEmpty(ByVal s_stack As Collection) As Boolean
-    StackIsEmpty = s_stack Is Nothing
-    If Not StackIsEmpty Then StackIsEmpty = s_stack.Count = 0
+Private Function StkIsEmpty(ByVal s_stack As Collection) As Boolean
+    StkIsEmpty = s_stack Is Nothing
+    If Not StkIsEmpty Then StkIsEmpty = s_stack.Count = 0
 End Function
 
-Private Sub StackItem(ByVal s_stack As Collection, _
+Private Sub StkItem(ByVal s_stack As Collection, _
                       ByVal s_pos As Long, _
              Optional ByRef s_item As Variant)
 ' ----------------------------------------------------------------------------
@@ -61,8 +61,8 @@ Private Sub StackItem(ByVal s_stack As Collection, _
 ' provided the stack is not empty and the position is within the stack's size.
 ' ----------------------------------------------------------------------------
     
-    If Not StackIsEmpty(s_stack) Then
-        If s_pos <= StackSize(s_stack) Then
+    If Not StkIsEmpty(s_stack) Then
+        If s_pos <= StkSize(s_stack) Then
             If VarType(s_stack(s_pos)) = vbObject Then
                 Set s_item = s_stack(s_pos)
             Else
@@ -73,30 +73,30 @@ Private Sub StackItem(ByVal s_stack As Collection, _
     
 End Sub
 
-Private Sub StackPop(ByRef s_stack As Collection, _
+Private Sub StkPop(ByRef s_stack As Collection, _
                      ByRef s_item As Variant)
 ' ----------------------------------------------------------------------------
 ' Returns the top item on the stack (s_item), i.e. the last one pushed on it,
 ' and removes it from the stack.
 ' ----------------------------------------------------------------------------
     Dim Pos As Long
-    If Not StackIsEmpty(s_stack) Then
-        StackTop s_stack, s_item, Pos
+    If Not StkIsEmpty(s_stack) Then
+        StkTop s_stack, s_item, Pos
         s_stack.Remove Pos
     End If
 End Sub
 
-Private Sub StackPush(ByRef s_stack As Collection, _
+Private Sub StkPush(ByRef s_stack As Collection, _
                       ByVal s_item As Variant)
     If s_stack Is Nothing Then Set s_stack = New Collection
     s_stack.Add s_item
 End Sub
 
-Private Function StackSize(ByVal s_stack As Collection) As Long
-    If Not StackIsEmpty(s_stack) Then StackSize = s_stack.Count
+Private Function StkSize(ByVal s_stack As Collection) As Long
+    If Not StkIsEmpty(s_stack) Then StkSize = s_stack.Count
 End Function
 
-Private Sub StackTop(ByVal s_stack As Collection, _
+Private Sub StkTop(ByVal s_stack As Collection, _
                      ByRef s_item As Variant, _
             Optional ByRef s_pos As Long)
 ' ----------------------------------------------------------------------------
@@ -104,7 +104,7 @@ Private Sub StackTop(ByVal s_stack As Collection, _
 ' and the top item's position.
 ' ----------------------------------------------------------------------------
     
-    If Not StackIsEmpty(s_stack) Then
+    If Not StkIsEmpty(s_stack) Then
         s_pos = s_stack.Count
         If VarType(s_stack(s_pos)) = vbObject Then
             Set s_item = s_stack(s_pos)
@@ -114,32 +114,32 @@ Private Sub StackTop(ByVal s_stack As Collection, _
     End If
 End Sub
 
-Public Sub Test_Private_Stack_Services()
+Public Sub Test_Private_Stk_Services()
 ' ----------------------------------------------------------------------------
-' Self-test for the 'Private' Stack.... services
+' Self-test for the 'Private' Stk.... services
 ' ----------------------------------------------------------------------------
-    Dim MyStack As New Collection
+    Dim MyStk As New Collection
     Dim Item    As Variant
     Dim Pos     As Long
-                                Debug.Assert StackIsEmpty(MyStack)
-    StackPush MyStack, "A":     Debug.Assert Not StackIsEmpty(MyStack)
-    StackPop MyStack, Item:     Debug.Assert Item = "A"
-                                Debug.Assert StackIsEmpty(MyStack)
-    StackPush MyStack, "A"
-    StackPush MyStack, "B"
-    StackPush MyStack, "C"
-    StackPush MyStack, "D"
-                                Debug.Assert Not StackIsEmpty(MyStack)
-                                Debug.Assert StackSize(MyStack) = 4
-                                Debug.Assert IsOnStack(MyStack, "B", Pos) = True
+                                Debug.Assert StkIsEmpty(MyStk)
+    StkPush MyStk, "A":     Debug.Assert Not StkIsEmpty(MyStk)
+    StkPop MyStk, Item:     Debug.Assert Item = "A"
+                                Debug.Assert StkIsEmpty(MyStk)
+    StkPush MyStk, "A"
+    StkPush MyStk, "B"
+    StkPush MyStk, "C"
+    StkPush MyStk, "D"
+                                Debug.Assert Not StkIsEmpty(MyStk)
+                                Debug.Assert StkSize(MyStk) = 4
+                                Debug.Assert StkOn(MyStk, "B", Pos) = True
                                 Debug.Assert Pos = 2
-    StackItem MyStack, 2, Item: Debug.Assert Item = "B"
-    StackPop MyStack, Item:     Debug.Assert Item = "D"
-    StackPop MyStack, Item:     Debug.Assert Item = "C"
-    StackPop MyStack, Item:     Debug.Assert Item = "B"
-    StackPop MyStack, Item:     Debug.Assert Item = "A"
-                                Debug.Assert StackIsEmpty(MyStack)
-    Set MyStack = Nothing
+    StkItem MyStk, 2, Item: Debug.Assert Item = "B"
+    StkPop MyStk, Item:     Debug.Assert Item = "D"
+    StkPop MyStk, Item:     Debug.Assert Item = "C"
+    StkPop MyStk, Item:     Debug.Assert Item = "B"
+    StkPop MyStk, Item:     Debug.Assert Item = "A"
+                                Debug.Assert StkIsEmpty(MyStk)
+    Set MyStk = Nothing
     
 End Sub
 

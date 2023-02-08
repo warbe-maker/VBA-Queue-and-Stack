@@ -450,7 +450,7 @@ Public Function Buttons(ParamArray bttns() As Variant) As Collection
     Const PROC          As String = "Buttons"
     
     On Error GoTo eh
-    Static StackItems   As Collection
+    Static StkItems   As Collection
     Static QueueResult  As Collection
     Static cllResult    As Collection
     Static lBttnsInRow  As Long         ' buttons in a row counter (excludes break items)
@@ -463,7 +463,7 @@ Public Function Buttons(ParamArray bttns() As Variant) As Collection
     Dim sDelimiter      As String
     
     If cllResult Is Nothing Then
-        Set StackItems = New Collection
+        Set StkItems = New Collection
         Set QueueResult = New Collection
         Set cllResult = New Collection
         lBttnsInRow = 0
@@ -480,12 +480,12 @@ Public Function Buttons(ParamArray bttns() As Variant) As Collection
         If TypeName(bttns(0)) = "Collection" Then
             Set cll = bttns(0)
             For i = cll.Count To 1 Step -1
-                StckPush StackItems, cll(i)
+                StckPush StkItems, cll(i)
             Next i
         ElseIf TypeName(bttns(0)) = "Dictionary" Then
             Set dct = bttns(0)
             For i = dct.Count - 1 To 0 Step -1
-                StckPush StackItems, dct.Items()(i)
+                StckPush StkItems, dct.Items()(i)
             Next i
         ElseIf IsNumeric(bttns(0)) _
             Or (TypeName(bttns(0)) = "String" And bttns(0) <> vbNullString) Then
@@ -506,7 +506,7 @@ Public Function Buttons(ParamArray bttns() As Variant) As Collection
                     If sDelimiter <> vbNullString Then
                         '~~ The comma or semicolon delimited items are pushed on the stack in reverse order
                         For i = UBound(Split(bttns(0), sDelimiter)) To 0 Step -1
-                            StckPush StackItems, Trim(Split(bttns(0), sDelimiter)(i))
+                            StckPush StkItems, Trim(Split(bttns(0), sDelimiter)(i))
                         Next i
                     Else
                         '~~ This is a single buttons caption specified by a numeric value or a string
@@ -533,18 +533,18 @@ Public Function Buttons(ParamArray bttns() As Variant) As Collection
     Else
         '~~ More than one item in ParamArray
         For i = UBound(bttns) To 0 Step -1
-            StckPush StackItems, bttns(i)
+            StckPush StkItems, bttns(i)
         Next i
     End If
     
-    While Not StckIsEmpty(StackItems)
-        Set cllResult = Buttons(StckPop(StackItems))
+    While Not StckIsEmpty(StkItems)
+        Set cllResult = Buttons(StckPop(StkItems))
     Wend
 
-xt: If Not StckIsEmpty(StackItems) Then Exit Function
+xt: If Not StckIsEmpty(StkItems) Then Exit Function
     Set Buttons = cllResult
     Set cllResult = Nothing
-    Set StackItems = Nothing
+    Set StkItems = Nothing
     Exit Function
         
 eh: If ErrMsg(ErrSrc(PROC)) = vbYes Then: Stop: Resume
@@ -1214,30 +1214,30 @@ Private Sub ShowAtRange(ByVal sar_form As Object, _
 
 End Sub
 
-Public Function StackIsEmpty(ByVal stck As Collection) As Boolean
+Public Function StkIsEmpty(ByVal stck As Collection) As Boolean
 ' ----------------------------------------------------------------------------
 ' Returns TRUE when the stack (stck) is empty.
 ' ----------------------------------------------------------------------------
     If stck Is Nothing _
-    Then StackIsEmpty = True _
-    Else StackIsEmpty = stck.Count = 0
+    Then StkIsEmpty = True _
+    Else StkIsEmpty = stck.Count = 0
 End Function
 
-Public Function StackPop(ByVal stck As Collection) As Variant
+Public Function StkPop(ByVal stck As Collection) As Variant
 ' ----------------------------------------------------------------------------
-' Common Stack Pop service. Returns the last item pushed on the stack (stck)
+' Common Stk Pop service. Returns the last item pushed on the stack (stck)
 ' and removes the item from the stack. When the stack (stck) is empty a
 ' vbNullString is returned.
 ' ----------------------------------------------------------------------------
     Const PROC = "StckPop"
     
     On Error GoTo eh
-    If StackIsEmpty(stck) Then GoTo xt
+    If StkIsEmpty(stck) Then GoTo xt
     
     On Error Resume Next
-    Set StackPop = stck(stck.Count)
+    Set StkPop = stck(stck.Count)
     If Err.Number <> 0 _
-    Then StackPop = stck(stck.Count)
+    Then StkPop = stck(stck.Count)
     stck.Remove stck.Count
 
 xt: Exit Function
@@ -1245,10 +1245,10 @@ xt: Exit Function
 eh: If ErrMsg(ErrSrc(PROC)) = vbYes Then: Stop: Resume
 End Function
 
-Public Sub StackPush(ByRef stck As Collection, _
+Public Sub StkPush(ByRef stck As Collection, _
                      ByVal stck_item As Variant)
 ' ----------------------------------------------------------------------------
-' Common Stack Push service. Pushes (adds) an item (stck_item) to the stack
+' Common Stk Push service. Pushes (adds) an item (stck_item) to the stack
 ' (stck). When the provided stack (stck) is Nothing the stack is created.
 ' ----------------------------------------------------------------------------
     Const PROC = "StckPush"
@@ -1264,7 +1264,7 @@ End Sub
 
 Private Function StckIsEmpty(ByVal stck As Collection) As Boolean
 ' ----------------------------------------------------------------------------
-' Common Stack Empty check service. Returns True when either there is no stack
+' Common Stk Empty check service. Returns True when either there is no stack
 ' (stck Is Nothing) or when the stack is empty (items count is 0).
 ' ----------------------------------------------------------------------------
     StckIsEmpty = stck Is Nothing
@@ -1273,7 +1273,7 @@ End Function
 
 Private Function StckPop(ByVal stck As Collection) As Variant
 ' ----------------------------------------------------------------------------
-' Common Stack Pop service. Returns the last item pushed on the stack (stck)
+' Common Stk Pop service. Returns the last item pushed on the stack (stck)
 ' and removes the item from the stack. When the stack (stck) is empty a
 ' vbNullString is returned.
 ' ----------------------------------------------------------------------------
@@ -1296,7 +1296,7 @@ End Function
 Private Sub StckPush(ByRef stck As Collection, _
                      ByVal stck_item As Variant)
 ' ----------------------------------------------------------------------------
-' Common Stack Push service. Pushes (adds) an item (stck_item) to the stack
+' Common Stk Push service. Pushes (adds) an item (stck_item) to the stack
 ' (stck). When the provided stack (stck) is Nothing the stack is created.
 ' ----------------------------------------------------------------------------
     Const PROC = "StckPush"

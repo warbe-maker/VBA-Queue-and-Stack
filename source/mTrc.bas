@@ -115,7 +115,7 @@ Private sLogFile            As String           ' When not vbNullString the trac
 Private oLogFile            As TextStream
 Private sLogTitle           As String
 Private Trace               As Collection       ' Collection of begin and end trace entries
-Private TraceStack          As Collection       ' Trace stack for the trace log written to a file
+Private TraceStk          As Collection       ' Trace stack for the trace log written to a file
 Private bLogToFileSuspended As Boolean
 
 Public Property Get LogToFileSuspended() As Boolean:        LogToFileSuspended = bLogToFileSuspended:       End Property
@@ -522,7 +522,7 @@ Public Sub EoC(ByVal eoc_id As String, _
     Dim cll As Collection
     
     cyTcksOvrhdTrcStrt = SysCrrntTcks
-    If StckIsEmpty(TraceStack) Then Exit Sub
+    If StckIsEmpty(TraceStk) Then Exit Sub
     If Trace Is Nothing Then Exit Sub
     TrcEnd trc_id:=eoc_id, trc_dir:=DIR_END_CODE, trc_inf:=eoc_inf, trc_cll:=cll
     cyTcksOvrhdTrc = SysCrrntTcks - cyTcksOvrhdTrcStrt ' overhead ticks caused by the collection of the begin trace entry
@@ -539,11 +539,11 @@ Public Sub EoP(ByVal eop_id As String, _
     Dim cll As Collection
     
     cyTcksOvrhdTrcStrt = SysCrrntTcks
-    If StckIsEmpty(TraceStack) Then Exit Sub        ' Nothing to trace any longer. Stack has been emptied after an error to finish the trace
+    If StckIsEmpty(TraceStk) Then Exit Sub        ' Nothing to trace any longer. Stk has been emptied after an error to finish the trace
     If Trace Is Nothing Then Exit Sub  ' No trace or trace has finished
     
     TrcEnd trc_id:=eop_id, trc_dir:=DIR_END_PROC, trc_inf:=eop_inf, trc_cll:=cll
-'    If StckIsEmpty(TraceStack) Then
+'    If StckIsEmpty(TraceStk) Then
 '        Dsply
 '    End If
     cyTcksOvrhdTrc = SysCrrntTcks - cyTcksOvrhdTrcStrt ' overhead ticks caused by the collection of the end-of-trace entry
@@ -703,8 +703,8 @@ End Function
 '' ----------------------------------------------------------------------------
 '    Dim cll As Collection
 '
-'    While Not StckIsEmpty(TraceStack)
-'        Set cll = StckTop(TraceStack)
+'    While Not StckIsEmpty(TraceStk)
+'        Set cll = StckTop(TraceStk)
 '        If NtryIsCode(cll) _
 '        Then mTrc.EoC eoc_id:=ItmId(cll), eoc_inf:=inf _
 '        Else mTrc.EoP eop_id:=ItmId(cll), eop_inf:=inf
@@ -838,9 +838,9 @@ Private Sub LogBgn(ByVal tl_ntry As Collection)
     Dim s                   As String
     Dim fso                 As New FileSystemObject
     
-    StckPush TraceStack, tl_ntry
+    StckPush TraceStk, tl_ntry
     
-    If TraceStack.Count = 1 Then
+    If TraceStk.Count = 1 Then
         If sLogFile = vbNullString Then
             '~~ Provide a default log file not appended when no one had been specified
             s = mTrc.DefaultLogSpec
@@ -893,7 +893,7 @@ Private Sub LogEnd(ByVal tl_ntry As Collection)
 ' ----------------------------------------------------------------------------
 ' Write an end trace line to the trace log file (sLogFile) - provided one
 ' had been specified - with the execution time calculated in seconds. When the
-' TraceStack is empty write an additional End trace footer line.
+' TraceStk is empty write an additional End trace footer line.
 ' ----------------------------------------------------------------------------
     Const PROC = "LogEnd"
     
@@ -903,14 +903,14 @@ Private Sub LogEnd(ByVal tl_ntry As Collection)
     Dim ElapsedSecs         As String
     Dim ElapsedSecsTotal    As String
     
-    StckPop TraceStack, tl_ntry, BgnNtry
+    StckPop TraceStk, tl_ntry, BgnNtry
     ElapsedSecsTotal = LogElapsedSecsTotal(ItmTcks(tl_ntry))
     ElapsedSecs = LogElapsedSecs(et_ticks_end:=ItmTcks(tl_ntry), et_ticks_start:=ItmTcks(BgnNtry))
     
     If Not sLogFile = vbNullString Then
         sLogText = LogLinePrefix & ElapsedSecsTotal & ElapsedSecs & RepeatStrng("|  ", ItmLvl(tl_ntry)) & ItmDir(tl_ntry) & " " & ItmId(tl_ntry) & ItmInf(tl_ntry)
         LogTxt = sLogText
-        If TraceStack.Count = 1 Then
+        If TraceStk.Count = 1 Then
             sLogText = LogLinePrefix & ElapsedSecsTotal & ElapsedSecs & ItmDir(tl_ntry) & " "
             If LogTitle = vbNullString _
             Then sLogText = sLogText & "End execution trace " _
@@ -1015,12 +1015,12 @@ Private Sub StckAdjust(ByVal trc_id As String)
     Dim cllNtry As Collection
     Dim i       As Long
     
-    For i = TraceStack.Count To 1 Step -1
-        Set cllNtry = TraceStack(i)
+    For i = TraceStk.Count To 1 Step -1
+        Set cllNtry = TraceStk(i)
         If ItmId(cllNtry) = trc_id Then
             Exit For
         Else
-            TraceStack.Remove (TraceStack.Count)
+            TraceStk.Remove (TraceStk.Count)
             iTrcLvl = iTrcLvl - 1
         End If
     Next i
@@ -1038,8 +1038,8 @@ Private Function StckEd(ByVal stck_id As String) As Boolean
     Dim cllNtry As Collection
     Dim i       As Long
     
-    For i = TraceStack.Count To 1 Step -1
-        Set cllNtry = TraceStack(i)
+    For i = TraceStk.Count To 1 Step -1
+        Set cllNtry = TraceStk(i)
         If ItmId(cllNtry) = stck_id Then ' And ItmLvl(cllNtry) = stck_lvl Then
             StckEd = True
             Exit Function
@@ -1073,29 +1073,29 @@ Private Sub StckPop(ByRef stck As Collection, _
     Dim cllTop  As Collection: Set cllTop = StckTop(stck)
     Dim cll     As Collection: Set cll = stck_item
     
-    While ItmId(cll) <> ItmId(cllTop) And Not StckIsEmpty(TraceStack)
+    While ItmId(cll) <> ItmId(cllTop) And Not StckIsEmpty(TraceStk)
         '~~ Finish any unfinished code trace still on the stack which needs to be finished first
         If NtryIsCode(cllTop) Then
             mTrc.EoC eoc_id:=ItmId(cllTop), eoc_inf:="ended by stack!!"
         Else
             mTrc.EoP eop_id:=ItmId(cllTop), eop_inf:="ended by stack!!"
         End If
-        If Not StckIsEmpty(TraceStack) Then Set cllTop = StckTop(stck)
+        If Not StckIsEmpty(TraceStk) Then Set cllTop = StckTop(stck)
     Wend
     
-    If StckIsEmpty(TraceStack) Then GoTo xt
+    If StckIsEmpty(TraceStk) Then GoTo xt
     
     If ItmId(cll) = ItmId(cllTop) Then
         Set stck_ppd = cllTop
-        TraceStack.Remove TraceStack.Count
-        Set cllTop = StckTop(TraceStack)
+        TraceStk.Remove TraceStk.Count
+        Set cllTop = StckTop(TraceStk)
     Else
         '~~ There is nothing to pop because the top item is not the one requested to pop
-        Debug.Print "Stack Pop ='" & ItmId(cll) _
-                  & "', Stack Top = '" & ItmId(cllTop) _
-                  & "', Stack Dir = '" & ItmDir(cllTop) _
-                  & "', Stack Lvl = '" & ItmLvl(cllTop) _
-                  & "', Stack Cnt = '" & TraceStack.Count
+        Debug.Print "Stk Pop ='" & ItmId(cll) _
+                  & "', Stk Top = '" & ItmId(cllTop) _
+                  & "', Stk Dir = '" & ItmDir(cllTop) _
+                  & "', Stk Lvl = '" & ItmLvl(cllTop) _
+                  & "', Stk Cnt = '" & TraceStk.Count
         Stop
     End If
 
@@ -1124,7 +1124,7 @@ Public Sub Terminate()
 ' to begin with the very first procedure's execution.
 ' ----------------------------------------------------------------------------
     Set Trace = Nothing
-    Set TraceStack = Nothing
+    Set TraceStk = Nothing
     cyTcksPaused = 0
 End Sub
 
@@ -1210,7 +1210,7 @@ Private Sub TrcBgn(ByVal trc_id As String, _
          , trc_inf:=vbNullString _
          , trc_args:=trc_args _
          , trc_ntry:=trc_cll
-    StckPush TraceStack, trc_cll
+    StckPush TraceStk, trc_cll
 
 xt: Exit Sub
     
@@ -1232,7 +1232,7 @@ Private Sub TrcEnd(ByVal trc_id As String, _
     
     On Error GoTo eh
     Dim cy  As Currency:    cy = SysCrrntTcks - cyTcksPaused
-    Dim Top As Collection:  Set Top = StckTop(TraceStack)
+    Dim Top As Collection:  Set Top = StckTop(TraceStk)
     Dim itm As Collection
     
     If trc_inf <> vbNullString Then
@@ -1249,7 +1249,7 @@ Private Sub TrcEnd(ByVal trc_id As String, _
     End If
     
     If ItmId(Top) <> trc_id And ItmLvl(Top) = iTrcLvl Then
-        StckPop TraceStack, Top
+        StckPop TraceStk, Top
     End If
 
     TrcAdd trc_id:=trc_id _
@@ -1259,7 +1259,7 @@ Private Sub TrcEnd(ByVal trc_id As String, _
          , trc_inf:=trc_inf _
          , trc_ntry:=trc_cll
          
-    StckPop stck:=TraceStack, stck_item:=trc_cll, stck_ppd:=itm
+    StckPop stck:=TraceStk, stck_item:=trc_cll, stck_ppd:=itm
     iTrcLvl = iTrcLvl - 1
 
 xt: Exit Sub
