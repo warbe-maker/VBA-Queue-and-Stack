@@ -1,0 +1,123 @@
+23-02-17 18:05:23 Execution trace by 'Common VBA Execution Trace Service' (https://github.com/warbe-maker/Common-VBA-Execution-Trace-Service)
+23-02-17 18:05:23                 >> Begin execution trace 
+23-02-17 18:05:23 00,0000         |  >> mTest.Test_00_Regression_test
+23-02-17 18:05:23 00,0039         |  |  >> mTest.Test_10_ClassModule_clsQ
+23-02-17 18:05:23 00,0043         |  |  |  > clsQ.IsEmpty
+23-02-17 18:05:23 00,0051 00,0008 |  |  |  < clsQ.IsEmpty
+23-02-17 18:05:23 00,0057         |  |  |  > clsQ.Enqueue
+23-02-17 18:05:23 00,0065 00,0008 |  |  |  < clsQ.Enqueue
+23-02-17 18:05:23 00,0068         |  |  |  > clsQ.DeQueue
+23-02-17 18:05:23 00,0077 00,0009 |  |  |  < clsQ.DeQueue
+23-02-17 18:05:23 00,0079         |  |  |  > clsQ.Size
+23-02-17 18:05:23 00,0086 00,0007 |  |  |  < clsQ.Size
+23-02-17 18:05:23 00,0089         |  |  |  > clsQ.First
+23-02-17 18:05:23 00,0092 00,0003 |  |  |  < clsQ.First
+23-02-17 18:05:23 00,0094         |  |  |  > clsQ.Last
+23-02-17 18:05:23 00,0098 00,0004 |  |  |  < clsQ.Last
+23-02-17 18:05:23 00,0100         |  |  |  > clsQ.Item
+23-02-17 18:05:23 00,0105 00,0004 |  |  |  < clsQ.Item
+23-02-17 18:05:23 00,0107         |  |  |  > clsQ.IsQueued
+23-02-17 18:05:23 00,0111 00,0004 |  |  |  < clsQ.IsQueued
+23-02-17 18:05:23 00,0114         |  |  |  > clsQ.IsQueued AppErr(1) asserted
+23-02-17 18:05:23 00,0116 00,0002 |  |  |  < clsQ.IsQueued AppErr(1) asserted
+23-02-17 18:05:23 00,0140 00,0100 |  |  << mTest.Test_10_ClassModule_clsQ
+23-02-17 18:05:23 00,0145         |  |  >> mTest.Test_10_ClassModule_clsQ_VarTypes
+23-02-17 18:05:23 00,0150         |  |  |  > Enqueue/Dequeue VarType   0 vbEmpty           Empty (not initialized)
+23-02-17 18:05:23 00,0152 00,0002 |  |  |  < Enqueue/Dequeue VarType   0 vbEmpty           Empty (not initialized)
+23-02-17 18:05:23 00,0155         |  |  |  > Enqueue/Dequeue VarType   1 vbNull            Null (no valid data)
+23-02-17 18:05:23 00,0157 00,0002 |  |  |  < Enqueue/Dequeue VarType   1 vbNull            Null (no valid data)
+23-02-17 18:05:23 00,0160         |  |  |  > Enqueue/Dequeue VarType   8 vbString          String
+23-02-17 18:05:23 00,0161 00,0002 |  |  |  < Enqueue/Dequeue VarType   8 vbString          String
+23-02-17 18:05:23 00,0164         |  |  |  > Enqueue/Dequeue VarType   9 vbObject          Object
+23-02-17 18:05:23 00,0166 00,0002 |  |  |  < Enqueue/Dequeue VarType   9 vbObject          Object
+23-02-17 18:05:23 00,0170 00,0025 |  |  << mTest.Test_10_ClassModule_clsQ_VarTypes
+23-02-17 18:05:23 00,0179         |  |  >> mTest.Test_10_ClassModule_clsStk
+23-02-17 18:05:23 00,0181         |  |  |  > clsStk.IsEmpty
+23-02-17 18:05:23 00,0186 00,0005 |  |  |  < clsStk.IsEmpty
+23-02-17 18:05:23 00,0188         |  |  |  > MyStk.Push
+23-02-17 18:05:23 00,0193 00,0004 |  |  |  < MyStk.Push
+23-02-17 18:05:23 00,0195         |  |  |  > MyStk.Pop
+23-02-17 18:05:23 00,0200 00,0005 |  |  |  < MyStk.Pop
+23-02-17 18:05:23 00,0202         |  |  |  > MyStk.Size
+23-02-17 18:05:23 00,0206 00,0004 |  |  |  < MyStk.Size
+23-02-17 18:05:23 00,0208         |  |  |  > MyStk.Top
+23-02-17 18:05:23 00,0211 00,0003 |  |  |  < MyStk.Top
+23-02-17 18:05:23 00,0213         |  |  |  > MyStk.Bottom
+23-02-17 18:05:23 00,0217 00,0004 |  |  |  < MyStk.Bottom
+23-02-17 18:05:23 00,0219         |  |  |  > MyStk.IsStked
+23-02-17 18:05:23 00,0223 00,0004 |  |  |  < MyStk.IsStked
+23-02-17 18:05:23 00,0226 00,0047 |  |  << mTest.Test_10_ClassModule_clsStk
+23-02-17 18:05:23 00,0231         |  |  >> mTest.Test_20_StandardModule_mQue_Default_Queue
+23-02-17 18:05:23 00,0233         |  |  |  > mQ.IsEmpty
+23-02-17 18:05:23 00,0237 00,0004 |  |  |  < mQ.IsEmpty
+23-02-17 18:05:23 00,0239         |  |  |  > mQ.EnQueue
+23-02-17 18:05:23 00,0242 00,0003 |  |  |  < mQ.EnQueue
+23-02-17 18:05:23 00,0244         |  |  |  > mQ.DeQueue
+23-02-17 18:05:23 00,0248 00,0004 |  |  |  < mQ.DeQueue
+23-02-17 18:05:23 00,0250         |  |  |  > mQ.Size
+23-02-17 18:05:23 00,0253 00,0003 |  |  |  < mQ.Size
+23-02-17 18:05:23 00,0255         |  |  |  > mQ.Queued
+23-02-17 18:05:23 00,0258 00,0003 |  |  |  < mQ.Queued
+23-02-17 18:05:23 00,0261 00,0029 |  |  << mTest.Test_20_StandardModule_mQue_Default_Queue
+23-02-17 18:05:23 00,0266         |  |  >> mTest.Test_20_StandardModule_mQue_Provided_Queue
+23-02-17 18:05:23 00,0267         |  |  |  > mQ.IsEmpty
+23-02-17 18:05:23 00,0269 00,0002 |  |  |  < mQ.IsEmpty
+23-02-17 18:05:23 00,0271         |  |  |  > mQ.EnQueue
+23-02-17 18:05:23 00,0273 00,0002 |  |  |  < mQ.EnQueue
+23-02-17 18:05:23 00,0275         |  |  |  > mQ.DeQueue
+23-02-17 18:05:23 00,0277 00,0002 |  |  |  < mQ.DeQueue
+23-02-17 18:05:23 00,0280         |  |  |  > mQ.Size
+23-02-17 18:05:23 00,0282 00,0002 |  |  |  < mQ.Size
+23-02-17 18:05:23 00,0284         |  |  |  > mQ.IsQueued
+23-02-17 18:05:23 00,0287 00,0002 |  |  |  < mQ.IsQueued
+23-02-17 18:05:23 00,0289 00,0023 |  |  << mTest.Test_20_StandardModule_mQue_Provided_Queue
+23-02-17 18:05:23 00,0296         |  |  >> mTest.Test_30_Queue_as_Private_Services
+23-02-17 18:05:23 00,0298         |  |  |  > QisEmpty
+23-02-17 18:05:23 00,0301 00,0002 |  |  |  < QisEmpty
+23-02-17 18:05:23 00,0303         |  |  |  > Qenqueue
+23-02-17 18:05:23 00,0306 00,0003 |  |  |  < Qenqueue
+23-02-17 18:05:23 00,0308         |  |  |  > QdeQueue
+23-02-17 18:05:23 00,0312 00,0004 |  |  |  < QdeQueue
+23-02-17 18:05:23 00,0315         |  |  |  > Qsize
+23-02-17 18:05:23 00,0317 00,0002 |  |  |  < Qsize
+23-02-17 18:05:23 00,0319         |  |  |  > Qfirst
+23-02-17 18:05:23 00,0321 00,0002 |  |  |  < Qfirst
+23-02-17 18:05:23 00,0323         |  |  |  > Qlast
+23-02-17 18:05:23 00,0325 00,0003 |  |  |  < Qlast
+23-02-17 18:05:23 00,0327         |  |  |  > Qitem
+23-02-17 18:05:23 00,0331 00,0003 |  |  |  < Qitem
+23-02-17 18:05:23 00,0333         |  |  |  > QisQueued
+23-02-17 18:05:23 00,0335 00,0002 |  |  |  < QisQueued
+23-02-17 18:05:23 00,0337         |  |  |  > QisQueued AppErr(1) asserted
+23-02-17 18:05:23 00,0339 00,0002 |  |  |  < QisQueued AppErr(1) asserted
+23-02-17 18:05:23 00,0347 00,0051 |  |  << mTest.Test_30_Queue_as_Private_Services
+23-02-17 18:05:23 00,0353         |  |  >> mTest.Test_50_StandardModule_mStck_Default_Stk
+23-02-17 18:05:23 00,0355         |  |  |  > mStk.IsEmpty
+23-02-17 18:05:23 00,0359 00,0004 |  |  |  < mStk.IsEmpty
+23-02-17 18:05:23 00,0361         |  |  |  > mStk.Push
+23-02-17 18:05:23 00,0363 00,0002 |  |  |  < mStk.Push
+23-02-17 18:05:23 00,0365         |  |  |  > mStk.Pop
+23-02-17 18:05:23 00,0369 00,0003 |  |  |  < mStk.Pop
+23-02-17 18:05:23 00,0371         |  |  |  > mStk.Size
+23-02-17 18:05:23 00,0373 00,0003 |  |  |  < mStk.Size
+23-02-17 18:05:23 00,0375         |  |  |  > mStk.Stked
+23-02-17 18:05:23 00,0378 00,0003 |  |  |  < mStk.Stked
+23-02-17 18:05:23 00,0380 00,0028 |  |  << mTest.Test_50_StandardModule_mStck_Default_Stk
+23-02-17 18:05:23 00,0385         |  |  >> mTest.Test_50_StandardModule_mStck_Provided_Stk
+23-02-17 18:05:23 00,0387         |  |  |  > mStk.IsEmpty
+23-02-17 18:05:23 00,0389 00,0002 |  |  |  < mStk.IsEmpty
+23-02-17 18:05:23 00,0391         |  |  |  > mStk.Push
+23-02-17 18:05:23 00,0393 00,0002 |  |  |  < mStk.Push
+23-02-17 18:05:23 00,0394         |  |  |  > mStk.Pop
+23-02-17 18:05:23 00,0396 00,0002 |  |  |  < mStk.Pop
+23-02-17 18:05:23 00,0399         |  |  |  > mStk.Size
+23-02-17 18:05:23 00,0400 00,0002 |  |  |  < mStk.Size
+23-02-17 18:05:23 00,0402         |  |  |  > mStk.Stked
+23-02-17 18:05:23 00,0404 00,0002 |  |  |  < mStk.Stked
+23-02-17 18:05:23 00,0407 00,0022 |  |  << mTest.Test_50_StandardModule_mStck_Provided_Stk
+23-02-17 18:05:23 00,0411         |  |  >> mTest.Test_50_Stack_as_Private_Services
+23-02-17 18:05:23 00,0416 00,0004 |  |  << mTest.Test_50_Stack_as_Private_Services
+23-02-17 18:05:23 00,0418 00,0418 |  << mTest.Test_00_Regression_test
+23-02-17 18:05:23 00,0418 00,0418 << End execution trace 
+23-02-17 18:05:23                 Impact on the overall performance (caused by the trace itself): 00,0002 seconds!
+23-02-17 18:05:23 Execution trace by 'Common VBA Execution Trace Service' (https://github.com/warbe-maker/Common-VBA-Execution-Trace-Service)

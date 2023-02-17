@@ -43,7 +43,7 @@ Public Const CONCAT                 As String = "||"
 Private Const ErrMsgDefaultButton   As Long = vbOKOnly
 
 Private cllErrPath          As Collection   ' managed by ErrPath... procedures exclusively
-Private ProcStk           As Collection   ' stack maintained by BoP (push) and EoP (pop)
+Private ProcStack           As Collection   ' stack maintained by BoP (push) and EoP (pop)
 Private lSubsequErrNo       As Long         ' possibly different from the initial error number if it changes when passed on
 Private vErrsAsserted       As Variant      ' possibly provided with BoTP
 Private vErrReply           As Variant
@@ -52,11 +52,11 @@ Private cllRecentErrors     As Collection
 Private bRegression         As Boolean
 Private CurrentProc         As String
 
-Private Property Get EntryProc():                               EntryProc = StkBottom(ProcStk):                         End Property
+Private Property Get EntryProc():                               EntryProc = StackBottom(ProcStack):                         End Property
 
-Private Property Get EntryProcIsKnown() As Boolean:             EntryProcIsKnown = Not StkIsEmpty(ProcStk):             End Property
+Private Property Get EntryProcIsKnown() As Boolean:             EntryProcIsKnown = Not StackIsEmpty(ProcStack):             End Property
 
-Private Property Get EntryProcReached() As Boolean:             EntryProcReached = StkBottom(ProcStk) = CurrentProc:    End Property
+Private Property Get EntryProcReached() As Boolean:             EntryProcReached = StackBottom(ProcStack) = CurrentProc:    End Property
 
 Public Property Get ErrReply() As Variant:                      ErrReply = vErrReply:                                       End Property
 
@@ -115,12 +115,12 @@ Public Sub BoP(ByVal bop_id As String, _
     
     On Error GoTo eh
     
-    If StkIsEmpty(ProcStk) Then
+    If StackIsEmpty(ProcStack) Then
 '        Set vErrsAsserted = Nothing
         Set cllRecentErrors = Nothing: Set cllRecentErrors = New Collection
     End If
     
-    StkPush ProcStk, bop_id
+    StackPush ProcStack, bop_id
     If IsArray(bop_arguments) Then
         BoPArguments = Join(bop_arguments, ";")
     Else
@@ -168,8 +168,8 @@ Public Sub EoP(ByVal eop_id As String)
 #If ExecTrace = 1 Then
     mTrc.EoP eop_id
 #End If
-    If StkTop(ProcStk) = eop_id Then
-        StkPop ProcStk
+    If StackTop(ProcStack) = eop_id Then
+        StackPop ProcStack
 '    Else
 '        Err.Raise AppErr(1), ErrSrc(PROC), "The procedure '" & eop_id & "' has an EoP (End of Procedure) statement " & _
 '                                           "without a corresponfding BoP (Begin of Procedure) statement!"
@@ -410,7 +410,7 @@ Public Function ErrMsg( _
         err_reply = vErrReply
         
         If vErrReply <> vbResume Then ErrPathErase
-        StkPop ProcStk
+        StackPop ProcStack
         sInitErrInfo = vbNullString
         sInitErrSource = vbNullString
         sInitErrDscrptn = vbNullString
@@ -426,7 +426,7 @@ Public Function ErrMsg( _
         sInitErrSource = vbNullString
         sInitErrDscrptn = vbNullString
         lInitErrNo = 0
-        StkErase ProcStk
+        StackErase ProcStack
     End If
     
 xt: Exit Function
@@ -622,7 +622,7 @@ Private Function ErrPathErrMsg(ByVal msg_details As String) As String
 ' The path to the error has two possible sourced:
 ' - cllErrPath Path collected when the error is passed on to the
 '              entry procedure (bottom up approach).
-' - ProcStk maintained by BoP/EoP statements (top down approach)
+' - ProcStack maintained by BoP/EoP statements (top down approach)
 ' Either of the two or both may provide information about the path
 ' to the error. While the stack requires a BoP/EoP statement with
 ' each procedure executed, the path collected on the way up will
@@ -656,12 +656,12 @@ Private Function ErrPathErrMsg(ByVal msg_details As String) As String
         '~~ the second best chance to get the path to the error is using the stack
         '~~ maintained with all the BoP/EoP statements passed on the way down to the
         '~~ error raising procedure.
-        If Not StkIsEmpty(ProcStk) Then
-            For i = 1 To ProcStk.Count
+        If Not StackIsEmpty(ProcStack) Then
+            For i = 1 To ProcStack.Count
                 If ErrPathErrMsg <> vbNullString Then
-                   ErrPathErrMsg = ErrPathErrMsg & vbLf & Space$((i - 1) * 2) & "|_" & ProcStk(i)
+                   ErrPathErrMsg = ErrPathErrMsg & vbLf & Space$((i - 1) * 2) & "|_" & ProcStack(i)
                 Else
-                   ErrPathErrMsg = ProcStk(i)
+                   ErrPathErrMsg = ProcStack(i)
                 End If
             Next i
         End If
@@ -694,48 +694,48 @@ Private Function ErrSrc(ByVal sProc As String) As String
     ErrSrc = "mErH." & sProc
 End Function
 
-Private Function StkBottom(ByVal stck As Collection) As String
-    If Not StkIsEmpty(stck) Then StkBottom = ProcStk(1)
+Private Function StackBottom(ByVal stck As Collection) As String
+    If Not StackIsEmpty(stck) Then StackBottom = ProcStack(1)
 End Function
 
-Private Sub StkErase(ByRef stck As Collection)
+Private Sub StackErase(ByRef stck As Collection)
     If Not stck Is Nothing Then Set stck = Nothing
     Set stck = New Collection
 End Sub
 
-Public Function StkIsEmpty(ByVal stck As Collection) As Boolean
+Public Function StackIsEmpty(ByVal stck As Collection) As Boolean
 ' ----------------------------------------------------------------------------
-' Common Stk Empty check service. Returns True when either there is no stack
+' Common Stack Empty check service. Returns True when either there is no stack
 ' (stck Is Nothing) or when the stack is empty (items count is 0).
 ' ----------------------------------------------------------------------------
-    StkIsEmpty = stck Is Nothing
-    If Not StkIsEmpty Then StkIsEmpty = stck.Count = 0
+    StackIsEmpty = stck Is Nothing
+    If Not StackIsEmpty Then StackIsEmpty = stck.Count = 0
 End Function
 
-Public Function StkPop(ByVal stck As Collection, _
+Public Function StackPop(ByVal stck As Collection, _
                 Optional ByVal id As Variant = vbNullString) As Variant
 ' ----------------------------------------------------------------------------
-' Common Stk Pop service. Returns the last item pushed on the stack (stck)
+' Common Stack Pop service. Returns the last item pushed on the stack (stck)
 ' and removes the item from the stack. When the stack (stck) is empty a
 ' vbNullString is returned.
 ' ----------------------------------------------------------------------------
     Const PROC = "StckPop"
     
     On Error GoTo eh
-    If StkIsEmpty(stck) Then GoTo xt
+    If StackIsEmpty(stck) Then GoTo xt
     
     If VarType(id) = vbObject Then
-        If Not StkTop(ProcStk) Is id Then GoTo xt
+        If Not StackTop(ProcStack) Is id Then GoTo xt
     Else
         If Not id = vbNullString Then
-            If StkTop(ProcStk) <> id Then GoTo xt
+            If StackTop(ProcStack) <> id Then GoTo xt
         End If
     End If
     
     On Error Resume Next
-    Set StkPop = stck(stck.Count) ' last pushed item is an object
+    Set StackPop = stck(stck.Count) ' last pushed item is an object
     If Err.Number <> 0 _
-    Then StkPop = stck(stck.Count)
+    Then StackPop = stck(stck.Count)
     stck.Remove stck.Count
 
 xt: Exit Function
@@ -743,10 +743,10 @@ xt: Exit Function
 eh: If ErrMsg(ErrSrc(PROC)) = vbYes Then: Stop: Resume
 End Function
 
-Public Sub StkPush(ByRef stck As Collection, _
+Public Sub StackPush(ByRef stck As Collection, _
                      ByVal stck_item As Variant)
 ' ----------------------------------------------------------------------------
-' Common Stk Push service. Pushes (adds) an item (stck_item) to the stack
+' Common Stack Push service. Pushes (adds) an item (stck_item) to the stack
 ' (stck). When the provided stack (stck) is Nothing the stack is created.
 ' ----------------------------------------------------------------------------
     Const PROC = "StckPush"
@@ -760,11 +760,11 @@ xt: Exit Sub
 eh: If ErrMsg(ErrSrc(PROC)) = vbYes Then: Stop: Resume
 End Sub
 
-Private Function StkTop(ByVal stck As Collection) As Variant
-    If Not StkIsEmpty(stck) Then
+Private Function StackTop(ByVal stck As Collection) As Variant
+    If Not StackIsEmpty(stck) Then
         If VarType(stck.Count) = vbObject _
-        Then Set StkTop = stck(stck.Count) _
-        Else StkTop = stck(stck.Count)
+        Then Set StackTop = stck(stck.Count) _
+        Else StackTop = stck(stck.Count)
     End If
 End Function
 

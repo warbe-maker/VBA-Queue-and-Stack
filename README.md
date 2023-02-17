@@ -4,7 +4,7 @@ Common VBA Components providing comprehensive queue and stack services each in t
 ## Services
 All services below are provided either by a Standard-Module (mQueue, mStack) by a Class-Module (clsQueue, clsStack). In addition the services may be integrated as Private procedures (Queue...., Stack....) which are identical in the clsQueue/mQueue and the clsStack/mStack modules.
 
-| Service   | Queue | Stack | Description                                                                        |
+| Service<br><small>(Q. or mQ.)</small> | <br>Queue | <br>Stack | <br>Description                                                                        |
 | --------- |:-----:|:-----:|------------------------------------------------------------------------------------|
 | Bottom    |       |   x   | Returns the bottom item on the stack                                               |
 | DeQueue   |   x   |       | De-queues (returns and removes):<br>- the first item in the queue (the default)<br>- a specific item plus its position provided an identical and unique item is in the queue<br>- an item identified by its position       |

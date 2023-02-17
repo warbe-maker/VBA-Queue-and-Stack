@@ -1,22 +1,13 @@
-23-02-08 13:01:00 Export Changed Components (by CompMan.xlsb) for SaQ.xlsb: 
-23-02-08 13:01:00 ----------------------------------------------------------
-23-02-08 13:01:01 Export-File obsolete (deleted because component no longer exists)
-23-02-08 13:01:01 Export-File obsolete (deleted because component no longer exists)
-23-02-08 13:01:01 Export-File obsolete (deleted because component no longer exists)
-23-02-08 13:01:01 Class-Module    clsStk .......: Hosted Raw Common Component code modified
-23-02-08 13:01:01                                 Code modified of Hosted Raw Common Component
-23-02-08 13:01:01                                 Exported, Revision Number increased, Export File copied to 'Common Components Folder'
-23-02-08 13:01:01 UserForm        fMsg .........: Unchanged Used Common Component
-23-02-08 13:01:01 Standard-Module mBasic .......: Modified Used Common Component exported (due revert allert registered!)
-23-02-08 13:01:01 Standard-Module mCompManClient: Unchanged Used Common Component
-23-02-08 13:01:01 Standard-Module mErH .........: Modified Used Common Component exported (due revert allert registered!)
-23-02-08 13:01:01 Standard-Module mMsg .........: Modified Used Common Component exported (due revert allert registered!)
-23-02-08 13:01:01 Standard-Module mQprivate ....: Modified code exported
-23-02-08 13:01:01 Standard-Module mStk .........: Hosted Raw Common Component code modified
-23-02-08 13:01:01                                 Code modified of Hosted Raw Common Component
-23-02-08 13:01:01                                 Exported, Revision Number increased, Export File copied to 'Common Components Folder'
-23-02-08 13:01:01 Standard-Module mStkPrivate ..: Modified code exported
-23-02-08 13:01:01 Standard-Module mTest ........: Modified code exported
-23-02-08 13:01:01 Standard-Module mTrc .........: Modified Used Common Component exported (due revert allert registered!)
-23-02-08 13:01:01 Workbook        wbSaQ ........: Modified code exported
-23-02-08 13:01:01 Worksheet       wsUnused .....: Unchanged component
+23-02-17 18:06:18 Export Changed Components (by Add-in) for SaQ.xlsb: 
+23-02-17 18:06:18 ----------------------------------------------------
+23-02-17 18:06:18 UserForm        fMsg .........: Unchanged Used Common Component
+23-02-17 18:06:19 Standard-Module mBasic .......: Unchanged Used Common Component
+23-02-17 18:06:19 Standard-Module mCompManClient: Unchanged Used Common Component
+23-02-17 18:06:19 Standard-Module mErH .........: Unchanged Used Common Component
+23-02-17 18:06:19 Standard-Module mMsg .........: Unchanged Used Common Component
+23-02-17 18:06:19 Standard-Module mQprivate ....: Unchanged component
+23-02-17 18:06:19 Standard-Module mStkPrivate ..: Unchanged component
+23-02-17 18:06:19 Standard-Module mTest ........: Unchanged component
+23-02-17 18:06:19 Standard-Module mTrc .........: Unchanged Used Common Component
+23-02-17 18:06:19 Workbook        wbSaQ ........: Unchanged component
+23-02-17 18:06:19 Worksheet       wsUnused .....: Unchanged component
