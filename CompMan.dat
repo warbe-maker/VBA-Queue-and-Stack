@@ -16,7 +16,7 @@ RawExpFileFullName=D:\Ablage\Excel VBA\DevAndTest\Common-VBA-Queue-and-Stack-ser
 RawRevisionNumber=2023-02-17.001
 [mCompManClient]
 KindOfComponent=used
-RawRevisionNumber=2023-02-17.001
+RawRevisionNumber=2023-02-24.001
 DueModificationWarning=0
 [mErH]
 KindOfComponent=used
@@ -24,7 +24,7 @@ RawRevisionNumber=2022-05-25.001
 DueModificationWarning=0
 [mTrc]
 KindOfComponent=used
-RawRevisionNumber=2022-07-24.003
+RawRevisionNumber=2023-02-27.002
 DueModificationWarning=0
 [mMsg]
 KindOfComponent=used
@@ -37,5 +37,5 @@ RawRevisionNumber=2022-12-31.001
 KindOfComponent=used
 RawRevisionNumber=2023-01-24.002
 DueModificationWarning=0
-[Export]
-RecentlyUsedExportFolder=source
+[_MostRecentExport]
+UsedExportFolder=source
