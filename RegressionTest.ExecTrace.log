@@ -1,0 +1,123 @@
+23-06-23 15:48:36 Elapsed Length  Execution trace by 'Common VBA Execution Trace Service (mTrc)' (https://github.com/warbe-maker/VBA-Trace)
+23-06-23 15:48:36 seconds seconds >> Regression-Test mQ, mStk
+23-06-23 15:48:36 00,0000         |  >> mTest.Test_00_Regression_test
+23-06-23 15:48:36 00,0010         |  |  >> mTest.Test_10_ClassModule_clsQ
+23-06-23 15:48:36 00,0011         |  |  |  > clsQ.IsEmpty
+23-06-23 15:48:36 00,0013 00,0002 |  |  |  < clsQ.IsEmpty
+23-06-23 15:48:36 00,0015         |  |  |  > clsQ.Enqueue
+23-06-23 15:48:36 00,0017 00,0002 |  |  |  < clsQ.Enqueue
+23-06-23 15:48:36 00,0216         |  |  |  > clsQ.DeQueue
+23-06-23 15:48:36 00,0222 00,0006 |  |  |  < clsQ.DeQueue
+23-06-23 15:48:36 00,0225         |  |  |  > clsQ.Size
+23-06-23 15:48:36 00,0228 00,0003 |  |  |  < clsQ.Size
+23-06-23 15:48:36 00,0231         |  |  |  > clsQ.First
+23-06-23 15:48:36 00,0233 00,0002 |  |  |  < clsQ.First
+23-06-23 15:48:36 00,0235         |  |  |  > clsQ.Last
+23-06-23 15:48:36 00,0237 00,0002 |  |  |  < clsQ.Last
+23-06-23 15:48:36 00,0239         |  |  |  > clsQ.Item
+23-06-23 15:48:36 00,0241 00,0002 |  |  |  < clsQ.Item
+23-06-23 15:48:36 00,0243         |  |  |  > clsQ.IsQueued
+23-06-23 15:48:36 00,0246 00,0003 |  |  |  < clsQ.IsQueued
+23-06-23 15:48:36 00,0249         |  |  |  > clsQ.IsQueued AppErr(1) asserted
+23-06-23 15:48:36 00,0251 00,0002 |  |  |  < clsQ.IsQueued AppErr(1) asserted
+23-06-23 15:48:36 00,0260 00,0250 |  |  << mTest.Test_10_ClassModule_clsQ
+23-06-23 15:48:36 00,0262         |  |  >> mTest.Test_10_ClassModule_clsQ_VarTypes
+23-06-23 15:48:36 00,0269         |  |  |  > Enqueue/Dequeue VarType   0 vbEmpty           Empty (not initialized)
+23-06-23 15:48:36 00,0272 00,0003 |  |  |  < Enqueue/Dequeue VarType   0 vbEmpty           Empty (not initialized)
+23-06-23 15:48:36 00,0275         |  |  |  > Enqueue/Dequeue VarType   1 vbNull            Null (no valid data)
+23-06-23 15:48:36 00,0277 00,0002 |  |  |  < Enqueue/Dequeue VarType   1 vbNull            Null (no valid data)
+23-06-23 15:48:36 00,0279         |  |  |  > Enqueue/Dequeue VarType   8 vbString          String
+23-06-23 15:48:36 00,0282 00,0002 |  |  |  < Enqueue/Dequeue VarType   8 vbString          String
+23-06-23 15:48:36 00,0284         |  |  |  > Enqueue/Dequeue VarType   9 vbObject          Object
+23-06-23 15:48:36 00,0286 00,0002 |  |  |  < Enqueue/Dequeue VarType   9 vbObject          Object
+23-06-23 15:48:36 00,0288 00,0026 |  |  << mTest.Test_10_ClassModule_clsQ_VarTypes
+23-06-23 15:48:36 00,0291         |  |  >> mTest.Test_10_ClassModule_clsStk
+23-06-23 15:48:36 00,0293         |  |  |  > clsStk.IsEmpty
+23-06-23 15:48:36 00,0295 00,0002 |  |  |  < clsStk.IsEmpty
+23-06-23 15:48:36 00,0297         |  |  |  > MyStk.Push
+23-06-23 15:48:36 00,0299 00,0002 |  |  |  < MyStk.Push
+23-06-23 15:48:36 00,0301         |  |  |  > MyStk.Pop
+23-06-23 15:48:36 00,0304 00,0002 |  |  |  < MyStk.Pop
+23-06-23 15:48:36 00,0306         |  |  |  > MyStk.Size
+23-06-23 15:48:36 00,0308 00,0002 |  |  |  < MyStk.Size
+23-06-23 15:48:36 00,0310         |  |  |  > MyStk.Top
+23-06-23 15:48:36 00,0312 00,0002 |  |  |  < MyStk.Top
+23-06-23 15:48:36 00,0314         |  |  |  > MyStk.Bottom
+23-06-23 15:48:36 00,0316 00,0002 |  |  |  < MyStk.Bottom
+23-06-23 15:48:36 00,0319         |  |  |  > MyStk.IsStked
+23-06-23 15:48:36 00,0322 00,0002 |  |  |  < MyStk.IsStked
+23-06-23 15:48:36 00,0324 00,0033 |  |  << mTest.Test_10_ClassModule_clsStk
+23-06-23 15:48:36 00,0326         |  |  >> mTest.Test_20_StandardModule_mQue_Default_Queue
+23-06-23 15:48:36 00,0328         |  |  |  > mQ.IsEmpty
+23-06-23 15:48:36 00,0331 00,0002 |  |  |  < mQ.IsEmpty
+23-06-23 15:48:36 00,0333         |  |  |  > mQ.EnQueue
+23-06-23 15:48:36 00,0335 00,0002 |  |  |  < mQ.EnQueue
+23-06-23 15:48:36 00,0337         |  |  |  > mQ.DeQueue
+23-06-23 15:48:36 00,0339 00,0002 |  |  |  < mQ.DeQueue
+23-06-23 15:48:36 00,0341         |  |  |  > mQ.Size
+23-06-23 15:48:36 00,0343 00,0002 |  |  |  < mQ.Size
+23-06-23 15:48:36 00,0345         |  |  |  > mQ.Queued
+23-06-23 15:48:36 00,0347 00,0002 |  |  |  < mQ.Queued
+23-06-23 15:48:36 00,0350 00,0024 |  |  << mTest.Test_20_StandardModule_mQue_Default_Queue
+23-06-23 15:48:36 00,0353         |  |  >> mTest.Test_20_StandardModule_mQue_Provided_Queue
+23-06-23 15:48:36 00,0355         |  |  |  > mQ.IsEmpty
+23-06-23 15:48:36 00,0357 00,0002 |  |  |  < mQ.IsEmpty
+23-06-23 15:48:36 00,0359         |  |  |  > mQ.EnQueue
+23-06-23 15:48:36 00,0361 00,0002 |  |  |  < mQ.EnQueue
+23-06-23 15:48:36 00,0363         |  |  |  > mQ.DeQueue
+23-06-23 15:48:36 00,0365 00,0002 |  |  |  < mQ.DeQueue
+23-06-23 15:48:36 00,0368         |  |  |  > mQ.Size
+23-06-23 15:48:36 00,0370 00,0002 |  |  |  < mQ.Size
+23-06-23 15:48:36 00,0372         |  |  |  > mQ.IsQueued
+23-06-23 15:48:36 00,0374 00,0002 |  |  |  < mQ.IsQueued
+23-06-23 15:48:36 00,0377 00,0024 |  |  << mTest.Test_20_StandardModule_mQue_Provided_Queue
+23-06-23 15:48:36 00,0379         |  |  >> mTest.Test_30_Queue_as_Private_Services
+23-06-23 15:48:36 00,0381         |  |  |  > QisEmpty
+23-06-23 15:48:36 00,0383 00,0002 |  |  |  < QisEmpty
+23-06-23 15:48:36 00,0385         |  |  |  > Qenqueue
+23-06-23 15:48:36 00,0387 00,0002 |  |  |  < Qenqueue
+23-06-23 15:48:36 00,0390         |  |  |  > QdeQueue
+23-06-23 15:48:36 00,0392 00,0002 |  |  |  < QdeQueue
+23-06-23 15:48:36 00,0394         |  |  |  > Qsize
+23-06-23 15:48:36 00,0396 00,0002 |  |  |  < Qsize
+23-06-23 15:48:36 00,0398         |  |  |  > Qfirst
+23-06-23 15:48:36 00,0400 00,0002 |  |  |  < Qfirst
+23-06-23 15:48:36 00,0402         |  |  |  > Qlast
+23-06-23 15:48:36 00,0404 00,0002 |  |  |  < Qlast
+23-06-23 15:48:36 00,0406         |  |  |  > Qitem
+23-06-23 15:48:36 00,0408 00,0002 |  |  |  < Qitem
+23-06-23 15:48:36 00,0410         |  |  |  > QisQueued
+23-06-23 15:48:36 00,0413 00,0003 |  |  |  < QisQueued
+23-06-23 15:48:36 00,0415         |  |  |  > QisQueued AppErr(1) asserted
+23-06-23 15:48:36 00,0418 00,0002 |  |  |  < QisQueued AppErr(1) asserted
+23-06-23 15:48:36 00,0426 00,0047 |  |  << mTest.Test_30_Queue_as_Private_Services
+23-06-23 15:48:36 00,0429         |  |  >> mTest.Test_50_StandardModule_mStck_Default_Stk
+23-06-23 15:48:36 00,0431         |  |  |  > mStk.IsEmpty
+23-06-23 15:48:36 00,0433 00,0002 |  |  |  < mStk.IsEmpty
+23-06-23 15:48:36 00,0435         |  |  |  > mStk.Push
+23-06-23 15:48:36 00,0437 00,0002 |  |  |  < mStk.Push
+23-06-23 15:48:36 00,0439         |  |  |  > mStk.Pop
+23-06-23 15:48:36 00,0441 00,0002 |  |  |  < mStk.Pop
+23-06-23 15:48:36 00,0444         |  |  |  > mStk.Size
+23-06-23 15:48:36 00,0446 00,0002 |  |  |  < mStk.Size
+23-06-23 15:48:36 00,0448         |  |  |  > mStk.Stked
+23-06-23 15:48:36 00,0450 00,0002 |  |  |  < mStk.Stked
+23-06-23 15:48:36 00,0452 00,0024 |  |  << mTest.Test_50_StandardModule_mStck_Default_Stk
+23-06-23 15:48:36 00,0455         |  |  >> mTest.Test_50_StandardModule_mStck_Provided_Stk
+23-06-23 15:48:36 00,0457         |  |  |  > mStk.IsEmpty
+23-06-23 15:48:36 00,0459 00,0002 |  |  |  < mStk.IsEmpty
+23-06-23 15:48:36 00,0461         |  |  |  > mStk.Push
+23-06-23 15:48:36 00,0463 00,0002 |  |  |  < mStk.Push
+23-06-23 15:48:36 00,0465         |  |  |  > mStk.Pop
+23-06-23 15:48:36 00,0466 00,0002 |  |  |  < mStk.Pop
+23-06-23 15:48:36 00,0468         |  |  |  > mStk.Size
+23-06-23 15:48:36 00,0470 00,0002 |  |  |  < mStk.Size
+23-06-23 15:48:36 00,0472         |  |  |  > mStk.Stked
+23-06-23 15:48:36 00,0474 00,0002 |  |  |  < mStk.Stked
+23-06-23 15:48:36 00,0476 00,0021 |  |  << mTest.Test_50_StandardModule_mStck_Provided_Stk
+23-06-23 15:48:36 00,0478         |  |  >> mTest.Test_50_Stack_as_Private_Services
+23-06-23 15:48:36 00,0480 00,0002 |  |  << mTest.Test_50_Stack_as_Private_Services
+23-06-23 15:48:36 00,0482 00,0482 |  << mTest.Test_00_Regression_test
+23-06-23 15:48:36 00,0482 00,0482 << Regression-Test mQ, mStk
+23-06-23 15:48:36                 Execution trace by 'Common VBA Execution Trace Service (mTrc)' (https://github.com/warbe-maker/VBA-Trace)
+23-06-23 15:48:36                 Impact on the overall performance (caused by the trace itself): 0,2 milliseconds!

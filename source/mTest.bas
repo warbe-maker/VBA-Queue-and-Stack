@@ -16,165 +16,6 @@ Private Function AppErr(ByVal app_err_no As Long) As Long
     If app_err_no > 0 Then AppErr = app_err_no + vbObjectError Else AppErr = app_err_no - vbObjectError
 End Function
 
-Private Sub BoC(ByVal boc_id As String, ParamArray b_arguments() As Variant)
-' ------------------------------------------------------------------------------
-' (B)egin-(o)f-(C)ode with id (boc_id) trace. Procedure to be copied as Private
-' into any module potentially using the Common VBA Execution Trace Service. Has
-' no effect when Conditional Compile Argument is 0 or not set at all.
-' Note: The begin id (boc_id) has to be identical with the paired EoC statement.
-' ------------------------------------------------------------------------------
-    Dim s As String: If UBound(b_arguments) >= 0 Then s = Join(b_arguments, ",")
-#If ExecTrace = 1 Then
-    mTrc.BoC boc_id, s
-#End If
-End Sub
-
-Private Sub BoP(ByVal b_proc As String, ParamArray b_arguments() As Variant)
-' ------------------------------------------------------------------------------
-' (B)egin-(o)f-(P)rocedure named (b_proc). Procedure to be copied as Private
-' into any module potentially either using the Common VBA Error Service and/or
-' the Common VBA Execution Trace Service. Has no effect when Conditional Compile
-' Arguments are 0 or not set at all.
-' ------------------------------------------------------------------------------
-    Dim s As String: If UBound(b_arguments) >= 0 Then s = Join(b_arguments, ",")
-#If ErHComp = 1 Then
-    mErH.BoP b_proc, s
-#ElseIf ExecTrace = 1 Then
-    mTrc.BoP b_proc, s
-#End If
-End Sub
-
-Private Sub EoC(ByVal eoc_id As String, ParamArray b_arguments() As Variant)
-' ------------------------------------------------------------------------------
-' (E)nd-(o)f-(C)ode id (eoc_id) trace. Procedure to be copied as Private into
-' any module potentially using the Common VBA Execution Trace Service. Has no
-' effect when the Conditional Compile Argument is 0 or not set at all.
-' Note: The end id (eoc_id) has to be identical with the paired BoC statement.
-' ------------------------------------------------------------------------------
-    Dim s As String: If UBound(b_arguments) >= 0 Then s = Join(b_arguments, ",")
-#If ExecTrace = 1 Then
-    mTrc.EoC eoc_id, s
-#End If
-End Sub
-
-Private Sub EoP(ByVal e_proc As String, _
-      Optional ByVal e_inf As String = vbNullString)
-' ------------------------------------------------------------------------------
-' (E)nd-(o)f-(P)rocedure named (e_proc). Procedure to be copied as Private Sub
-' into any module potentially either using the Common VBA Error Service and/or
-' the Common VBA Execution Trace Service. Has no effect when Conditional Compile
-' Arguments are 0 or not set at all.
-' ------------------------------------------------------------------------------
-#If ErHComp = 1 Then
-    mErH.EoP e_proc
-#ElseIf ExecTrace = 1 Then
-    mTrc.EoP e_proc, e_inf
-#End If
-End Sub
-
-Private Function ErrMsg(ByVal err_source As String, _
-               Optional ByVal err_no As Long = 0, _
-               Optional ByVal err_dscrptn As String = vbNullString, _
-               Optional ByVal err_line As Long = 0) As Variant
-' ------------------------------------------------------------------------------
-' Universal error message display service. See:
-' https://warbe-maker.github.io/vba/common/2022/02/15/Personal-and-public-Common-Components.html
-'
-' Basic service:
-' - Displays a debugging option button when the Conditional Compile Argument
-'   'Debugging = 1'
-' - Displays an optional additional "About the error:" section when a string is
-'   concatenated with the error message by two vertical bars (||)
-' - Displays the error message by means of VBA.MsgBox when neither of the
-'   following is installed
-'
-' Extendend service when other Common Components are installed and indicated via
-' Conditional Compile Arguments:
-' - Invokes mErH.ErrMsg when the Conditional Compile Argument ErHComp = 1
-' - Invokes mMsg.ErrMsg when the Conditional Compile Argument MsgComp = 1 (and
-'   the mErH module is not installed / MsgComp not set)
-'
-' Uses:
-' - AppErr For programmed application errors (Err.Raise AppErr(n), ....) to turn
-'          them into negative and in the error message back into a positive
-'          number.
-' - ErrSrc To provide an unambiguous procedure name by prefixing is with the
-'          module name.
-'
-' See: https://github.com/warbe-maker/Common-VBA-Error-Services
-'
-' W. Rauschenberger Berlin, May 2022
-' ------------------------------------------------------------------------------' ------------------------------------------------------------------------------
-#If ErHComp = 1 Then
-    '~~ When Common VBA Error Services (mErH) is availabel in the VB-Project
-    '~~ (which includes the mMsg component) the mErh.ErrMsg service is invoked.
-    ErrMsg = mErH.ErrMsg(err_source, err_no, err_dscrptn, err_line): GoTo xt
-    GoTo xt
-#ElseIf MsgComp = 1 Then
-    '~~ When (only) the Common Message Service (mMsg, fMsg) is available in the
-    '~~ VB-Project, mMsg.ErrMsg is invoked for the display of the error message.
-    ErrMsg = mMsg.ErrMsg(err_source, err_no, err_dscrptn, err_line): GoTo xt
-    GoTo xt
-#End If
-    '~~ When neither of the Common Component is available in the VB-Project
-    '~~ the error message is displayed by means of the VBA.MsgBox
-    Dim ErrBttns    As Variant
-    Dim ErrAtLine   As String
-    Dim ErrDesc     As String
-    Dim ErrLine     As Long
-    Dim ErrNo       As Long
-    Dim ErrSrc      As String
-    Dim ErrText     As String
-    Dim ErrTitle    As String
-    Dim ErrType     As String
-    Dim ErrAbout    As String
-        
-    '~~ Obtain error information from the Err object for any argument not provided
-    If err_no = 0 Then err_no = Err.Number
-    If err_line = 0 Then ErrLine = Erl
-    If err_source = vbNullString Then err_source = Err.Source
-    If err_dscrptn = vbNullString Then err_dscrptn = Err.Description
-    If err_dscrptn = vbNullString Then err_dscrptn = "--- No error description available ---"
-    
-    '~~ Consider extra information is provided with the error description
-    If InStr(err_dscrptn, "||") <> 0 Then
-        ErrDesc = Split(err_dscrptn, "||")(0)
-        ErrAbout = Split(err_dscrptn, "||")(1)
-    Else
-        ErrDesc = err_dscrptn
-    End If
-    
-    '~~ Determine the type of error
-    Select Case err_no
-        Case Is < 0
-            ErrNo = AppErr(err_no)
-            ErrType = "Application Error "
-        Case Else
-            ErrNo = err_no
-            If err_dscrptn Like "*DAO*" _
-            Or err_dscrptn Like "*ODBC*" _
-            Or err_dscrptn Like "*Oracle*" _
-            Then ErrType = "Database Error " _
-            Else ErrType = "VB Runtime Error "
-    End Select
-    
-    If err_source <> vbNullString Then ErrSrc = " in: """ & err_source & """"   ' assemble ErrSrc from available information"
-    If err_line <> 0 Then ErrAtLine = " at line " & err_line                    ' assemble ErrAtLine from available information
-    ErrTitle = Replace(ErrType & ErrNo & ErrSrc & ErrAtLine, "  ", " ")         ' assemble ErrTitle from available information
-       
-    ErrText = "Error: " & vbLf & ErrDesc & vbLf & vbLf & "Source: " & vbLf & err_source & ErrAtLine
-    If ErrAbout <> vbNullString Then ErrText = ErrText & vbLf & vbLf & "About: " & vbLf & ErrAbout
-    
-#If Debugging Then
-    ErrBttns = vbYesNo
-    ErrText = ErrText & vbLf & vbLf & "Debugging:" & vbLf & "Yes    = Resume Error Line" & vbLf & "No     = Terminate"
-#Else
-    ErrBttns = vbCritical
-#End If
-    ErrMsg = MsgBox(Title:=ErrTitle, Prompt:=ErrText, Buttons:=ErrBttns)
-xt:
-End Function
-
 Private Function ErrSrc(ByVal sProc As String) As String
     ErrSrc = "mTest." & sProc
 End Function
@@ -229,7 +70,7 @@ Private Sub Qdequeue(ByRef q_queue As Collection, _
 
 xt: Exit Sub
 
-eh: Select Case ErrMsg(ErrSrc(PROC))
+eh: Select Case mBasic.ErrMsg(ErrSrc(PROC))
         Case vbResume:  Stop: Resume
         Case Else:      GoTo xt
     End Select
@@ -501,7 +342,7 @@ Private Function StkUsed(Optional ByRef u_stack As Collection = Nothing) As Coll
 
 xt: Exit Function
 
-eh: Select Case ErrMsg(ErrSrc(PROC))
+eh: Select Case mBasic.ErrMsg(ErrSrc(PROC))
         Case vbResume:  Stop: Resume
         Case Else:      GoTo xt
     End Select
@@ -510,10 +351,12 @@ End Function
 Public Sub Test_00_Regression_Test()
     Const PROC = "Test_00_Regression_test"
     
-    mTrc.LogClear
-    BoP ErrSrc(PROC)
-    
+    mTrc.FileName = "RegressionTest.ExecTrace.log"
+    mTrc.Title = "Regression-Test mQ, mStk"
     mErH.Regression = True
+    
+    mBasic.BoP ErrSrc(PROC)
+    
     mTest.Test_10_ClassModule_clsQ
     mTest.Test_10_ClassModule_clsQ_VarTypes
     mTest.Test_10_ClassModule_clsStk
@@ -524,7 +367,7 @@ Public Sub Test_00_Regression_Test()
     mTest.Test_50_StandardModule_mStck_Provided_Stk
     mTest.Test_60_Stack_as_Private_Services
     
-    EoP ErrSrc(PROC)
+    mBasic.EoP ErrSrc(PROC)
     mTrc.Dsply
     
 End Sub
@@ -537,21 +380,21 @@ Public Sub Test_10_ClassModule_clsQ()
     Dim lQueuePos       As Long
     Dim lNo             As Long
     
-    BoP ErrSrc(PROC)
+    mBasic.BoP ErrSrc(PROC)
     
-    BoC "clsQ.IsEmpty"
+    mBasic.BoC "clsQ.IsEmpty"
     Debug.Assert MyQueue.IsEmpty
-    EoC "clsQ.IsEmpty"
+    mBasic.EoC "clsQ.IsEmpty"
     
-    BoC "clsQ.Enqueue"
+    mBasic.BoC "clsQ.Enqueue"
     MyQueue.EnQueue "A":                Debug.Assert MyQueue.IsQueued("A", lQueuePos)
                                         Debug.Assert lQueuePos = 1
-    EoC "clsQ.Enqueue"
+    mBasic.EoC "clsQ.Enqueue"
     
-    BoC "clsQ.DeQueue"
+    mBasic.BoC "clsQ.DeQueue"
     MyQueue.DeQueue vDequeuedItem:      Debug.Assert vDequeuedItem = "A": Set vDequeuedItem = Nothing
     MyQueue.DeQueue vDequeuedItem:      Debug.Assert vDequeuedItem Is Nothing
-    EoC "clsQ.DeQueue"
+    mBasic.EoC "clsQ.DeQueue"
     
     MyQueue.EnQueue "A"                 ' 1st: a string
     MyQueue.EnQueue True                ' 2nd: a boolean
@@ -559,32 +402,32 @@ Public Sub Test_10_ClassModule_clsQ()
     MyQueue.EnQueue ThisWorkbook        ' 41h: an object
     MyQueue.EnQueue Now                 ' 5th: a Date
     
-    BoC "clsQ.Size"
+    mBasic.BoC "clsQ.Size"
     Debug.Assert MyQueue.Size = 5
-    EoC "clsQ.Size"
+    mBasic.EoC "clsQ.Size"
     
-    BoC "clsQ.First"
+    mBasic.BoC "clsQ.First"
     MyQueue.First vDequeuedItem:        Debug.Assert vDequeuedItem = "A"
-    EoC "clsQ.First"
+    mBasic.EoC "clsQ.First"
         
-    BoC "clsQ.Last"
+    mBasic.BoC "clsQ.Last"
     MyQueue.Last vDequeuedItem:         Debug.Assert IsDate(vDequeuedItem)
-    EoC "clsQ.Last"
+    mBasic.EoC "clsQ.Last"
     
-    BoC "clsQ.Item"
+    mBasic.BoC "clsQ.Item"
     MyQueue.Item 2, vDequeuedItem:      Debug.Assert vDequeuedItem = True
-    EoC "clsQ.Item"
+    mBasic.EoC "clsQ.Item"
     
-    BoC "clsQ.IsQueued"
+    mBasic.BoC "clsQ.IsQueued"
     Debug.Assert MyQueue.IsQueued(ThisWorkbook, lQueuePos, lNo) = True
-    EoC "clsQ.IsQueued"
+    mBasic.EoC "clsQ.IsQueued"
     Debug.Assert lQueuePos = 4
     Debug.Assert lNo = 1
       
     mErH.Asserted AppErr(1)
-    BoC "clsQ.IsQueued AppErr(1) asserted"
+    mBasic.BoC "clsQ.IsQueued AppErr(1) asserted"
     Debug.Assert MyQueue.IsQueued(True, lQueuePos, lNo) = True
-    EoC "clsQ.IsQueued AppErr(1) asserted"
+    mBasic.EoC "clsQ.IsQueued AppErr(1) asserted"
     Debug.Assert lQueuePos = 3 ' the position of the last found item identical with True
     Debug.Assert lNo = 2
     
@@ -602,7 +445,7 @@ Public Sub Test_10_ClassModule_clsQ()
     
     Set MyQueue = Nothing
     
-    EoP ErrSrc(PROC)
+    mBasic.EoP ErrSrc(PROC)
 End Sub
 
 Public Sub Test_10_ClassModule_clsQ_VarTypes()
@@ -611,35 +454,35 @@ Public Sub Test_10_ClassModule_clsQ_VarTypes()
     Dim cll     As clsQ
     Dim vItem   As Variant
     
-    BoP ErrSrc(PROC)
+    mBasic.BoP ErrSrc(PROC)
     
     Set cll = New clsQ
     Dim v2   As Variant: v2 = Empty
     Debug.Assert VarType(v2) = vbEmpty
-    BoC "Enqueue/Dequeue VarType " & Test_10_ClassModule_clsQ_VarTypes_Test_Case(v2)
+    mBasic.BoC "Enqueue/Dequeue VarType " & Test_10_ClassModule_clsQ_VarTypes_Test_Case(v2)
     cll.EnQueue v2
     cll.DeQueue vItem
-    EoC "Enqueue/Dequeue VarType " & Test_10_ClassModule_clsQ_VarTypes_Test_Case(v2)
+    mBasic.EoC "Enqueue/Dequeue VarType " & Test_10_ClassModule_clsQ_VarTypes_Test_Case(v2)
     Debug.Assert VarType(vItem) = vbEmpty
     Set cll = Nothing
       
     Set cll = New clsQ
     Dim v3   As Variant: v3 = Null
     Debug.Assert VarType(v3) = vbNull
-    BoC "Enqueue/Dequeue VarType " & Test_10_ClassModule_clsQ_VarTypes_Test_Case(v3)
+    mBasic.BoC "Enqueue/Dequeue VarType " & Test_10_ClassModule_clsQ_VarTypes_Test_Case(v3)
     cll.EnQueue v3
     cll.DeQueue vItem
-    EoC "Enqueue/Dequeue VarType " & Test_10_ClassModule_clsQ_VarTypes_Test_Case(v3)
+    mBasic.EoC "Enqueue/Dequeue VarType " & Test_10_ClassModule_clsQ_VarTypes_Test_Case(v3)
     Debug.Assert VarType(vItem) = vbNull
     Set cll = Nothing
     
     Set cll = New clsQ
     Dim v1   As Variant: v1 = vbNullString
     Debug.Assert VarType(v1) = vbString
-    BoC "Enqueue/Dequeue VarType " & Test_10_ClassModule_clsQ_VarTypes_Test_Case(v1)
+    mBasic.BoC "Enqueue/Dequeue VarType " & Test_10_ClassModule_clsQ_VarTypes_Test_Case(v1)
     cll.EnQueue v1
     cll.DeQueue vItem
-    EoC "Enqueue/Dequeue VarType " & Test_10_ClassModule_clsQ_VarTypes_Test_Case(v1)
+    mBasic.EoC "Enqueue/Dequeue VarType " & Test_10_ClassModule_clsQ_VarTypes_Test_Case(v1)
     Debug.Assert VarType(vItem) = vbString
     Debug.Assert vItem = vbNullString
     Set cll = Nothing
@@ -647,14 +490,14 @@ Public Sub Test_10_ClassModule_clsQ_VarTypes()
     Set cll = New clsQ
     Dim o   As Object
     Debug.Assert VarType(o) = vbObject
-    BoC "Enqueue/Dequeue VarType " & Test_10_ClassModule_clsQ_VarTypes_Test_Case(o)
+    mBasic.BoC "Enqueue/Dequeue VarType " & Test_10_ClassModule_clsQ_VarTypes_Test_Case(o)
     cll.EnQueue o
     cll.DeQueue vItem
-    EoC "Enqueue/Dequeue VarType " & Test_10_ClassModule_clsQ_VarTypes_Test_Case(o)
+    mBasic.EoC "Enqueue/Dequeue VarType " & Test_10_ClassModule_clsQ_VarTypes_Test_Case(o)
     Debug.Assert VarType(vItem) = vbObject
     Set cll = Nothing
         
-    EoP ErrSrc(PROC)
+    mBasic.EoP ErrSrc(PROC)
 End Sub
 
 Private Function Test_10_ClassModule_clsQ_VarTypes_Test_Case(ByVal v As Variant) As String
@@ -668,19 +511,19 @@ Public Sub Test_10_ClassModule_clsStk()
     Dim Item    As Variant
     Dim Pos     As Long
     
-    BoP ErrSrc(PROC)
+    mBasic.BoP ErrSrc(PROC)
     
-    BoC "clsStk.IsEmpty"
+    mBasic.BoC "clsStk.IsEmpty"
     Debug.Assert MyStk.IsEmpty
-    EoC "clsStk.IsEmpty"
+    mBasic.EoC "clsStk.IsEmpty"
     
-    BoC "MyStk.Push"
+    mBasic.BoC "MyStk.Push"
     MyStk.Push "A"
-    EoC "MyStk.Push"
+    mBasic.EoC "MyStk.Push"
     
-    BoC "MyStk.Pop"
+    mBasic.BoC "MyStk.Pop"
     MyStk.Pop Item
-    EoC "MyStk.Pop"
+    mBasic.EoC "MyStk.Pop"
     Debug.Assert Item = "A"
     
     MyStk.Push "A"
@@ -688,23 +531,23 @@ Public Sub Test_10_ClassModule_clsStk()
     MyStk.Push "C"
     MyStk.Push "D"
     
-    BoC "MyStk.Size"
+    mBasic.BoC "MyStk.Size"
     Debug.Assert MyStk.Size = 4
-    EoC "MyStk.Size"
+    mBasic.EoC "MyStk.Size"
     
-    BoC "MyStk.Top"
+    mBasic.BoC "MyStk.Top"
     MyStk.Top Item
     Debug.Assert Item = "D"
-    EoC "MyStk.Top"
+    mBasic.EoC "MyStk.Top"
         
-    BoC "MyStk.Bottom"
+    mBasic.BoC "MyStk.Bottom"
     MyStk.Bottom Item
     Debug.Assert Item = "A"
-    EoC "MyStk.Bottom"
+    mBasic.EoC "MyStk.Bottom"
     
-    BoC "MyStk.IsStked"
+    mBasic.BoC "MyStk.IsStked"
     Debug.Assert MyStk.IsStked("C", Pos) = True
-    EoC "MyStk.IsStked"
+    mBasic.EoC "MyStk.IsStked"
     Debug.Assert Pos = 3
     
     Debug.Assert Not MyStk.IsEmpty
@@ -720,7 +563,7 @@ Public Sub Test_10_ClassModule_clsStk()
     
     Set MyStk = Nothing
     
-    EoP ErrSrc(PROC)
+    mBasic.EoP ErrSrc(PROC)
 End Sub
 
 Public Sub Test_30_Queue_as_Private_Services()
@@ -735,21 +578,21 @@ Public Sub Test_30_Queue_as_Private_Services()
     Dim lQueuePos       As Long
     Dim lNo             As Long
     
-    BoP ErrSrc(PROC)
+    mBasic.BoP ErrSrc(PROC)
     
-    BoC "QisEmpty"
+    mBasic.BoC "QisEmpty"
     Debug.Assert QisEmpty(MyQueue)
-    EoC "QisEmpty"
+    mBasic.EoC "QisEmpty"
     
-    BoC "Qenqueue"
+    mBasic.BoC "Qenqueue"
     Qenqueue MyQueue, "A":                          Debug.Assert QisQueued(MyQueue, "A", lQueuePos)
                                                         Debug.Assert lQueuePos = 1
-    EoC "Qenqueue"
+    mBasic.EoC "Qenqueue"
     
-    BoC "QdeQueue"
+    mBasic.BoC "QdeQueue"
     Qdequeue MyQueue, vDequeuedItem:                Debug.Assert vDequeuedItem = "A": Set vDequeuedItem = Nothing
     Qdequeue MyQueue, vDequeuedItem:                Debug.Assert vDequeuedItem Is Nothing
-    EoC "QdeQueue"
+    mBasic.EoC "QdeQueue"
     
     Qenqueue MyQueue, "A"                           ' 1st: a string
     Qenqueue MyQueue, True                          ' 2nd: a boolean
@@ -757,32 +600,32 @@ Public Sub Test_30_Queue_as_Private_Services()
     Qenqueue MyQueue, ThisWorkbook                  ' 41h: an object
     Qenqueue MyQueue, Now                           ' 5th: a Date
     
-    BoC "Qsize"
+    mBasic.BoC "Qsize"
     Debug.Assert Qsize(MyQueue) = 5
-    EoC "Qsize"
+    mBasic.EoC "Qsize"
     
-    BoC "Qfirst"
+    mBasic.BoC "Qfirst"
     Qfirst MyQueue, vDequeuedItem:                  Debug.Assert vDequeuedItem = "A"
-    EoC "Qfirst"
+    mBasic.EoC "Qfirst"
         
-    BoC "Qlast"
+    mBasic.BoC "Qlast"
     Qlast MyQueue, vDequeuedItem:                   Debug.Assert IsDate(vDequeuedItem)
-    EoC "Qlast"
+    mBasic.EoC "Qlast"
     
-    BoC "Qitem"
+    mBasic.BoC "Qitem"
     Qitem MyQueue, 2, vDequeuedItem:                Debug.Assert vDequeuedItem = True
-    EoC "Qitem"
+    mBasic.EoC "Qitem"
     
-    BoC "QisQueued"
+    mBasic.BoC "QisQueued"
     Debug.Assert QisQueued(MyQueue, ThisWorkbook, lQueuePos, lNo) = True
-    EoC "QisQueued"
+    mBasic.EoC "QisQueued"
     Debug.Assert lQueuePos = 4
     Debug.Assert lNo = 1
       
     mErH.Asserted AppErr(1)
-    BoC "QisQueued AppErr(1) asserted"
+    mBasic.BoC "QisQueued AppErr(1) asserted"
     Debug.Assert QisQueued(MyQueue, True, lQueuePos, lNo) = True
-    EoC "QisQueued AppErr(1) asserted"
+    mBasic.EoC "QisQueued AppErr(1) asserted"
     Debug.Assert lQueuePos = 3 ' the position of the last found item identical with True
     Debug.Assert lNo = 2
     
@@ -800,7 +643,7 @@ Public Sub Test_30_Queue_as_Private_Services()
     
     Set MyQueue = Nothing
     
-    EoP ErrSrc(PROC)
+    mBasic.EoP ErrSrc(PROC)
 End Sub
 
 Public Sub Test_20_StandardModule_mQue_Default_Queue()
@@ -809,18 +652,18 @@ Public Sub Test_20_StandardModule_mQue_Default_Queue()
     Dim Item As Variant
     Dim Pos  As Long
     
-    BoP ErrSrc(PROC)
-    BoC "mQ.IsEmpty"
+    mBasic.BoP ErrSrc(PROC)
+    mBasic.BoC "mQ.IsEmpty"
     Debug.Assert mQ.IsEmpty()
-    EoC "mQ.IsEmpty"
+    mBasic.EoC "mQ.IsEmpty"
     
-    BoC "mQ.EnQueue"
+    mBasic.BoC "mQ.EnQueue"
     mQ.EnQueue "A"
-    EoC "mQ.EnQueue"
+    mBasic.EoC "mQ.EnQueue"
     
-    BoC "mQ.DeQueue"
+    mBasic.BoC "mQ.DeQueue"
     mQ.DeQueue Item
-    EoC "mQ.DeQueue"
+    mBasic.EoC "mQ.DeQueue"
     Debug.Assert Item = "A"
     
     mQ.EnQueue "A"
@@ -828,13 +671,13 @@ Public Sub Test_20_StandardModule_mQue_Default_Queue()
     mQ.EnQueue "C"
     mQ.EnQueue "D"
     
-    BoC "mQ.Size"
+    mBasic.BoC "mQ.Size"
     Debug.Assert mQ.Size() = 4
-    EoC "mQ.Size"
+    mBasic.EoC "mQ.Size"
         
-    BoC "mQ.Queued"
+    mBasic.BoC "mQ.Queued"
     Debug.Assert mQ.IsQueued("B", Pos) = True
-    EoC "mQ.Queued"
+    mBasic.EoC "mQ.Queued"
     Debug.Assert Pos = 2
     
     mQ.DeQueue Item:    Debug.Assert Item = "A"
@@ -842,7 +685,7 @@ Public Sub Test_20_StandardModule_mQue_Default_Queue()
     mQ.DeQueue Item:    Debug.Assert Item = "C"
     mQ.DeQueue Item:    Debug.Assert Item = "D"
                             Debug.Assert mQ.IsEmpty()
-    EoP ErrSrc(PROC)
+    mBasic.EoP ErrSrc(PROC)
         
 End Sub
 
@@ -852,31 +695,31 @@ Public Sub Test_20_StandardModule_mQue_Provided_Queue()
     Dim Item    As Variant
     Dim Pos     As Long
 
-    BoP ErrSrc(PROC)
-    BoC "mQ.IsEmpty"
+    mBasic.BoP ErrSrc(PROC)
+    mBasic.BoC "mQ.IsEmpty"
     Debug.Assert mQ.IsEmpty(MyQueue)
-    EoC "mQ.IsEmpty"
+    mBasic.EoC "mQ.IsEmpty"
     
-    BoC "mQ.EnQueue"
+    mBasic.BoC "mQ.EnQueue"
     mQ.EnQueue "A", MyQueue
-    EoC "mQ.EnQueue"
+    mBasic.EoC "mQ.EnQueue"
     
-    BoC "mQ.DeQueue"
+    mBasic.BoC "mQ.DeQueue"
     mQ.DeQueue Item, MyQueue:        Debug.Assert Item = "A"
-    EoC "mQ.DeQueue"
+    mBasic.EoC "mQ.DeQueue"
     
     mQ.EnQueue "A", MyQueue
     mQ.EnQueue "B", MyQueue
     mQ.EnQueue "C", MyQueue
     mQ.EnQueue "D", MyQueue
     
-    BoC "mQ.Size"
+    mBasic.BoC "mQ.Size"
     Debug.Assert mQ.Size(MyQueue) = 4
-    EoC "mQ.Size"
+    mBasic.EoC "mQ.Size"
         
-    BoC "mQ.IsQueued"
+    mBasic.BoC "mQ.IsQueued"
     Debug.Assert mQ.IsQueued("B", Pos, MyQueue) = True
-    EoC "mQ.IsQueued"
+    mBasic.EoC "mQ.IsQueued"
     Debug.Assert Pos = 2
     
     Debug.Assert Not mQ.IsEmpty(MyQueue)
@@ -891,7 +734,7 @@ Public Sub Test_20_StandardModule_mQue_Provided_Queue()
     
     Debug.Assert mQ.IsEmpty(MyQueue)
     
-    EoP ErrSrc(PROC)
+    mBasic.EoP ErrSrc(PROC)
     
 End Sub
 
@@ -900,33 +743,33 @@ Public Sub Test_50_StandardModule_mStck_Default_Stk()
 
     Dim Item As Variant
     
-    BoP ErrSrc(PROC)
+    mBasic.BoP ErrSrc(PROC)
     
-    BoC "mStk.IsEmpty"
+    mBasic.BoC "mStk.IsEmpty"
     Debug.Assert mStk.IsEmpty()
-    EoC "mStk.IsEmpty"
+    mBasic.EoC "mStk.IsEmpty"
     
-    BoC "mStk.Push"
+    mBasic.BoC "mStk.Push"
     mStk.Push "A"
-    EoC "mStk.Push"
+    mBasic.EoC "mStk.Push"
     
-    BoC "mStk.Pop"
+    mBasic.BoC "mStk.Pop"
     mStk.Pop Item
     Debug.Assert Item = "A"
-    EoC "mStk.Pop"
+    mBasic.EoC "mStk.Pop"
     
     mStk.Push "A"
     mStk.Push "B"
     mStk.Push "C"
     mStk.Push "D"
        
-    BoC "mStk.Size"
+    mBasic.BoC "mStk.Size"
     Debug.Assert mStk.Size() = 4
-    EoC "mStk.Size"
+    mBasic.EoC "mStk.Size"
         
-    BoC "mStk.Stked"
+    mBasic.BoC "mStk.Stked"
     Debug.Assert mStk.StkEd("B") = True
-    EoC "mStk.Stked"
+    mBasic.EoC "mStk.Stked"
     
     Debug.Assert Not mStk.IsEmpty
     mStk.Pop Item
@@ -938,7 +781,7 @@ Public Sub Test_50_StandardModule_mStck_Default_Stk()
     mStk.Pop Item
     Debug.Assert Item = "A"
     Debug.Assert mStk.IsEmpty
-    EoP ErrSrc(PROC)
+    mBasic.EoP ErrSrc(PROC)
     
 End Sub
 
@@ -948,19 +791,19 @@ Public Sub Test_50_StandardModule_mStck_Provided_Stk()
     Dim Item   As Variant
     Dim Pos    As Long
     
-    BoP ErrSrc(PROC)
+    mBasic.BoP ErrSrc(PROC)
     
-    BoC "mStk.IsEmpty"
+    mBasic.BoC "mStk.IsEmpty"
     Debug.Assert mStk.IsEmpty(MyStk)
-    EoC "mStk.IsEmpty"
+    mBasic.EoC "mStk.IsEmpty"
     
-    BoC "mStk.Push"
+    mBasic.BoC "mStk.Push"
     mStk.Push "A", MyStk
-    EoC "mStk.Push"
+    mBasic.EoC "mStk.Push"
     
-    BoC "mStk.Pop"
+    mBasic.BoC "mStk.Pop"
     mStk.Pop Item, MyStk
-    EoC "mStk.Pop"
+    mBasic.EoC "mStk.Pop"
     Debug.Assert Item = "A"
     
     mStk.Push "A", MyStk
@@ -968,13 +811,13 @@ Public Sub Test_50_StandardModule_mStck_Provided_Stk()
     mStk.Push "C", MyStk
     mStk.Push "D", MyStk
     
-    BoC "mStk.Size"
+    mBasic.BoC "mStk.Size"
     Debug.Assert mStk.Size(MyStk) = 4
-    EoC "mStk.Size"
+    mBasic.EoC "mStk.Size"
         
-    BoC "mStk.Stked"
+    mBasic.BoC "mStk.Stked"
     Debug.Assert mStk.StkEd("B", Pos, MyStk) = True
-    EoC "mStk.Stked"
+    mBasic.EoC "mStk.Stked"
     Debug.Assert Pos = 2
     
     Debug.Assert Not mStk.IsEmpty(MyStk)
@@ -987,7 +830,7 @@ Public Sub Test_50_StandardModule_mStck_Provided_Stk()
     mStk.Pop Item, MyStk
     Debug.Assert Item = "A"
     Debug.Assert mStk.IsEmpty(MyStk)
-    EoP ErrSrc(PROC)
+    mBasic.EoP ErrSrc(PROC)
     
 End Sub
 
@@ -1001,7 +844,7 @@ Public Sub Test_60_Stack_as_Private_Services()
     Dim Item    As Variant
     Dim Pos     As Long
                                 
-    BoP ErrSrc(PROC)
+    mBasic.BoP ErrSrc(PROC)
                                 Debug.Assert StkIsEmpty(MyStk)
     StkPush MyStk, "A":         Debug.Assert Not StkIsEmpty(MyStk)
     StkPop MyStk, Item:         Debug.Assert Item = "A"
@@ -1021,7 +864,7 @@ Public Sub Test_60_Stack_as_Private_Services()
     StkPop MyStk, Item:         Debug.Assert Item = "A"
                                 Debug.Assert StkIsEmpty(MyStk)
     Set MyStk = Nothing
-    EoP ErrSrc(PROC)
+    mBasic.EoP ErrSrc(PROC)
     
 End Sub
 

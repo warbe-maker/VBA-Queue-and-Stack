@@ -1,41 +1,36 @@
-[mStk]
+[_MostRecentExport]
+UsedExportFolder=source
+[clsQ]
 KindOfComponent=hosted
-RawExpFileFullName=D:\Ablage\Excel VBA\DevAndTest\Common-VBA-Queue-and-Stack-services\source\mStk.bas
-RawRevisionNumber=2023-02-17.001
-[mQ]
-KindOfComponent=hosted
-RawExpFileFullName=D:\Ablage\Excel VBA\DevAndTest\Common-VBA-Queue-and-Stack-services\source\mQ.bas
+RawExpFileFullName=D:\Ablage\Excel VBA\DevAndTest\Common-VBA-Queue-and-Stack-services\source\clsQ.cls
 RawRevisionNumber=2023-02-17.001
 [clsStk]
 KindOfComponent=hosted
 RawExpFileFullName=D:\Ablage\Excel VBA\DevAndTest\Common-VBA-Queue-and-Stack-services\source\clsStk.cls
 RawRevisionNumber=2023-02-17.001
-[clsQ]
-KindOfComponent=hosted
-RawExpFileFullName=D:\Ablage\Excel VBA\DevAndTest\Common-VBA-Queue-and-Stack-services\source\clsQ.cls
-RawRevisionNumber=2023-02-17.001
-[mCompManClient]
-KindOfComponent=used
-RawRevisionNumber=2023-02-24.001
-DueModificationWarning=0
-[mErH]
-KindOfComponent=used
-RawRevisionNumber=2022-05-25.001
-DueModificationWarning=0
-[mTrc]
-KindOfComponent=used
-RawRevisionNumber=2023-02-27.002
-DueModificationWarning=0
-[mMsg]
-KindOfComponent=used
-RawRevisionNumber=2023-02-14.001
-DueModificationWarning=0
 [fMsg]
 KindOfComponent=used
-RawRevisionNumber=2022-12-31.001
+RawRevisionNumber=2023-06-23.001
 [mBasic]
 KindOfComponent=used
-RawRevisionNumber=2023-01-24.002
-DueModificationWarning=0
-[_MostRecentExport]
-UsedExportFolder=source
+RawRevisionNumber=2023-06-23.002
+[mCompManClient]
+KindOfComponent=used
+RawRevisionNumber=2023-06-23.002
+[mErH]
+KindOfComponent=used
+RawRevisionNumber=2023-06-23.001
+[mMsg]
+KindOfComponent=used
+RawRevisionNumber=2023-06-23.001
+[mQ]
+KindOfComponent=hosted
+RawExpFileFullName=D:\Ablage\Excel VBA\DevAndTest\Common-VBA-Queue-and-Stack-services\source\mQ.bas
+RawRevisionNumber=2023-06-23.001
+[mStk]
+KindOfComponent=hosted
+RawExpFileFullName=D:\Ablage\Excel VBA\DevAndTest\Common-VBA-Queue-and-Stack-services\source\mStk.bas
+RawRevisionNumber=2023-06-23.001
+[mTrc]
+KindOfComponent=used
+RawRevisionNumber=2023-06-23.003

@@ -1,22 +1,16 @@
 Attribute VB_Name = "mCompManClient"
 Option Explicit
-' ----------------------------------------------------------------------
-' Standard Module mCompManClient
-' ------------------------------
-' Component to be imported into any Workbook in order to enbale it for
-' being serviced by CompMan. The component is the interface between a
-' the serviced Workbook/VB-Project and CompMan as the servicing Workbook
-' for the services:
-' - "Export Changed Components"
-' - "Update Outdated Common Components"
-' - "Synchronize VB-Projects"
+' ----------------------------------------------------------------------------
+' Standard Module mCompManClient: CompMan client interface. To be imported
+' =============================== into any Workbook for being serviced by
+' CompMan's "Export Changed Components", "Update Outdated Common Components",
+' or "Synchronize VB-Projects" service.
 '
-' See also the public Github repo:
-' https://github.com/warbe-maker/Excel-VB-Components-Management-Services
+' W. Rauschenberger, Berlin Jun 2023
 '
-' W. Rauschenberger, Berlin Feb 2023
-' ----------------------------------------------------------------------
-Public Const COMPMAN_ADDIN              As String = "CompMan.xlam"
+' See https://github.com/warbe-maker/VB-Components-Management
+' ----------------------------------------------------------------------------
+' --- The below constants must not be changed to Private since they are used byCompMan
 Public Const COMPMAN_DEVLP              As String = "CompMan.xlsb"
 Public Const SRVC_EXPORT_ALL            As String = "ExportAll"
 Public Const SRVC_EXPORT_ALL_DSPLY      As String = "Export All Components"
@@ -26,7 +20,9 @@ Public Const SRVC_SYNCHRONIZE           As String = "SynchronizeVBProjects"
 Public Const SRVC_SYNCHRONIZE_DSPLY     As String = "Synchronize VB-Projects"
 Public Const SRVC_UPDATE_OUTDATED       As String = "UpdateOutdatedCommonComponents"
 Public Const SRVC_UPDATE_OUTDATED_DSPLY As String = "Update Outdated Common Components"
+' --- The above constants must not be changed to Private since they are used byCompMan
 
+Private Const COMPMAN_ADDIN             As String = "CompMan.xlam"
 Private Const vbResume                  As Long = 6 ' return value (equates to vbYes)
 Private Busy                            As Boolean ' prevent parallel execution of a service
 
@@ -42,7 +38,7 @@ Private Property Get IsDevInstance() As Boolean
 End Property
 
 Private Property Get IsAddinInstance() As Boolean
-    IsAddinInstance = ThisWorkbook.Name = mCompManClient.COMPMAN_ADDIN
+    IsAddinInstance = ThisWorkbook.Name = COMPMAN_ADDIN
 End Property
 
 Private Function AppErr(ByVal app_err_no As Long) As Long
@@ -61,7 +57,7 @@ Public Sub CompManService(ByVal cms_name As String, _
 ' ----------------------------------------------------------------------------
 ' Execution of the CompMan service (cms_name) preferably via the "CompMan
 ' Development Instance" as the servicing Workbook. Only when not available the
-' "CompMan AddIn Instance" (mCompManClient.COMPMAN_ADDIN) becomes the servicing
+' "CompMan AddIn Instance" (COMPMAN_ADDIN) becomes the servicing
 ' Workbook - which maynot be open either or open but paused.
 ' Note: cms_unused is for backwards compatibility only
 ' ----------------------------------------------------------------------------
@@ -158,27 +154,18 @@ Private Function ErrMsg(ByVal err_source As String, _
 ' W. Rauschenberger Berlin, Nov 2021
 ' ------------------------------------------------------------------------------
 #If ErHComp = 1 Then
-    '~~ ------------------------------------------------------------------------
-    '~~ When the Common VBA Error Handling Component (mErH) is installed in the
-    '~~ VB-Project (which includes the mMsg component) the mErh.ErrMsg service
-    '~~ is preferred since it provides some enhanced features like a path to the
-    '~~ error.
-    '~~ ------------------------------------------------------------------------
+    '~~ When Common VBA Error Services (mErH) is availabel in the VB-Project
+    '~~ (which includes the mMsg component) the mErh.ErrMsg service is invoked.
     ErrMsg = mErH.ErrMsg(err_source, err_no, err_dscrptn, err_line)
     GoTo xt
 #ElseIf MsgComp = 1 Then
-    '~~ ------------------------------------------------------------------------
-    '~~ When only the Common Message Services Component (mMsg) is installed but
-    '~~ not the mErH component the mMsg.ErrMsg service is preferred since it
-    '~~ provides an enhanced layout and other features.
-    '~~ ------------------------------------------------------------------------
+    '~~ When (only) the Common Message Service (mMsg, fMsg) is available in the
+    '~~ VB-Project, mMsg.ErrMsg is invoked for the display of the error message.
     ErrMsg = mMsg.ErrMsg(err_source, err_no, err_dscrptn, err_line)
     GoTo xt
 #End If
-    '~~ -------------------------------------------------------------------
     '~~ When neither the mMsg nor the mErH component is installed the error
     '~~ message is displayed by means of the VBA.MsgBox
-    '~~ -------------------------------------------------------------------
     Dim ErrBttns    As Variant
     Dim ErrAtLine   As String
     Dim ErrDesc     As String
@@ -193,7 +180,7 @@ Private Function ErrMsg(ByVal err_source As String, _
     '~~ Obtain error information from the Err object for any argument not provided
     If err_no = 0 Then err_no = Err.Number
     If err_line = 0 Then ErrLine = Erl
-    If err_source = vbNullString Then err_source = Err.Source
+    If err_source = vbNullString Then err_source = Err.source
     If err_dscrptn = vbNullString Then err_dscrptn = Err.Description
     If err_dscrptn = vbNullString Then err_dscrptn = "--- No error description available ---"
     
@@ -315,15 +302,15 @@ Private Function WbkServicingName(ByVal csa_service As String) As String
         '~~ Display/indicate why the service cannot be provided
         Case ServicedByWrkbkResult = ResultConfigInvalid
             Select Case csa_service
-                Case SRVC_SYNCHRONIZE:      DisplayedServiceStatus = "'" & SRVC_SYNCHRONIZE_DSPLY & "' service denied (no Sync-Target- and or Sync-Archive-Folder configured)!"
-                Case SRVC_UPDATE_OUTDATED:  DisplayedServiceStatus = "'" & SRVC_UPDATE_OUTDATED_DSPLY & "' service denied (a valid configuration is missing)!"
-                Case SRVC_EXPORT_CHANGED:   DisplayedServiceStatus = "'" & SRVC_EXPORT_CHANGED_DSPLY & "' service denied (a valid configuration is missing)!"
+                Case SRVC_SYNCHRONIZE:      DisplayedServiceStatus = vbNullString ' "'" & SRVC_SYNCHRONIZE_DSPLY & "' service denied (no Sync-Target- and or Sync-Archive-Folder configured)!"
+                Case SRVC_UPDATE_OUTDATED:  DisplayedServiceStatus = "The enabled/requested '" & SRVC_UPDATE_OUTDATED_DSPLY & "' service had been denied due to an invalid or missing configuration (see Config Worksheet)!"
+                Case SRVC_EXPORT_CHANGED:   DisplayedServiceStatus = "The enabled/requested'" & SRVC_EXPORT_CHANGED_DSPLY & "' service had been denied due to an invalid or missing configuration (see Config Worksheet)!"
             End Select
         Case ServicedByWrkbkResult = ResultOutsideCfgFolder
             Select Case csa_service
-                Case SRVC_SYNCHRONIZE:      Debug.Print "'" & SRVC_SYNCHRONIZE_DSPLY & "' service silently denied! (Workbook has not been opened from within the configured 'Sync-Target-Folder')"
-                Case SRVC_UPDATE_OUTDATED:  Debug.Print "'" & SRVC_EXPORT_CHANGED_DSPLY & "' service silently denied! (Workbook has not been opened from within the configured 'Dev-and-Test-Folder')"
-                Case SRVC_EXPORT_CHANGED:   Debug.Print "'" & SRVC_UPDATE_OUTDATED_DSPLY & "' service silently denied! (Workbook has not been opened from within the configured 'Dev-and-Test-Folder')"
+                Case SRVC_SYNCHRONIZE:      Debug.Print "The enabled/requested '" & SRVC_SYNCHRONIZE_DSPLY & "' service had silently been denied! (Workbook has not been opened from within the configured 'Sync-Target-Folder')"
+                Case SRVC_UPDATE_OUTDATED:  Debug.Print "The enabled/requested '" & SRVC_EXPORT_CHANGED_DSPLY & "' service had silently been denied! (Workbook has not been opened from within the configured 'Dev-and-Test-Folder')"
+                Case SRVC_EXPORT_CHANGED:   Debug.Print "The enabled/requested '" & SRVC_UPDATE_OUTDATED_DSPLY & "' service had silently been denied! (Workbook has not been opened from within the configured 'Dev-and-Test-Folder')"
             End Select
         Case ServicedByWrkbkResult = ResultRequiredAddinNotAvailable
             DisplayedServiceStatus = "The required Add-in is not available for the 'Update' service for the Development-Instance!"
@@ -331,12 +318,12 @@ Private Function WbkServicingName(ByVal csa_service As String) As String
             DisplayedServiceStatus = mCompManClient.COMPMAN_DEVLP & " is the Workbook reqired for the " & SRVC_SYNCHRONIZE & " but it is not open!"
         
         '~~ When neither of the above is True the servicing Workbook instance is decided
-        Case IsDevInstance And csa_service = SRVC_UPDATE_OUTDATED And ServiceAvailableByAddin:  WbkServicingName = mCompManClient.COMPMAN_ADDIN
-        Case Not IsDevInstance And ServiceAvailableByCompMan:                                   WbkServicingName = mCompManClient.COMPMAN_DEVLP
-        Case Not IsDevInstance And Not ServiceAvailableByCompMan And ServiceAvailableByAddin:   WbkServicingName = mCompManClient.COMPMAN_ADDIN
-        Case Not ServiceAvailableByCompMan And ServiceAvailableByAddin:                         WbkServicingName = mCompManClient.COMPMAN_ADDIN
-        Case ServiceAvailableByCompMan And Not ServiceAvailableByAddin:                         WbkServicingName = mCompManClient.COMPMAN_DEVLP
-        Case ServiceAvailableByCompMan And ServiceAvailableByAddin:                             WbkServicingName = mCompManClient.COMPMAN_DEVLP
+        Case IsDevInstance And csa_service = SRVC_UPDATE_OUTDATED And ServiceAvailableByAddin:  WbkServicingName = COMPMAN_ADDIN
+        Case Not IsDevInstance And ServiceAvailableByCompMan:                                   WbkServicingName = COMPMAN_DEVLP
+        Case Not IsDevInstance And Not ServiceAvailableByCompMan And ServiceAvailableByAddin:   WbkServicingName = COMPMAN_ADDIN
+        Case Not ServiceAvailableByCompMan And ServiceAvailableByAddin:                         WbkServicingName = COMPMAN_ADDIN
+        Case ServiceAvailableByCompMan And Not ServiceAvailableByAddin:                         WbkServicingName = COMPMAN_DEVLP
+        Case ServiceAvailableByCompMan And ServiceAvailableByAddin:                             WbkServicingName = COMPMAN_DEVLP
         Case Else
             '~~ Silent service denial
             Debug.Print "CompMan services are not available, neither by open Workbook nor by CompMan Add-in!"
