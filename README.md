@@ -1,5 +1,8 @@
-## Common VBA Queue and Stack services
-Common VBA Components providing comprehensive queue and stack services each in three different flavors, as StandardModule (mQueue, mStack) as ClassModules (clsQueue, clsStack) and as private procedures for being copied into any StandardModule (Queue....., Stack......).
+## Common VBA Stack and Queue services
+Common VBA Components providing comprehensive stack and queue services with each in three different flavors:
+- As StandardModule (mQueue, mStack)
+- As ClassModules (clsQueue, clsStack)
+' And as private procedures for being copied from the mQueue/mStack component into any StandardModule (`Queue.....`, `Stack......``).
 
 ## Services
 All services below are provided either by a Standard-Module (mQueue, mStack) by a Class-Module (clsQueue, clsStack). In addition the services may be integrated as Private procedures (Queue...., Stack....) which are identical in the clsQueue/mQueue and the clsStack/mStack modules.
