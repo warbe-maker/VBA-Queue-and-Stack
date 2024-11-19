@@ -18,7 +18,7 @@ Option Explicit
 '
 ' W. Rauschenberger Berlin Jan 2013
 ' ----------------------------------------------------------------------------
-Private Const HOSTED_RAWS = "mStk,mQ,clsStk, clsQ"
+Private Const HOSTED_RAWS = "mStk,mQ,clsStk,clsQ"
 
 Private Sub Workbook_Open()
     '~~ The following statement invokes the named service, provided the Workbook

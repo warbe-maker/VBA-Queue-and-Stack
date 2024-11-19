@@ -8,15 +8,15 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
-' ----------------------------------------------------------------------------
 ' Class Module clsQ: FiFo (queue) services based on a Collection as queue
-'                        serving Null, Empty, Nothing, and all the other type
-'                        of variables.
+' ================== serving Null, Empty, Nothing, and all the other type
+'                    of variables.
 '
 ' Note: A queue is like a tube which is open at both ends. The first
 '       item put into it (add/enqued) is the first one dequeued.
 '
 ' Public services:
+' ----------------
 ' - DeQueue   Returns the first (first added) item from the queue and removes
 '             it
 ' - EnQueue   Queues (adds) an item
@@ -78,40 +78,27 @@ Private Function ErrMsg(ByVal err_source As String, _
                Optional ByVal err_dscrptn As String = vbNullString, _
                Optional ByVal err_line As Long = 0) As Variant
 ' ------------------------------------------------------------------------------
-' Universal error message display service. See:
-' https://warbe-maker.github.io/vba/common/2022/02/15/Personal-and-public-Common-Components.html
+' Universal error message display service which displays:
+' - a debugging option button
+' - an "About:" section when the err_dscrptn has an additional string
+'   concatenated by two vertical bars (||)
+' - the error message either by means of the Common VBA Message Service
+'   (fMsg/mMsg) when installed (indicated by Cond. Comp. Arg. `mMsg = 1` or by
+'   means of the VBA.MsgBox in case not.
 '
-' Basic service:
-' - Displays a debugging option button when the Conditional Compile Argument
-'   'Debugging = 1'
-' - Displays an optional additional "About the error:" section when a string is
-'   concatenated with the error message by two vertical bars (||)
-' - Displays the error message by means of VBA.MsgBox when neither of the
-'   following is installed
+' Uses: AppErr  For programmed application errors (Err.Raise AppErr(n), ....)
+'               to turn them into a negative and in the error message back into
+'               its origin positive number.
 '
-' Extendend service when other Common Components are installed and indicated via
-' Conditional Compile Arguments:
-' - Invokes mErH.ErrMsg when the Conditional Compile Argument ErHComp = 1
-' - Invokes mMsg.ErrMsg when the Conditional Compile Argument MsgComp = 1 (and
-'   the mErH module is not installed / MsgComp not set)
-'
-' Uses:
-' - AppErr For programmed application errors (Err.Raise AppErr(n), ....) to turn
-'          them into negative and in the error message back into a positive
-'          number.
-' - ErrSrc To provide an unambiguous procedure name by prefixing is with the
-'          module name.
-'
-' See: https://github.com/warbe-maker/Common-VBA-Error-Services
-'
-' W. Rauschenberger Berlin, May 2022
+' W. Rauschenberger Berlin, Jan 2024
+' See: https://github.com/warbe-maker/VBA-Error
 ' ------------------------------------------------------------------------------
-#If ErHComp = 1 Then
+#If mErH = 1 Then
     '~~ When Common VBA Error Services (mErH) is availabel in the VB-Project
     '~~ (which includes the mMsg component) the mErh.ErrMsg service is invoked.
     ErrMsg = mErH.ErrMsg(err_source, err_no, err_dscrptn, err_line): GoTo xt
     GoTo xt
-#ElseIf MsgComp = 1 Then
+#ElseIf mMsg = 1 Then
     '~~ When (only) the Common Message Service (mMsg, fMsg) is available in the
     '~~ VB-Project, mMsg.ErrMsg is invoked for the display of the error message.
     ErrMsg = mMsg.ErrMsg(err_source, err_no, err_dscrptn, err_line): GoTo xt
@@ -166,12 +153,8 @@ Private Function ErrMsg(ByVal err_source As String, _
     ErrText = "Error: " & vbLf & ErrDesc & vbLf & vbLf & "Source: " & vbLf & err_source & ErrAtLine
     If ErrAbout <> vbNullString Then ErrText = ErrText & vbLf & vbLf & "About: " & vbLf & ErrAbout
     
-#If Debugging Then
     ErrBttns = vbYesNo
     ErrText = ErrText & vbLf & vbLf & "Debugging:" & vbLf & "Yes    = Resume Error Line" & vbLf & "No     = Terminate"
-#Else
-    ErrBttns = vbCritical
-#End If
     ErrMsg = MsgBox(Title:=ErrTitle, Prompt:=ErrText, Buttons:=ErrBttns)
 xt:
 End Function
@@ -200,9 +183,9 @@ End Sub
 Public Sub Last(ByRef b_item As Variant):               Qlast cllQueue, b_item:             End Sub
 
 Private Sub Qdequeue(ByRef q_queue As Collection, _
-                Optional ByRef q_item_returned As Variant, _
-                Optional ByVal q_item_to_be_dequeued As Variant = Nothing, _
-                Optional ByVal q_item_pos_to_be_dequeued As Long = 0)
+            Optional ByRef q_item_returned As Variant = Nothing, _
+            Optional ByVal q_item_to_be_dequeued As Variant = Nothing, _
+            Optional ByVal q_item_pos_to_be_dequeued As Long = 0)
 ' ----------------------------------------------------------------------------
 ' - When neither a specific item to be dequeued (q_item_to_be_dequeued) nor a
 '   specific to be dequed item by its position (q_item_pos) is provided, the
@@ -243,8 +226,6 @@ Private Sub Qdequeue(ByRef q_queue As Collection, _
             Qfirst q_queue, q_item_returned
             q_queue.Remove 1
         End If
-    Else
-        Set q_item_returned = Nothing
     End If
 
 xt: Exit Sub
@@ -256,13 +237,13 @@ eh: Select Case ErrMsg(ErrSrc(PROC))
 End Sub
 
 Private Sub Qenqueue(ByRef q_queue As Collection, _
-                         ByVal q_item As Variant)
+                     ByVal q_item As Variant)
     If q_queue Is Nothing Then Set q_queue = New Collection
     q_queue.Add q_item
 End Sub
 
 Private Sub Qfirst(ByVal q_queue As Collection, _
-                       ByRef q_item_returned As Variant)
+                   ByRef q_item_returned As Variant)
 ' ----------------------------------------------------------------------------
 ' Returns the current first item in the queue, i.e. the one added (enqueued)
 ' first. When the queue is empty Nothing is returned
@@ -276,7 +257,7 @@ Private Sub Qfirst(ByVal q_queue As Collection, _
 End Sub
 
 Private Function QidenticalItems(ByVal q_1 As Variant, _
-                                     ByVal q_2 As Variant) As Boolean
+                                 ByVal q_2 As Variant) As Boolean
 ' ----------------------------------------------------------------------------
 ' Retunrs TRUE when item 1 is identical with item 2.
 ' ----------------------------------------------------------------------------
@@ -302,9 +283,9 @@ Private Function QisNothing(ByVal i_item As Variant) As Boolean
 End Function
 
 Private Function QisQueued(ByVal i_queue As Collection, _
-                               ByVal i_item As Variant, _
-                      Optional ByRef i_pos As Long, _
-                      Optional ByRef i_no_found As Long) As Boolean
+                           ByVal i_item As Variant, _
+                  Optional ByRef i_pos As Long, _
+                  Optional ByRef i_no_found As Long) As Boolean
 ' ----------------------------------------------------------------------------
 ' Returns TRUE and the index (i_pos) when the item (i_item) is found in the
 ' queue (i_queue).
@@ -323,8 +304,8 @@ Private Function QisQueued(ByVal i_queue As Collection, _
 End Function
 
 Private Sub Qitem(ByVal q_queue As Collection, _
-                      ByVal q_pos As Long, _
-             Optional ByRef q_item As Variant)
+                  ByVal q_pos As Long, _
+         Optional ByRef q_item As Variant)
 ' ----------------------------------------------------------------------------
 ' Returns the item (q_item) at the position (q_pos) in the queue (q_queue),
 ' provided the queue is not empty and the position is within the queue's size.
@@ -343,7 +324,7 @@ Private Sub Qitem(ByVal q_queue As Collection, _
 End Sub
 
 Private Sub Qlast(ByVal q_queue As Collection, _
-                      ByRef q_item As Variant)
+                  ByRef q_item As Variant)
 ' ----------------------------------------------------------------------------
 ' Returns the item (q_item) in the queue which had been enqueued last in the
 ' queue (q_queue), provided the queue is not empty.
@@ -365,11 +346,10 @@ Private Function Qsize(ByVal q_queue As Collection) As Long
 End Function
 
 Private Sub QvarType(ByVal q_item As Variant, _
-                         ByRef q_item_result As Variant)
+                     ByRef q_item_result As Variant)
 ' ----------------------------------------------------------------------------
 ' Returns the pr0vided item (q_item) with respect to its VarType (q_item_var).
 ' ----------------------------------------------------------------------------
-    Set q_item_result = Nothing
     If VarType(q_item) = vbObject Then
         Set q_item_result = q_item
     Else
