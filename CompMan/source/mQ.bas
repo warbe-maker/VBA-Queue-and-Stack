@@ -177,7 +177,7 @@ Private Function ErrMsg(ByVal err_source As String, _
     '~~ Obtain error information from the Err object for any argument not provided
     If err_no = 0 Then err_no = Err.Number
     If err_line = 0 Then ErrLine = Erl
-    If err_source = vbNullString Then err_source = Err.source
+    If err_source = vbNullString Then err_source = Err.Source
     If err_dscrptn = vbNullString Then err_dscrptn = Err.Description
     If err_dscrptn = vbNullString Then err_dscrptn = "--- No error description available ---"
     
@@ -240,52 +240,55 @@ Public Function IsEmpty(Optional ByRef q_queue As Collection = Nothing) As Boole
     IsEmpty = QisEmpty(UsedQueue(q_queue))
 End Function
 
-Private Function IsInQueue(ByVal i_queue As Collection, _
-                           ByVal i_item As Variant, _
-                  Optional ByRef i_pos As Long) As Boolean
-' ----------------------------------------------------------------------------
-' Returns TRUE and the index (i_pos) when the item (i_item) is found in the
-' queue (i_queue).
-' ----------------------------------------------------------------------------
-    Dim i As Long
-    
-    If VarType(i_item) = vbObject Then
-        For i = 1 To i_queue.Count
-            If i_queue(i) Is i_item Then
-                IsInQueue = True
-                i_pos = i
-                Exit Function
-            End If
-        Next i
-    Else
-        For i = 1 To i_queue.Count
-            If i_queue(i) = i_item Then
-                IsInQueue = True
-                i_pos = i
-                Exit Function
-            End If
-        Next i
-    End If
-
-End Function
-
+'Private Function IsInQueue(ByVal i_queue As Collection, _
+'                           ByVal i_item As Variant, _
+'                  Optional ByRef i_pos As Long) As Boolean
+'' ----------------------------------------------------------------------------
+'' Returns TRUE and the index (i_pos) when the item (i_item) is found in the
+'' queue (i_queue).
+'' ----------------------------------------------------------------------------
+'    Dim i As Long
+'
+'    If VarType(i_item) = vbObject Then
+'        For i = 1 To i_queue.Count
+'            If i_queue(i) Is i_item Then
+'                IsInQueue = True
+'                i_pos = i
+'                Exit Function
+'            End If
+'        Next i
+'    Else
+'        For i = 1 To i_queue.Count
+'            If i_queue(i) = i_item Then
+'                IsInQueue = True
+'                i_pos = i
+'                Exit Function
+'            End If
+'        Next i
+'    End If
+'
+'End Function
+'
 Public Function IsQueued(ByVal i_item As Variant, _
                 Optional ByRef i_pos As Long, _
+                Optional ByRef i_number As Long, _
                 Optional ByRef i_queue As Collection = Nothing) As Boolean
 ' ----------------------------------------------------------------------------
 '
 ' ----------------------------------------------------------------------------
-    IsQueued = IsInQueue(UsedQueue(i_queue), i_item, i_pos)
+    IsQueued = QisQueued(UsedQueue, i_item, i_pos, i_number)
 End Function
 
-Public Sub Item(ByVal i_pos As Long, _
-                ByRef i_item As Variant, _
-       Optional ByRef i_queue As Collection = Nothing)
+Public Function Item(ByVal i_pos As Long, _
+            Optional ByRef i_item As Variant, _
+            Optional ByRef i_queue As Collection = Nothing) As Variant
 ' ----------------------------------------------------------------------------
-'
+' Returns the item as Variant and via the optional i_item parameter - at the
+' position (i_pos) in the queue (i_queue), provided the queue is not empty and
+' the position is within the queue's size.
 ' ----------------------------------------------------------------------------
     Qitem UsedQueue(i_queue), i_pos, i_item
-End Sub
+End Function
 
 Public Sub Last(ByRef l_item As Variant, _
        Optional ByRef l_queue As Collection = Nothing)
@@ -372,13 +375,13 @@ Private Sub Qfirst(ByVal q_queue As Collection, _
 End Sub
 
 Private Function QidenticalItems(ByVal q_1 As Variant, _
-                                     ByVal q_2 As Variant) As Boolean
+                                 ByVal q_2 As Variant) As Boolean
 ' ----------------------------------------------------------------------------
-' Retunrs TRUE when item 1 is identical with item 2.
+' Returns TRUE when item 1 is identical with item 2.
 ' ----------------------------------------------------------------------------
     Select Case True
-        Case VarType(q_1) = vbObject And VarType(q_2) = vbObject:   QidenticalItems = q_1 Is q_2
-        Case VarType(q_1) <> vbObject And VarType(q_2) <> vbObject: QidenticalItems = q_1 = q_2
+        Case VBA.IsObject(q_1) And VBA.IsObject(q_2):           QidenticalItems = q_1 Is q_2
+        Case Not VBA.IsObject(q_1) And Not VBA.IsObject(q_2):   QidenticalItems = q_1 = q_2
     End Select
 End Function
 
@@ -400,43 +403,47 @@ End Function
 Private Function QisQueued(ByVal i_queue As Collection, _
                                ByVal i_item As Variant, _
                       Optional ByRef i_pos As Long, _
-                      Optional ByRef i_no_found As Long) As Boolean
+                      Optional ByRef i_number As Long) As Boolean
 ' ----------------------------------------------------------------------------
 ' Returns TRUE and the index (i_pos) when the item (i_item) is found in the
 ' queue (i_queue).
 ' ----------------------------------------------------------------------------
     Dim i As Long
     
-    i_no_found = 0
+    i_number = 0
+    i_pos = 0
     For i = 1 To i_queue.Count
         If QidenticalItems(i_queue(i), i_item) Then
-            i_no_found = i_no_found + 1
+            i_number = i_number + 1
             QisQueued = True
-            i_pos = i
+            If i_pos = 0 Then i_pos = i
         End If
     Next i
 
 End Function
 
-Private Sub Qitem(ByVal q_queue As Collection, _
-                      ByVal q_pos As Long, _
-             Optional ByRef q_item As Variant)
+Private Function Qitem(ByVal q_queue As Collection, _
+                       ByVal q_pos As Long, _
+              Optional ByRef q_item As Variant) As Variant
 ' ----------------------------------------------------------------------------
-' Returns the item (q_item) at the position (q_pos) in the queue (q_queue),
-' provided the queue is not empty and the position is within the queue's size.
+' Returns the item as Variant and via the q_item parameter - at the position
+' (q_pos) in the queue (q_queue), provided the queue is not empty and the
+' position is within the queue's size.
 ' ----------------------------------------------------------------------------
     
     If Not QisEmpty(q_queue) Then
         If q_pos <= Qsize(q_queue) Then
             If VarType(q_queue(q_pos)) = vbObject Then
                 Set q_item = q_queue(q_pos)
+                Set Qitem = q_item
             Else
                 q_item = q_queue(q_pos)
+                Qitem = q_item
             End If
         End If
     End If
     
-End Sub
+End Function
 
 Private Sub Qlast(ByVal q_queue As Collection, _
                       ByRef q_item As Variant)
@@ -497,24 +504,24 @@ Private Sub Test_Private_Queue_Services()
     Dim MyQueue As New Collection
     Dim Item    As Variant
     Dim Pos     As Long
-                                Debug.Assert QisEmpty(MyQueue)
+                            Debug.Assert QisEmpty(MyQueue)
     Qenqueue MyQueue, "A":  Debug.Assert Not QisEmpty(MyQueue)
     Qdequeue MyQueue, Item: Debug.Assert Item = "A"
-                                Debug.Assert QisEmpty(MyQueue)
+                            Debug.Assert QisEmpty(MyQueue)
     Qenqueue MyQueue, "A"
     Qenqueue MyQueue, "B"
     Qenqueue MyQueue, "C"
     Qenqueue MyQueue, "D"
-                                Debug.Assert Not QisEmpty(MyQueue)
-                                Debug.Assert Qsize(MyQueue) = 4
-                                Debug.Assert IsInQueue(MyQueue, "B", Pos) = True
-                                Debug.Assert Pos = 2
+                            Debug.Assert Not QisEmpty(MyQueue)
+                            Debug.Assert Qsize(MyQueue) = 4
+                            Debug.Assert IsQueued(MyQueue, "B", Pos) = True
+                            Debug.Assert Pos = 2
     Qitem MyQueue, 2, Item: Debug.Assert Item = "B"
     Qdequeue MyQueue, Item: Debug.Assert Item = "A"
     Qdequeue MyQueue, Item: Debug.Assert Item = "B"
     Qdequeue MyQueue, Item: Debug.Assert Item = "C"
     Qdequeue MyQueue, Item: Debug.Assert Item = "D"
-                                Debug.Assert QisEmpty(MyQueue)
+                            Debug.Assert QisEmpty(MyQueue)
     Set MyQueue = Nothing
     
 End Sub

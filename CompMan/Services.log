@@ -1,68 +1,63 @@
-23-06-23-15:36:08                                          Update Outdated Common Components (by CompMan.xlsb) for SaQ.xlsb                                          
-23-06-23-15:36:08 ---------------------------------------------------------------------------------------------------------------------------------------------------
-23-06-23-15:36:08  UserForm        fMsg ...........: Outdated used Common Component updated by re-import of D:\Ablage\Excel VBA\DevAndTest\Common-Components\fMsg.frm
-23-06-23-15:36:10  Standard-Module mBasic .........: Outdated used Common Component updated by re-import of D:\Ablage\Excel VBA\DevAndTest\Common-Components\mBasic.bas
-23-06-23-15:36:12  Standard-Module mCompManClient .: Outdated used Common Component updated by re-import of D:\Ablage\Excel VBA\DevAndTest\Common-Components\mCompManClient.bas
-23-06-23-15:36:13  Standard-Module mErH ...........: Outdated used Common Component updated by re-import of D:\Ablage\Excel VBA\DevAndTest\Common-Components\mErH.bas
-23-06-23-15:36:15  Standard-Module mMsg ...........: Outdated used Common Component updated by re-import of D:\Ablage\Excel VBA\DevAndTest\Common-Components\mMsg.bas
-23-06-23-15:36:17  Standard-Module mTrc ...........: Outdated used Common Component updated by re-import of D:\Ablage\Excel VBA\DevAndTest\Common-Components\mTrc.bas
-23-06-23-15:56:31 ========================================================================
-23-06-23-15:56:31         Export Changed Components (by CompMan.xlsb) for SaQ.xlsb        
-23-06-23-15:56:31 ------------------------------------------------------------------------
-23-06-23-15:56:31  Class-Module    clsQ ...........: Unchanged hosted raw Common Component
-23-06-23-15:56:31  Class-Module    clsStk .........: Unchanged hosted raw Common Component
-23-06-23-15:56:31  UserForm        fMsg ...........: Modified used Common Component!!!!! (because this is not the hosting Workbook a "due revert allert" has been registered!)
-23-06-23-15:56:31                                    Modified used Common Component e x p o r t e d !
-23-06-23-15:56:31  Standard-Module mBasic .........: Modified used Common Component!!!!! (because this is not the hosting Workbook a "due revert allert" has been registered!)
-23-06-23-15:56:31                                    Modified used Common Component e x p o r t e d !
-23-06-23-15:56:31  Standard-Module mCompManClient .: Modified used Common Component!!!!! (because this is not the hosting Workbook a "due revert allert" has been registered!)
-23-06-23-15:56:31                                    Modified used Common Component e x p o r t e d !
-23-06-23-15:56:32  Standard-Module mErH ...........: Modified used Common Component!!!!! (because this is not the hosting Workbook a "due revert allert" has been registered!)
-23-06-23-15:56:32                                    Modified used Common Component e x p o r t e d !
-23-06-23-15:56:32  Standard-Module mMsg ...........: Modified used Common Component!!!!! (because this is not the hosting Workbook a "due revert allert" has been registered!)
-23-06-23-15:56:32                                    Modified used Common Component e x p o r t e d !
-23-06-23-15:56:32  Standard-Module mQ .............: Hosted Raw Common Component code modified
-23-06-23-15:56:32                                    Modified hosted Common Component e x p o r t e d !
-23-06-23-15:56:32                                    Modified hosted Common Component's Revision Number increased
-23-06-23-15:56:32                                    Modified hosted Common Component's Export-File copied to D:\Ablage\Excel VBA\DevAndTest\Common-Components
-23-06-23-15:56:32  Standard-Module mQprivate ......: Unchanged VBComponent
-23-06-23-15:56:32  Standard-Module mStk ...........: Hosted Raw Common Component code modified
-23-06-23-15:56:32                                    Modified hosted Common Component e x p o r t e d !
-23-06-23-15:56:32                                    Modified hosted Common Component's Revision Number increased
-23-06-23-15:56:32                                    Modified hosted Common Component's Export-File copied to D:\Ablage\Excel VBA\DevAndTest\Common-Components
-23-06-23-15:56:32  Standard-Module mStkPrivate ....: Unchanged VBComponent
-23-06-23-15:56:32  Standard-Module mTest ..........: Modified VBComponent e x p o r t e d !
-23-06-23-15:56:32  Standard-Module mTrc ...........: Modified used Common Component!!!!! (because this is not the hosting Workbook a "due revert allert" has been registered!)
-23-06-23-15:56:32                                    Modified used Common Component e x p o r t e d !
-23-06-23-15:56:32  Workbook        wbSaQ ..........: Unchanged VBComponent
-23-06-23-15:56:32  Worksheet       wsUnused .......: Unchanged VBComponent
-24-09-30-16:11:12 ================================================================================================
-24-09-30-16:11:12 ------------------- Export Changed Components (by CompMan.xlsb) for SaQ.xlsb -------------------
-24-09-30-16:11:12 ------------------------------------------------------------------------------------------------
-24-09-30-16:11:12  Workbook         wbSaQ..........:  Modified VBComponent e x p o r t e d !                      
-24-09-30-16:16:59 ================================================================================================
-24-09-30-16:16:59 --------------- Update Outdated Common Components (by CompMan.xlsb) for SaQ.xlsb ---------------
-24-09-30-16:16:59 ------------------------------------------------------------------------------------------------
-24-09-30-16:16:59  Standard-Module  mQ.............:  Serviced Common Component used is up-to-date                
-24-09-30-16:16:59  Standard-Module  mStk...........:  Serviced Common Component used is up-to-date                
-24-09-30-16:16:59  Class-Module     clsStk.........:  Serviced Common Component used is up-to-date                
-24-09-30-16:17:04  Class-Module     clsQ...........:  Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-16:17:08  UserForm         fMsg...........:  Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-16:17:11  Standard-Module  mBasic.........:  Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-16:17:14  Standard-Module  mCompManClient.:  Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-16:17:17  Standard-Module  mErH...........:  Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-16:17:20  Standard-Module  mMsg...........:  Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-16:17:23  Standard-Module  mTrc...........:  Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-19:14:32 ================================================================================================
-24-09-30-19:14:32 --------------- Update Outdated Common Components (by CompMan.xlsb) for SaQ.xlsb ---------------
-24-09-30-19:14:32 ------------------------------------------------------------------------------------------------
-24-09-30-19:14:32  Standard-Module  mQ.............:  Serviced Common Component used is up-to-date                
-24-09-30-19:14:34  Standard-Module  mStk...........:  Serviced Common Component used is up-to-date                
-24-09-30-19:14:35  Class-Module     clsStk.........:  Serviced Common Component used is up-to-date                
-24-09-30-19:14:47  Class-Module     clsQ...........:  Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-19:15:05  UserForm         fMsg...........:  Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-19:15:09  Standard-Module  mBasic.........:  Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-19:15:11  Standard-Module  mCompManClient.:  Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-19:15:13  Standard-Module  mErH...........:  Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-19:15:16  Standard-Module  mMsg...........:  Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-19:15:18  Standard-Module  mTrc...........:  Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
+24-12-21-17:06:05 ---------------------- Export Changed Components (by Add-in) for SaQ.xlsb -----------------------
+24-12-21-17:06:05 -------------------------------------------------------------------------------------------------
+24-12-21-17:06:05  Class-Module     clsTestAid.....:  Common Component code change:                                
+24-12-21-17:06:05                                     Line 0637 Serviced (CodeModule)....:     sNameTestFile = Replace(sTestFolder & "\Test-" & sTestId & "-" & lVerificationNumber & "." & sTestFileExtension, "..", ".") 
+24-12-21-17:06:05                                     Line 0637 Serviced (Export-File)...:     sNameTestFile = sTestFolder & "\Test-" & sTestId & "-" & lVerificationNumber & sTestFileExtension                           
+24-12-21-17:06:05                                     Modified Common Component: Release registered pending                                                                                                                
+24-12-21-17:06:05                                     Serviced Common Component modified: E x p o r t e d !                                                                                                                
+24-12-21-17:06:05                                     Serviced Common Component modified: Re-registered pending release                                                                                                    
+24-12-21-17:18:19 =================================================================================================
+24-12-21-17:18:19 ---------------------- Export Changed Components (by Add-in) for SaQ.xlsb -----------------------
+24-12-21-17:18:19 -------------------------------------------------------------------------------------------------
+24-12-21-17:18:19  Standard-Module  mQ.............:  Common Component code change:                                
+24-12-21-17:18:19                                     Line 0375 Serviced (CodeModule)....:                       Optional ByRef i_number As Long) As Boolean 
+24-12-21-17:18:19                                     Line 0375 Serviced (Export-File)...:                       Optional ByRef i_no_found As Long) As Boolean 
+24-12-21-17:18:19                                     Modified Common Component: Release registered pending                                                    
+24-12-21-17:18:19                                     Serviced Common Component modified: E x p o r t e d !                                                    
+24-12-21-17:18:19                                     Serviced Common Component modified: Re-registered pending release                                        
+24-12-21-17:18:19  Standard-Module  mTest..........:  Modified VBComponent e x p o r t e d !                                                                   
+24-12-21-17:18:20  Class-Module     clsTestAid.....:  Common Component code change:                                                                            
+24-12-21-17:18:20                                     Line 2270 Serviced (CodeModule)....:         Then sPassedFailed = "Failed" _                             
+24-12-21-17:18:20                                     Line 2270 Serviced (Export-File)...:         Then sPassedFailed = "Passed" _                             
+24-12-21-17:18:20                                     Modified Common Component: Release registered pending                                                    
+24-12-21-17:18:20                                     Serviced Common Component modified: E x p o r t e d !                                                    
+24-12-21-17:18:20                                     Serviced Common Component modified: Re-registered pending release                                        
+24-12-21-17:18:20  Class-Module     clsQ...........:  Common Component code change:                                                                            
+24-12-21-17:18:20                                     Line 0161 Serviced (CodeModule)....:                 Optional ByRef i_number As Long) As Boolean         
+24-12-21-17:18:20                                     Line 0161 Serviced (Export-File)...:                 Optional ByRef i_no_found As Long) As Boolean       
+24-12-21-17:18:20                                     Modified Common Component: Release registered pending                                                    
+24-12-21-17:18:20                                     Serviced Common Component modified: E x p o r t e d !                                                    
+24-12-21-17:18:20                                     Serviced Common Component modified: Re-registered pending release                                        
+24-12-21-17:54:11 =================================================================================================
+24-12-21-17:54:11 ---------------------- Export Changed Components (by Add-in) for SaQ.xlsb -----------------------
+24-12-21-17:54:11 -------------------------------------------------------------------------------------------------
+24-12-21-17:54:11  Standard-Module  mTest..........:  Modified VBComponent e x p o r t e d !                       
+24-12-21-17:54:11  Class-Module     clsQ...........:  Common Component code change:                                
+24-12-21-17:54:11                                     Line 0266 Serviced (CodeModule)....:         Case VBA.IsObject(q_1) And VBA.IsObject(q_2):           QidenticalItems = q_1 Is q_2 
+24-12-21-17:54:11                                     Line 0266 Serviced (Export-File)...:         Case VarType(q_1) = vbObject And VarType(q_2) = vbObject:   QidenticalItems = q_1 Is q_2 
+24-12-21-17:54:11                                     Modified Common Component: Release registered pending                                                                                 
+24-12-21-17:54:11                                     Serviced Common Component modified: E x p o r t e d !                                                                                 
+24-12-21-17:54:11                                     Serviced Common Component modified: Re-registered pending release                                                                     
+24-12-21-18:00:35 =================================================================================================
+24-12-21-18:00:35 ---------------------- Export Changed Components (by Add-in) for SaQ.xlsb -----------------------
+24-12-21-18:00:35 -------------------------------------------------------------------------------------------------
+24-12-21-18:00:35  Class-Module     clsQ...........:  Serviced Common Component properties housekeeping:           
+24-12-21-18:00:35                                     Serviced Common Component's Export-File meets public: Properties set equal public 
+24-12-21-18:00:36  Standard-Module  mQ.............:  Common Component code change:                                                     
+24-12-21-18:00:36                                     Line 0350 Serviced (CodeModule)....:                                  ByVal q_2 As Variant) As Boolean 
+24-12-21-18:00:36                                     Line 0350 Serviced (Export-File)...:                                      ByVal q_2 As Variant) As Boolean 
+24-12-21-18:00:37                                     Modified Common Component: Release registered pending                                                      
+24-12-21-18:00:37                                     Serviced Common Component modified: E x p o r t e d !                                                      
+24-12-21-18:00:37                                     Serviced Common Component modified: Re-registered pending release                                          
+24-12-21-18:00:37  Standard-Module  mTest..........:  Modified VBComponent e x p o r t e d !                                                                     
+24-12-21-18:07:01 =================================================================================================
+24-12-21-18:07:01 ---------------------- Export Changed Components (by Add-in) for SaQ.xlsb -----------------------
+24-12-21-18:07:01 -------------------------------------------------------------------------------------------------
+24-12-21-18:07:01  Class-Module     clsQ...........:  Serviced Common Component properties housekeeping:           
+24-12-21-18:07:01                                     Serviced Common Component's Export-File meets public: Properties set equal public 
+24-12-21-18:07:02  Standard-Module  mQ.............:  Common Component code change:                                                     
+24-12-21-18:07:02                                     Line 0227 Serviced (CodeModule)....: 'Private Function IsInQueue(ByVal i_queue As Collection, _ 
+24-12-21-18:07:02                                     Line 0227 Serviced (Export-File)...: Private Function IsInQueue(ByVal i_queue As Collection, _  
+24-12-21-18:07:03                                     Modified Common Component: Release registered pending                                           
+24-12-21-18:07:03                                     Serviced Common Component modified: E x p o r t e d !                                           
+24-12-21-18:07:03                                     Serviced Common Component modified: Re-registered pending release                               

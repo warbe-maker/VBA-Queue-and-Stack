@@ -5,9 +5,9 @@ Option Explicit
 ' ====================== execution of procedures and code snippets with the
 ' highest possible precision regarding the measured elapsed execution time.
 ' The trace log is written to a file which ensures at least a partial trace
-' in case the execution terminates by exception. When this module is installed
-' the availability of the sevice is triggered/activated by the Conditional
-' Compile Argument 'mTrc = 1'. When the Conditional Compile
+' in case the execution terminates by exception. When this module is
+' installed the availability of the sevice is triggered/activated by the
+' Conditional Compile Argument 'mTrc = 1'. When the Conditional Compile
 ' Argument is 0 all services are disabled even when the module is installed,
 ' avoiding any effect on the performance though the effect very little anyway.
 '
@@ -24,23 +24,28 @@ Option Explicit
 ' Dsply    Displays the content of the trace-log-file (FileFullName).
 ' EoC      Indicates the (E)nd (o)f the execution trace of a (C)ode snippet.
 ' EoP      Indicates the (E)nd (o)f the execution trace of a (P)rocedure.
-' LogInfo  Explicitly writes an entry to the trace lof file by considering the
-'          current nesting level.
+' LogInfo  Explicitly writes an entry to the trace lof file by considering
+'          the current nesting level.
 ' Pause    Stops the execution traces time taking, e.g. while an error message
 '          is displayed.
 ' README   Displays the README in the corresponding public GitHub rebo.
 '
 ' Public Properties:
 ' ------------------
-' FileFullName r/w Specifies the full name of the trace-log-file, defaults to
-'                  Path & "\" & FileName when not specified.
-' FileName         Specifies the trace-log-file's name, defaults to
-'                  "ExecTrace.log" when not specified.
-' KeepLogs     w   Specifies the number of days a trace-log-file is kept until
-'                  it is deleted and re-created.
-' Path         r/w Specifies the path to the trace-log-file, defaults to
-'                  ThisWorkbook.Path when not specified.
-' Title        w   Specifies a trace-log title
+' FileBaseName  r/w The log-file's base name, defaults to the
+'                   ActiveWorkbook's BaseName.
+' FileExtension r/w The Log-file's file extension
+' FileFullName  r/w w: Specifies the full name of the log-file, thereby
+'                      providing the FileBaseName and the FileExtension.
+'                   r: When no FileFullName ever has been provided, the
+'                      default log-file's full name is assemled from
+'                      FileLocation, FileBaseName and FileExtension.
+' FileBaseName      The ActiveWorkbook's BaseName with a .log file extention.
+' FileLocation  r/w Defaults to the ActiveWorkbook's Path
+' KeepLogs        w Specifies the number of (back) logs kept.
+' Path          r/w Specifies the path to the trace-log-file, defaults to
+'                   ThisWorkbook.Path when not specified.
+' Title           w Specifies a trace-log title
 '
 ' Uses (for test purpose only!):
 ' ------------------------------
@@ -56,7 +61,7 @@ Option Explicit
 ' ---------
 ' Reference to 'Microsoft Scripting Runtime'
 '
-' W. Rauschenberger, Berlin, Aug 2024
+' W. Rauschenberger, Berlin, Nov 2024
 ' See: https://github.com/warbe-maker/VBA-Trace
 ' ----------------------------------------------------------------------------
 Private Const GITHUB_REPO_URL As String = "https://github.com/warbe-maker/VBA-Trace"
@@ -117,10 +122,12 @@ Private dtTraceBegin        As Date             ' Initialized at start of execut
 Private iTrcLvl             As Long             ' Increased with each begin entry and decreased with each end entry
 Private LastNtry            As Collection       '
 Private lKeepLogs           As Long
-Private sFileFullName       As String           ' Defaults to the When vbNullString the trace is written into file and the display is suspended
+Private sFileExtension      As String
+Private sFileFullName       As String
+Private sFileLocation       As String
+Private sFileBaseName       As String
 Private sFirstTraceItem     As String
 Private sTitle              As String
-Private sPath               As String
 Private TraceStack          As Collection       ' Trace stack for the trace log written to a file
 
 ' ----------------------------------------------------------------------------
@@ -154,7 +161,6 @@ Private Property Let Arry(Optional ByRef c_arr As Variant, _
     Const PROC = "Arry-Let"
     
     Dim bIsAllocated As Boolean
-    Dim s            As String
     
     If IsArray(c_arr) Then
         On Error GoTo -1
@@ -215,32 +221,49 @@ Private Property Get DIR_END_CODE() As String:              DIR_END_CODE = DIR_E
 
 Private Property Get DIR_END_PROC() As String:              DIR_END_PROC = VBA.String$(2, DIR_END_ID):      End Property
 
-Public Property Get FileFullName() As String
-' ----------------------------------------------------------------------------
-' When yet there is no trace output file specified, the file defaults to
-' "ExecTrace.log" in the application's parent folder.
-' ----------------------------------------------------------------------------
+Public Property Get FileBaseName() As String:               FileBaseName = sFileBaseName:                   End Property
 
-    If sFileFullName = vbNullString Then
-        FileFullName = DefaultFileName
-    Else
-        FileFullName = sFileFullName
-    End If
+Public Property Let FileBaseName(ByVal s As String):        sFileBaseName = s:                              End Property
+
+Public Property Get FileExtension() As String:              FileExtension = sFileExtension:                 End Property
+
     
+Public Property Let FileExtension(ByVal s As String):       sFileExtension = s:                             End Property
+
+Public Property Get FileFullName() As String
+    FileFullName = sFileLocation & "\" & sFileBaseName & "." & sFileExtension
+    FileFullName = Replace(FileFullName, "\\", "\")
+    FileFullName = Replace(FileFullName, "..", ".")
 End Property
 
 Public Property Let FileFullName(ByVal s As String)
 ' ----------------------------------------------------------------------------
-' Specifies the trace-log-file's name and location.
+' Specifies the log file's name and location, by the way maintaining the Path
+' and the FileBaseName property.
 ' ----------------------------------------------------------------------------
-    sFileFullName = s
-    If s <> DefaultFileName Then
-        With FSo
-            If .FileExists(DefaultFileName) Then .DeleteFile DefaultFileName
-        End With
-    End If
+    Dim lDaysAge As Long
+    
+    With FSo
+        sFileFullName = s
+        sFileExtension = .GetExtensionName(s)
+        sFileLocation = .GetParentFolderName(s)
+        sFileBaseName = .GetBaseName(s)
+    
+        If .FileExists(sFileFullName) Then
+            '~~ In case the file already existed it may have passed the KeepLogs limit
+            lDaysAge = VBA.DateDiff("d", .GetFile(sFileFullName).DateLastAccessed, Now())
+            If lDaysAge > lKeepLogs Then
+                .DeleteFile sFileFullName
+            End If
+        End If
+    End With
 
 End Property
+
+Public Property Get FileLocation() As String:              FileLocation = sFileLocation:                 End Property
+
+    
+Public Property Let FileLocation(ByVal s As String):       sFileLocation = s:                             End Property
 
 Private Property Get ItmArgs(Optional ByRef t_entry As Collection) As Variant
     ItmArgs = t_entry("I")(enItmArgs)
@@ -378,7 +401,7 @@ End Function
 
 Private Function ArryIsAllocated(ByVal a_arry As Variant) As Boolean
 ' ----------------------------------------------------------------------------
-' Retunrs TRUE when an array (a_array) is allocated.
+' Returns TRUE when an array (a_array) is allocated.
 ' ----------------------------------------------------------------------------
     
     On Error Resume Next
@@ -637,8 +660,6 @@ Private Function FileAsArray(ByVal f_file As Variant, _
 ' Note when copied: Originates in mVarTrans
 '                   See https://github.com/warbe-maker/Excel_VBA_VarTrans
 ' ----------------------------------------------------------------------------
-    Dim arr     As Variant
-    Dim sSplit  As String
     Dim s       As String
     
     If TypeName(f_file) = "String" Then f_file = FSo.GetFile(f_file)
@@ -719,6 +740,12 @@ Public Sub Initialize()
     cySysFrequency = 0
     sFirstTraceItem = vbNullString
     lKeepLogs = 10
+    
+    '~~ Default execution Trace log file
+    sFileBaseName = "ExecTrace"
+    sFileExtension = "log"
+    sFileLocation = ActiveWorkbook.Path
+    sFileFullName = FileFullName
     
 End Sub
 
@@ -1039,12 +1066,10 @@ Private Sub Reorg(ByVal r_file_full_name As String, _
     On Error GoTo eh
     Dim aFile   As Variant
     Dim aLog    As Variant
-    Dim bAppend As Boolean
     Dim cllLog  As New Collection
     Dim cllLogs As New Collection
     Dim i       As Long
     Dim lLen    As Long
-    Dim s       As String
     Dim v       As Variant
     Dim bTop    As Boolean: bTop = True
     
@@ -1300,7 +1325,7 @@ Private Function StringAsArray(ByVal v_strng As String, _
 ' items in the array are returned trimmed accordingly.
 ' Example 1: arr = StringAsArray("this is a string", " ") is returned as an
 '            array with 3 items: "this", "is", "a", "string".
-' Example 2: arr = StringAsArray(FileAsString(FileName),,False) is returned
+' Example 2: arr = StringAsArray(FileAsString(FileBaseName),,False) is returned
 '            as any array with records/lines of the provided file, whereby the
 '            lines are not trimmed, i.e. leading spaces are preserved.
 '            Note: The not provided split indicator has the advantage that it
@@ -1324,35 +1349,6 @@ Private Function StringAsArray(ByVal v_strng As String, _
     End If
     StringAsArray = arr
 
-End Function
-
-Private Function StringAsFile(ByVal s_strng As String, _
-                     Optional ByRef s_file As Variant = vbNullString, _
-                     Optional ByVal s_file_new As Boolean = False) As File
-' ----------------------------------------------------------------------------
-' Writes a string (s_strng) to a file (s_file) which might be a file object or
-' a file's full name. When no file (s_file) is provided, a temporary file is
-' returned.
-' Note 1: Only when the string has sub-strings delimited by vbCrLf the string
-'         is written a records/lines.
-' Note 2: When the string has the alternate split indicator "|&|" this one is
-'         replaced by vbCrLf.
-' Note when copied: Originates in mVarTrans
-'                   See https://github.com/warbe-maker/Excel_VBA_VarTrans
-' ----------------------------------------------------------------------------
-    
-    Select Case True
-        Case s_file = vbNullString: s_file = TempFile(, ".trc")
-        Case TypeName(s_file) = "File": s_file = s_file.Path
-    End Select
-    
-    If s_file_new _
-    Then Open s_file For Output As #1 _
-    Else Open s_file For Append As #1
-    Print #1, s_strng
-    Close #1
-    Set StringAsFile = FSo.GetFile(s_file)
-    
 End Function
 
 Private Function TempFile(Optional ByVal f_path As String = vbNullString, _

@@ -1,0 +1,16 @@
+------------------------------------------------------------------+--------+-----------+-----------+-----------+----------------------------------------+----------+-----------
+                               Test                               |  Test  | Component | Component | Procedure |              Verification              |   Test   | Exec time 
+                              Title                               |   Id   |   Name    |   Type    |   Name    |        (expected/tested result)        |  Result  |  (msec)   
+------------------------------------------------------------------+--------+-----------+-----------+-----------+----------------------------------------+----------+-----------
+ clsQ basics (Clear/IsEmpty, EnQueue, Size, First, Last, DeQueue) | 10-1.1 | clsQ      | Property  | IsEmpty   | Queue is empty                         |  Passed  |       n/a 
+                                                                  | 10-1.2 | clsQ      | Property  | Size      | Queue size                             |  Passed  |       n/a 
+                                                                  | 10-1.3 | clsQ      | Method    | First     | First = "A"                            |  Passed  |       n/a 
+                                                                  | 10-1.4 | clsQ      | Method    | Last      | Last is a certain date                 |  Passed  |       n/a 
+                                                                  | 10-1.5 | clsQ      | Method    | DeQueue   | Dequeue = "A"                          |  Passed  |       n/a 
+ clsQ extras (Item, IsQueued)                                     | 10-2.1 | clsQ      | Method    | Item      | Item is in queue at the given position |  Passed  |       n/a 
+                                                                  | 10-2.2 | clsQ      | Method    | IsQueued  | Item is queued                         |  Passed  |       n/a 
+                                                                  | 10-2.3 | clsQ      | Method    | IsQueued  | Item is queued once                    |  Passed  |       n/a 
+                                                                  | 10-2.4 | clsQ      | Method    | IsQueued  | Item is queued at position 4           |  Passed  |       n/a 
+                                                                  | 10-2.5 | clsQ      | Method    | IsQueued  | Item is queued twice                   |  Passed  |       n/a 
+                                                                  | 10-2.6 | clsQ      | Method    | IsQueued  | Item is queued twice, first at pos 2   |  Passed  |       n/a 
+                                                                  | 10-2.7 | clsQ      | Method    | IsQueued  | Item is not queued                     |  Passed  |       n/a 

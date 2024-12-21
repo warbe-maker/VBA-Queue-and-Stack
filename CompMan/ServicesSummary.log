@@ -1,34 +1,108 @@
-24-09-30-16:11:12 ------------------ Export Changed Components (by CompMan.xlsb) for SaQ.xlsb ------------------
-24-09-30-16:11:12 ----------------------------------------------------------------------------------------------
-24-09-30-16:11:12  Workbook         wbSaQ           Modified VBComponent e x p o r t e d !                      
-24-09-30-16:11:13 ExportChangedComponents (by CompMan.xlsb) for SaQ.xlsb: 1 of 15 exported (wbSaQ)  (see Services.log for log details)
-24-09-30-16:14:17 ============================================================================================================
-24-09-30-16:14:17 ------------------------- Export Changed Components (by CompMan.xlsb) for SaQ.xlsb -------------------------
-24-09-30-16:14:17 ------------------------------------------------------------------------------------------------------------
-24-09-30-16:14:17 ExportChangedComponents (by CompMan.xlsb) for SaQ.xlsb: 0 of 15 exported  (see Services.log for log details)
-24-09-30-16:16:59 ==============================================================================================
-24-09-30-16:16:59 -------------- Update Outdated Common Components (by CompMan.xlsb) for SaQ.xlsb --------------
-24-09-30-16:16:59 ----------------------------------------------------------------------------------------------
-24-09-30-16:16:59  Standard-Module  mQ              Serviced Common Component used is up-to-date                
-24-09-30-16:16:59  Standard-Module  mStk            Serviced Common Component used is up-to-date                
-24-09-30-16:16:59  Class-Module     clsStk          Serviced Common Component used is up-to-date                
-24-09-30-16:17:04  Class-Module     clsQ            Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-16:17:08  UserForm         fMsg            Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-16:17:11  Standard-Module  mBasic          Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-16:17:14  Standard-Module  mCompManClient  Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-16:17:17  Standard-Module  mErH            Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-16:17:20  Standard-Module  mMsg            Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-16:17:23  Standard-Module  mTrc            Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-19:14:32 ==============================================================================================
-24-09-30-19:14:32 -------------- Update Outdated Common Components (by CompMan.xlsb) for SaQ.xlsb --------------
-24-09-30-19:14:32 ----------------------------------------------------------------------------------------------
-24-09-30-19:14:32  Standard-Module  mQ              Serviced Common Component used is up-to-date                
-24-09-30-19:14:34  Standard-Module  mStk            Serviced Common Component used is up-to-date                
-24-09-30-19:14:35  Class-Module     clsStk          Serviced Common Component used is up-to-date                
-24-09-30-19:14:47  Class-Module     clsQ            Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-19:15:05  UserForm         fMsg            Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-19:15:09  Standard-Module  mBasic          Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-19:15:11  Standard-Module  mCompManClient  Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-19:15:13  Standard-Module  mErH            Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-19:15:16  Standard-Module  mMsg            Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
-24-09-30-19:15:18  Standard-Module  mTrc            Serviced Common Component updated by re-import of the public Export-File from the Common-Components folder.
+24-12-21-16:22:10 --------------------- Export Changed Components (by Add-in) for SaQ.xlsb ----------------------
+24-12-21-16:22:10 -----------------------------------------------------------------------------------------------
+24-12-21-16:22:10  Class-Module     clsTestAid      Common Component code change:                                
+24-12-21-16:22:10                                   Line 2136 Serviced (CodeModule)....:         If VBA.IsObject 
+24-12-21-16:22:10                                   Line 2136 Serviced (Export-File)...:         If VarType(dctR 
+24-12-21-16:22:10                                   Modified Common Component: Release registered pending        
+24-12-21-16:22:11                                   Serviced Common Component modified: E x p o r t e d !        
+24-12-21-16:22:11                                   Serviced Common Component modified: Re-registered pending re 
+24-12-21-16:22:11 ExportChangedComponents (by CompMan.xlam) for SaQ.xlsb: 1 of 16 exported (clsTestAid)     See the VBE CompMan menu for 2 Common Components pending release!  (see E:\Sync\Excel VBA\DevAndTest\SaQ\CompMan\Services.log for log details)
+24-12-21-16:42:31 ===============================================================================================
+24-12-21-16:42:31 --------------------- Export Changed Components (by Add-in) for SaQ.xlsb ----------------------
+24-12-21-16:42:31 -----------------------------------------------------------------------------------------------
+24-12-21-16:42:31  Standard-Module  mTest           Modified VBComponent e x p o r t e d !                       
+24-12-21-16:42:32  Class-Module     clsTestAid      Common Component code change:                                
+24-12-21-16:42:32                                   Line 2268 Serviced (CodeModule)....:         If VBA.IsObject 
+24-12-21-16:42:32                                   Line 2268 Serviced (Export-File)...:         lMaxResult = Ma 
+24-12-21-16:42:32                                   Modified Common Component: Release registered pending        
+24-12-21-16:42:32                                   Serviced Common Component modified: E x p o r t e d !        
+24-12-21-16:42:32                                   Serviced Common Component modified: Re-registered pending re 
+24-12-21-16:42:32  Class-Module     clsQ            Common Component code change:                                
+24-12-21-16:42:32                                   Line 0165 Serviced (CodeModule)....:             Optional By 
+24-12-21-16:42:32                                   Line 0165 Serviced (Export-File)...:             Optional By 
+24-12-21-16:42:32                                   Modified Common Component: Release registered pending        
+24-12-21-16:42:32                                   Serviced Common Component modified: E x p o r t e d !        
+24-12-21-16:42:32                                   Serviced Common Component modified: Properties in CommComps. 
+24-12-21-16:42:32                                   Serviced Common Component modified: Registered pending relea 
+24-12-21-16:42:33 ExportChangedComponents (by CompMan.xlam) for SaQ.xlsb: 3 of 16 exported (mTest, clsTestAid, clsQ)     See the VBE CompMan menu for 3 Common Components pending release!  (see E:\Sync\Excel VBA\DevAndTest\SaQ\CompMan\Services.log for log details)
+24-12-21-16:48:20 ===============================================================================================
+24-12-21-16:48:20 --------------------- Export Changed Components (by Add-in) for SaQ.xlsb ----------------------
+24-12-21-16:48:20 -----------------------------------------------------------------------------------------------
+24-12-21-16:48:20  Class-Module     clsTestAid      Common Component code change:                                
+24-12-21-16:48:20                                   Line 0662 Serviced (CodeModule)....:     If a_length = 0 The 
+24-12-21-16:48:20                                   Line 0662 Serviced (Export-File)...:     If a_length = 0 _   
+24-12-21-16:48:20                                   Modified Common Component: Release registered pending        
+24-12-21-16:48:20                                   Serviced Common Component modified: E x p o r t e d !        
+24-12-21-16:48:20                                   Serviced Common Component modified: Re-registered pending re 
+24-12-21-16:48:21 ExportChangedComponents (by CompMan.xlam) for SaQ.xlsb: 1 of 16 exported (clsTestAid)     See the VBE CompMan menu for 3 Common Components pending release!  (see E:\Sync\Excel VBA\DevAndTest\SaQ\CompMan\Services.log for log details)
+24-12-21-17:06:05 ===============================================================================================
+24-12-21-17:06:05 --------------------- Export Changed Components (by Add-in) for SaQ.xlsb ----------------------
+24-12-21-17:06:05 -----------------------------------------------------------------------------------------------
+24-12-21-17:06:05  Class-Module     clsTestAid      Common Component code change:                                
+24-12-21-17:06:05                                   Line 0637 Serviced (CodeModule)....:     sNameTestFile = Rep 
+24-12-21-17:06:05                                   Line 0637 Serviced (Export-File)...:     sNameTestFile = sTe 
+24-12-21-17:06:05                                   Modified Common Component: Release registered pending        
+24-12-21-17:06:05                                   Serviced Common Component modified: E x p o r t e d !        
+24-12-21-17:06:05                                   Serviced Common Component modified: Re-registered pending re 
+24-12-21-17:06:06 ExportChangedComponents (by CompMan.xlam) for SaQ.xlsb: 1 of 16 exported (clsTestAid)     See the VBE CompMan menu for 3 Common Components pending release!  (see E:\Sync\Excel VBA\DevAndTest\SaQ\CompMan\Services.log for log details)
+24-12-21-17:18:19 ===============================================================================================
+24-12-21-17:18:19 --------------------- Export Changed Components (by Add-in) for SaQ.xlsb ----------------------
+24-12-21-17:18:19 -----------------------------------------------------------------------------------------------
+24-12-21-17:18:19  Standard-Module  mQ              Common Component code change:                                
+24-12-21-17:18:19                                   Line 0375 Serviced (CodeModule)....:                       O 
+24-12-21-17:18:19                                   Line 0375 Serviced (Export-File)...:                       O 
+24-12-21-17:18:19                                   Modified Common Component: Release registered pending        
+24-12-21-17:18:19                                   Serviced Common Component modified: E x p o r t e d !        
+24-12-21-17:18:19                                   Serviced Common Component modified: Re-registered pending re 
+24-12-21-17:18:19  Standard-Module  mTest           Modified VBComponent e x p o r t e d !                       
+24-12-21-17:18:20  Class-Module     clsTestAid      Common Component code change:                                
+24-12-21-17:18:20                                   Line 2270 Serviced (CodeModule)....:         Then sPassedFai 
+24-12-21-17:18:20                                   Line 2270 Serviced (Export-File)...:         Then sPassedFai 
+24-12-21-17:18:20                                   Modified Common Component: Release registered pending        
+24-12-21-17:18:20                                   Serviced Common Component modified: E x p o r t e d !        
+24-12-21-17:18:20                                   Serviced Common Component modified: Re-registered pending re 
+24-12-21-17:18:20  Class-Module     clsQ            Common Component code change:                                
+24-12-21-17:18:20                                   Line 0161 Serviced (CodeModule)....:                 Optiona 
+24-12-21-17:18:20                                   Line 0161 Serviced (Export-File)...:                 Optiona 
+24-12-21-17:18:20                                   Modified Common Component: Release registered pending        
+24-12-21-17:18:20                                   Serviced Common Component modified: E x p o r t e d !        
+24-12-21-17:18:20                                   Serviced Common Component modified: Re-registered pending re 
+24-12-21-17:18:21 ExportChangedComponents (by CompMan.xlam) for SaQ.xlsb: 4 of 16 exported (mQ, mTest, clsTestAid, clsQ)     See the VBE CompMan menu for 3 Common Components pending release!  (see E:\Sync\Excel VBA\DevAndTest\SaQ\CompMan\Services.log for log details)
+24-12-21-17:54:11 ===============================================================================================
+24-12-21-17:54:11 --------------------- Export Changed Components (by Add-in) for SaQ.xlsb ----------------------
+24-12-21-17:54:11 -----------------------------------------------------------------------------------------------
+24-12-21-17:54:11  Standard-Module  mTest           Modified VBComponent e x p o r t e d !                       
+24-12-21-17:54:11  Class-Module     clsQ            Common Component code change:                                
+24-12-21-17:54:11                                   Line 0266 Serviced (CodeModule)....:         Case VBA.IsObje 
+24-12-21-17:54:11                                   Line 0266 Serviced (Export-File)...:         Case VarType(q_ 
+24-12-21-17:54:11                                   Modified Common Component: Release registered pending        
+24-12-21-17:54:11                                   Serviced Common Component modified: E x p o r t e d !        
+24-12-21-17:54:11                                   Serviced Common Component modified: Re-registered pending re 
+24-12-21-17:54:12 ExportChangedComponents (by CompMan.xlam) for SaQ.xlsb: 2 of 16 exported (mTest, clsQ)     See the VBE CompMan menu for 3 Common Components pending release!  (see E:\Sync\Excel VBA\DevAndTest\SaQ\CompMan\Services.log for log details)
+24-12-21-18:00:35 =================================================================================================
+24-12-21-18:00:35  Class-Module     clsQ...........:  Serviced Common Component properties housekeeping:           
+24-12-21-18:00:35                                     Serviced Common Component's Export-File meets public: Properties set equal public 
+24-12-21-18:00:36 ====================================================================================================================
+24-12-21-18:00:36 -------------------------------- Export Changed Components (by Add-in) for SaQ.xlsb --------------------------------
+24-12-21-18:00:36 --------------------------------------------------------------------------------------------------------------------
+24-12-21-18:00:36  Standard-Module  mQ              Common Component code change:                                                     
+24-12-21-18:00:36                                   Line 0350 Serviced (CodeModule)....:                                  ByVal q_2 A 
+24-12-21-18:00:36                                   Line 0350 Serviced (Export-File)...:                                      ByVal q 
+24-12-21-18:00:37                                   Modified Common Component: Release registered pending                             
+24-12-21-18:00:37                                   Serviced Common Component modified: E x p o r t e d !                             
+24-12-21-18:00:37                                   Serviced Common Component modified: Re-registered pending release                 
+24-12-21-18:00:37  Standard-Module  mTest           Modified VBComponent e x p o r t e d !                                            
+24-12-21-18:00:38 ExportChangedComponents (by CompMan.xlam) for SaQ.xlsb: 2 of 16 exported (mQ, mTest)     See the VBE CompMan menu for 1 Common Component is pending release!  (see E:\Sync\Excel VBA\DevAndTest\SaQ\CompMan\Services.log for log details)
+24-12-21-18:07:01 =================================================================================================
+24-12-21-18:07:01  Class-Module     clsQ...........:  Serviced Common Component properties housekeeping:           
+24-12-21-18:07:01                                     Serviced Common Component's Export-File meets public: Properties set equal public 
+24-12-21-18:07:02 ====================================================================================================================
+24-12-21-18:07:02 -------------------------------- Export Changed Components (by Add-in) for SaQ.xlsb --------------------------------
+24-12-21-18:07:02 --------------------------------------------------------------------------------------------------------------------
+24-12-21-18:07:02  Standard-Module  mQ              Common Component code change:                                                     
+24-12-21-18:07:02                                   Line 0227 Serviced (CodeModule)....: 'Private Function IsInQueue(ByVal i_queue As 
+24-12-21-18:07:02                                   Line 0227 Serviced (Export-File)...: Private Function IsInQueue(ByVal i_queue As  
+24-12-21-18:07:03                                   Modified Common Component: Release registered pending                             
+24-12-21-18:07:03                                   Serviced Common Component modified: E x p o r t e d !                             
+24-12-21-18:07:03                                   Serviced Common Component modified: Re-registered pending release                 
+24-12-21-18:07:04 ExportChangedComponents (by CompMan.xlam) for SaQ.xlsb: 1 of 16 exported (mQ)     See the VBE CompMan menu for 1 Common Component is pending release!  (see E:\Sync\Excel VBA\DevAndTest\SaQ\CompMan\Services.log for log details)

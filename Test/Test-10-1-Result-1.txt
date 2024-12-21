@@ -1,0 +1,5 @@
+ clsQ basics (enqueue, dequeue, first, last, size, empty) =
+---------------------+----------+--------+-----------------
+    Verification     |   P/F    | Result | Result Expected 
+---------------------+----------+--------+-----------------
+ Queue size          |  Failed  | "10"   | "5"             
